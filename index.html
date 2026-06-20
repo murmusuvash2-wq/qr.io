@@ -367,6 +367,7 @@ footer { width: 100%; max-width: 440px; margin: 40px auto 10px; text-align: cent
           <div class="acc-list" id="acc-list-style">
             <div class="acc-item on" onclick="pickDesign('dots','extra-rounded','Zen Premium','standard',false,this)"><span>Zen Premium</span></div>
             <div class="acc-item" onclick="pickDesign('classy-rounded','rounded','Fluid Wave','standard',false,this)"><span>Fluid Wave</span></div>
+            <div class="acc-item" onclick="pickDesign('square','square','Micro Product Tags','micro',true,this)"><span style="font-weight:800;color:var(--p);">Micro / Dog Tag (High Density)</span><span class="badge-pro">PRO</span></div>
             <div class="acc-item" onclick="pickDesign('dots','rounded','Dot Matrix','standard',false,this)"><span>Dot Matrix</span></div>
             <div class="acc-item" onclick="pickDesign('rounded','rounded','Classy Rounded','standard',false,this)"><span>Classy Rounded</span></div>
             <div class="acc-item" onclick="pickDesign('custom-text','extra-rounded','Custom Name QR','text',true,this)"><span>Custom Name QR</span><span class="badge-pro">PRO</span></div>
@@ -761,7 +762,7 @@ function buildData() {
     }
     case 'wifi': return `WIFI:S:${v('in-ssid')};P:${v('in-pass')};;`;
     case 'vcard': return `BEGIN:VCARD\nFN:${v('in-vcn')}\nTEL:${v('in-vcp')}\nEND:VCARD`;
-    case 'whatsapp': return `https://wa.me/${v('in-wa')}`;
+    case 'whatsapp': return `whatsapp://send?phone=${v('in-wa')}`;
     case 'pdf': {
       const pUrl = v('in-pdf');
       if(!pUrl) return 'https://ezqr.io';

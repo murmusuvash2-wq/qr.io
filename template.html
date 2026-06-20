@@ -260,13 +260,13 @@ function buildPayloadData() {
     let email = document.getElementById('in-contact-email')?.value || '';
     return `BEGIN:VCARD\nVERSION:3.0\nN:${name}\nTEL:${phone}\nEMAIL:${email}\nEND:VCARD`;
   }
-
+  
   if (guard === 'msg') {
     let phone = document.getElementById('in-msg-phone')?.value || '';
     let txt = document.getElementById('in-msg-text')?.value || '';
     if (document.querySelector('h1')?.textContent.toLowerCase().includes('whatsapp')) {
       phone = phone.replace(/[^0-9]/g, '');
-      return `https://wa.me/${phone}?text=${encodeURIComponent(txt)}`;
+      return `whatsapp://send?phone=${phone}&text=${encodeURIComponent(txt)}`;
     }
     return `SMSTO:${phone}:${txt}`;
   }
