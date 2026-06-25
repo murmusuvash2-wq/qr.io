@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
-<script src="/custom-qr-renderer.js"></script>
+<script src="./custom-qr-renderer.js"></script>
 
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -77,10 +77,8 @@ nav {
   margin: 0 auto; padding: 16px; gap: 20px;
 }
 .sidebar-aside {
-  background: #F1F5F9; /* Distinct premium light slate background */
-  border: 2px solid #CBD5E1; /* Highly visible contrasting border */
-  border-radius: 16px;
-  padding: 16px; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06); height: auto;
+  background: var(--s1); border: 1px solid var(--bd); border-radius: 16px;
+  padding: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.02); height: auto;
 }
 .main-content-panel {
   display: flex; flex-direction: column; gap: 24px; width: 100%;
@@ -101,7 +99,6 @@ nav {
     position: fixed; top: 0; left: -320px; width: 290px; height: 100%;
     z-index: 1000; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 15px 0 40px rgba(0,0,0,0.1); overflow-y: auto;
-    background: #F1F5F9; border: none; border-right: 2px solid #CBD5E1; border-radius: 0;
   }
   .sidebar-aside.open { left: 0; }
 }
@@ -515,251 +512,6 @@ footer { width: 100%; max-width: 440px; margin: 40px auto 10px; text-align: cent
   font-size: 10px; color: var(--mu); line-height: 1.35;
 }
 
-/* Premium Showcase Gallery Styles */
-.premium-gallery-section {
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto 32px;
-  padding: 0 16px;
-}
-.premium-showcase-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
-  justify-content: center;
-}
-.showcase-card {
-  position: relative;
-  background: var(--s1);
-  border: 1px solid var(--bd);
-  border-radius: 16px;
-  padding: 24px 16px 16px;
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-  text-align: center;
-  min-height: 380px;
-}
-.showcase-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0,0,0,0.08);
-  border-color: var(--bd2);
-}
-.sc-badge {
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 8px;
-  font-weight: 800;
-  padding: 3px 8px;
-  border-radius: 20px;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  background: var(--pt);
-  color: var(--pl);
-  white-space: nowrap;
-}
-.sc-inner {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  flex: 1;
-  padding: 10px 4px 4px;
-  border-radius: 12px;
-  background: var(--pt2);
-}
-.sc-title {
-  font-size: 14px;
-  font-weight: 800;
-  color: var(--tx);
-  letter-spacing: -0.2px;
-}
-.sc-desc {
-  font-size: 10px;
-  color: var(--mu);
-  line-height: 1.4;
-  margin: 0;
-  padding: 0 4px;
-}
-.sc-details-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-size: 9px;
-  font-weight: 700;
-  text-align: center;
-  margin: 4px 0;
-  padding: 6px;
-  background: rgba(0,0,0,0.03);
-  border-radius: 6px;
-  width: 100%;
-  color: var(--pl);
-}
-.sc-details-list span {
-  display: block;
-}
-.sc-qr-mock {
-  width: 110px;
-  height: 110px;
-  background: #FFF;
-  border-radius: 8px;
-  padding: 4px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.sc-qr-mock img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-.sc-subtext {
-  font-size: 8px;
-  font-weight: 800;
-  color: var(--mu);
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-.sc-action-btn {
-  width: 100%;
-  padding: 8px 12px;
-  background: var(--p);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 10.5px;
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: 4px;
-  transition: opacity 0.15s;
-}
-.sc-action-btn:hover {
-  opacity: 0.9;
-}
-
-/* Individual Showcase Theme Colors/Styles */
-.time-capsule-theme .sc-inner {
-  background: #F4EAD4;
-  border: 1.5px solid #78350F;
-}
-.time-capsule-theme .sc-title {
-  color: #78350F;
-  font-family: Georgia, serif;
-}
-.time-capsule-theme .sc-badge {
-  background: #78350F;
-  color: #F4EAD4;
-}
-.time-capsule-theme .sc-action-btn {
-  background: #78350F;
-  color: #F4EAD4;
-}
-
-.wedding-theme .sc-inner {
-  background: #FFE4E6;
-  border: 1.5px solid #E11D48;
-}
-.wedding-theme .sc-title {
-  color: #9F1239;
-  font-family: Georgia, serif;
-}
-.wedding-theme .sc-badge {
-  background: #FDA4AF;
-  color: #4C0519;
-}
-.wedding-theme .sc-action-btn {
-  background: #E11D48;
-  color: #FFFFFF;
-}
-
-.airbnb-theme .sc-inner {
-  background: #ECFDF5;
-  border: 1.5px dashed #059669;
-}
-.airbnb-theme .sc-title {
-  color: #047857;
-}
-.airbnb-theme .sc-badge {
-  background: #A7F3D0;
-  color: #064E3B;
-}
-.airbnb-theme .sc-action-btn {
-  background: #059669;
-  color: #FFFFFF;
-}
-
-.makeup-theme .sc-inner {
-  background: linear-gradient(135deg, #FFF9F6 0%, #F5E5DC 100%);
-  border: 1.5px solid #D4AF37;
-}
-.makeup-theme .sc-title {
-  color: #5C3E35;
-  font-family: Georgia, serif;
-}
-.makeup-theme .sc-badge {
-  background: #D4AF37;
-  color: #4A3B32;
-}
-.makeup-theme .sc-action-btn {
-  background: #D4AF37;
-  color: #4A3B32;
-}
-
-.culinary-theme .sc-inner {
-  background: #FFFBF7;
-  border: 1.5px solid #854D0E;
-}
-.culinary-theme .sc-title {
-  color: #78350F;
-}
-.culinary-theme .sc-badge {
-  background: #FEF3C7;
-  color: #78350F;
-}
-.culinary-theme .sc-action-btn {
-  background: #854D0E;
-  color: #FFFFFF;
-}
-
-.medical-theme .sc-inner {
-  background: #FFFFFF;
-  border: 1.5px solid #DC2626;
-}
-.medical-theme .sc-title {
-  color: #B91C1C;
-}
-.medical-theme .sc-badge {
-  background: #DC2626;
-  color: #FFFFFF;
-}
-.medical-theme .sc-action-btn {
-  background: #DC2626;
-  color: #FFFFFF;
-}
-
-.sc-avatar-wrap {
-  width: 32px;
-  height: 32px;
-  background: #475569;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 2px;
-}
-.sc-monogram {
-  font-size: 10px;
-  font-weight: 800;
-  color: #F8FAFC;
-}
-
 </style>
             </head>
 <body>
@@ -774,6 +526,10 @@ footer { width: 100%; max-width: 440px; margin: 40px auto 10px; text-align: cent
     </div>
   </div>
 </nav>
+
+<div style="background:var(--pt2); border-bottom:1px solid var(--bd); padding:8px 12px; text-align:center; font-size:12px; font-weight:500; color:var(--mu); letter-spacing:0.2px;">
+  🎯 Generate the perfect QR code for your exact use case. Free forever.
+</div>
 
 <div class="app-layout-container">
 
@@ -817,8 +573,21 @@ footer { width: 100%; max-width: 440px; margin: 40px auto 10px; text-align: cent
         <h1 class="h1" id="mainHeroTitle">Free Forever <span class="g">QR Codes</span></h1>
         <p class="hsub" id="mainHeroDesc" style="color: var(--pl); font-weight: 700; margin-bottom: 6px; letter-spacing: -0.2px;">No Expiry • No Scan Limits • Privacy First</p>
         <p class="hsub-sub" style="font-size: 13px; color: var(--mu); margin-bottom: 16px; font-weight: 600; font-family: inherit;">100+ QR Solutions for Business, Events & Personal Use</p>
+        
+        <div class="hero-actions-row" style="margin-bottom: 20px;">
+          <a href="#tb-wedding" class="hero-btn primary" onclick="document.querySelector('.studio-box').scrollIntoView({ behavior: 'smooth' }); return false;">Generate QR Free</a>
+          <button class="hero-btn" onclick="toggleSidebar(true)">Explore 100+ Tools</button>
+        </div>
       </div>
     </section>
+
+    <div class="niche-pills">
+      <span style="font-size: 12px; font-weight: 500; color: var(--mu); align-self: center; margin-right: 8px;">Try templates:</span>
+      <button class="niche-pill" onclick="quickLoadExample('wedding')">💖 Wedding RSVP</button>
+      <button class="niche-pill" onclick="quickLoadExample('airbnb')">🏡 Airbnb Guide</button>
+      <button class="niche-pill" onclick="quickLoadExample('vintage')">⏳ Time Capsule</button>
+      <button class="niche-pill" onclick="quickLoadExample('social')">🌐 Link Hub</button>
+    </div>
 
     <div class="studio-box">
       <div class="switcher-tabs" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;">
@@ -940,11 +709,6 @@ footer { width: 100%; max-width: 440px; margin: 40px auto 10px; text-align: cent
             <div class="acc-item" onclick="pickDesign('custom-photo','extra-rounded','Custom Photo QR','photo',true,this)"><span>Custom Photo QR</span><span class="badge-pro">PRO</span></div>
             <div class="acc-item" onclick="pickDesign('diamond','square','Diamond Grid','standard',true,this)"><span>Diamond Grid</span><span class="badge-pro">PRO</span></div>
             <div class="acc-item" onclick="pickSquareDesign('square','square','Classic Square','standard',false,this)"><span>Classic Square</span></div>
-            <div class="acc-item" onclick="pickDesign('bowl','extra-rounded','Artistic Food Bowl','artistic',false,this)"><span style="font-weight:700; color:#B45309;">🍽️ Artistic Food Bowl (Menu)</span></div>
-            <div class="acc-item" onclick="pickDesign('cat','extra-rounded','Artistic Cute Cat','artistic',false,this)"><span style="font-weight:700; color:#0F766E;">🐈 Artistic Cute Cat (Pets & Art)</span></div>
-            <div class="acc-item" onclick="pickDesign('butterfly','extra-rounded','Artistic Butterfly','artistic',false,this)"><span style="font-weight:700; color:#7C3AED;">🦋 Artistic Butterfly (Creative)</span></div>
-            <div class="acc-item" onclick="pickDesign('heart','extra-rounded','Artistic Love Heart','artistic',false,this)"><span style="font-weight:700; color:#BE123C;">❤️ Artistic Love Heart (Greetings)</span></div>
-            <div class="acc-item" onclick="pickDesign('eye','extra-rounded','Artistic Human Eye','artistic',false,this)"><span style="font-weight:700; color:#0369A1;">👁️ Artistic Human Eye (Concept)</span></div>
           </div>
         </div>
 
@@ -1002,7 +766,6 @@ footer { width: 100%; max-width: 440px; margin: 40px auto 10px; text-align: cent
             <option value="vintage">🕰️ Vintage Sepia Memory</option>
             <option value="wedding">💖 Elegant Floral Wedding</option>
             <option value="airbnb">🏡 Cozy Eco Airbnb / Guest Guide</option>
-            <option value="makeup">💄 Luxury Makeup & Cosmetics</option>
             <option value="slate">💼 High-End Metallic Slate</option>
             <option value="lounge">☕ Warm Café Lounge Menu</option>
             <option value="medical">⚠️ Medical Emergency ID</option>
@@ -1107,29 +870,6 @@ footer { width: 100%; max-width: 440px; margin: 40px auto 10px; text-align: cent
     </div>
     
     <div class="qr-gallery-scroll">
-      <!-- Premium Artistic Shapes -->
-      <div class="qr-gallery-card" style="border: 2px solid #B45309; background: #FFFBEB; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 120px;" onclick="quickLoadExample('bowl')">
-        <span style="font-size: 36px; margin-bottom: 6px;">🍽️</span>
-        <span class="qr-gallery-label" style="color: #78350F; font-weight: 800; font-size: 11px; margin-top: 2px;">Artistic Food Bowl</span>
-      </div>
-      <div class="qr-gallery-card" style="border: 2px solid #0F766E; background: #F0FDF4; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 120px;" onclick="quickLoadExample('cat')">
-        <span style="font-size: 36px; margin-bottom: 6px;">🐈</span>
-        <span class="qr-gallery-label" style="color: #115E59; font-weight: 800; font-size: 11px; margin-top: 2px;">Artistic Cute Cat</span>
-      </div>
-      <div class="qr-gallery-card" style="border: 2px solid #7C3AED; background: #F5F3FF; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 120px;" onclick="quickLoadExample('butterfly')">
-        <span style="font-size: 36px; margin-bottom: 6px;">🦋</span>
-        <span class="qr-gallery-label" style="color: #5B21B6; font-weight: 800; font-size: 11px; margin-top: 2px;">Artistic Butterfly</span>
-      </div>
-      <div class="qr-gallery-card" style="border: 2px solid #BE123C; background: #FFF5F5; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 120px;" onclick="quickLoadExample('heart')">
-        <span style="font-size: 36px; margin-bottom: 6px;">❤️</span>
-        <span class="qr-gallery-label" style="color: #9F1239; font-weight: 800; font-size: 11px; margin-top: 2px;">Artistic Love Heart</span>
-      </div>
-      <div class="qr-gallery-card" style="border: 2px solid #0369A1; background: #F0F9FF; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 120px;" onclick="quickLoadExample('eye')">
-        <span style="font-size: 36px; margin-bottom: 6px;">👁️</span>
-        <span class="qr-gallery-label" style="color: #075985; font-weight: 800; font-size: 11px; margin-top: 2px;">Artistic Human Eye</span>
-      </div>
-
-      <!-- General Gallery Templates -->
       <div class="qr-gallery-card" onclick="quickLoadExample('fibonacci')">
         <img class="qr-gallery-img" src="https://api.qrserver.com/v1/create-qr-code/?data=fibonacci&color=ffffff&bgcolor=312e81" alt="Fibonacci Spiral QR">
         <span class="qr-gallery-label">🌀 Fibonacci QR Spiral</span>
@@ -1223,21 +963,23 @@ footer { width: 100%; max-width: 440px; margin: 40px auto 10px; text-align: cent
           </div>
         </div>
 
-        <!-- Template 4: Luxury Makeup & Cosmetics -->
-        <div class="showcase-card makeup-theme" onclick="quickLoadExample('makeup'); document.querySelector('.studio-box').scrollIntoView({ behavior: 'smooth' });">
-          <span class="sc-badge">✨ LUXURY GLOW</span>
+        <!-- Template 4: Professional Contact -->
+        <div class="showcase-card professional-theme" onclick="quickLoadExample('fibonacci'); document.querySelector('.studio-box').scrollIntoView({ behavior: 'smooth' });">
+          <span class="sc-badge">METALLIC SLATE</span>
           <div class="sc-inner">
-            <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
-              <span style="font-size: 8px; letter-spacing: 1px; font-weight:700; color: #8C6A5E;">GLOW & CO. COSMETICS</span>
-              <div class="sc-title" style="font-family: Georgia, serif; color: #5C3E35; font-size: 15px;">Luxury Makeup</div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+              <div class="sc-avatar-wrap">
+                <span class="sc-monogram">AM</span>
+              </div>
+              <div class="sc-title">Alex Mercer</div>
+              <p class="sc-desc" style="color:var(--mu); font-size: 8px;">Lead UX Architect</p>
             </div>
-            <p class="sc-desc" style="color: #8C6A5E; font-size: 8px;">Get exclusive 20% off our premium vegan makeup collection. Scan to claim your coupon.</p>
-            <div class="sc-details-list" style="background: rgba(212, 175, 55, 0.08); color: #5C3E35;">
-              <span style="font-weight:800;">💄 Premium Artistry</span>
-              <span style="font-size:7.5px; opacity:0.9;">🌿 Vegan • ✨ Cruelty-Free • 🌟 Organic</span>
+            <div class="sc-details-list">
+              <span>📞 +91 98765 00</span>
+              <span>🌐 alexmercer.ux</span>
             </div>
-            <div class="sc-qr-mock">
-              <img referrerPolicy="no-referrer" src="https://api.qrserver.com/v1/create-qr-code/?data=luxury_makeup_discount_20&color=5c3e35&bgcolor=fff9f6" alt="Makeup Collection QR">
+            <div class="sc-qr-mock" style="background:#FFF;">
+              <img referrerPolicy="no-referrer" src="https://api.qrserver.com/v1/create-qr-code/?data=contact_alex_mercer&color=1e293b&bgcolor=ffffff" alt="Contact QR">
             </div>
             <button class="sc-action-btn">Load Template</button>
           </div>
@@ -1631,56 +1373,17 @@ function genQR() {
       };
     }
 
-    if (currentActiveStyleMode === 'artistic') {
-      const canvas = document.createElement('canvas');
-      canvas.width = 256;
-      canvas.height = 256;
-      canvas.style.width = "100%";
-      canvas.style.height = "100%";
-      canvas.style.maxWidth = "160px";
-      canvas.style.maxHeight = "160px";
-      canvas.style.display = "block";
-      canvas.style.margin = "0 auto";
-      canvas.id = "artistic-qr-canvas";
-      
-      new ArtQREngine(canvas, data, {
-        size: 512,
-        shape: curDots, // Here curDots stores the shape name ('bowl', 'cat', 'butterfly', 'heart', 'eye')
-        color: curColor,
-        bgColor: curBg,
-        errorCorrection: 'H'
-      });
-      el.appendChild(canvas);
-      
-      masterQR = {
-        _canvas: canvas,
-        getRawCanvas: function() { return canvas; },
-        getRawData: function(format) {
-          return new Promise((resolve) => {
-            canvas.toBlob((blob) => {
-              resolve(blob);
-            }, 'image/png');
-          });
-        },
-        download: function(options) {
-          const link = document.createElement('a');
-          link.download = (options && options.name) ? options.name + '.png' : 'artistic-qr.png';
-          link.href = canvas.toDataURL();
-          link.click();
-        }
-      };
-    } else {
-      masterQR = new QRCodeStyling({
-        width: 160, height: 160, type: 'canvas', data,
-        dotsOptions: { type: selectedDotType, ...paintOptions },
-        cornersSquareOptions: { type: computedCornerType, ...paintOptions },
-        cornersDotOptions: { type: 'dot', ...paintOptions },
-        backgroundOptions: { color: curBg },
-        qrOptions: { errorCorrectionLevel: 'H' },
-        ...maskConfig
-      });
-      masterQR.append(el);
-    }
+    masterQR = new QRCodeStyling({
+      width: 160, height: 160, type: 'canvas', data,
+      dotsOptions: { type: selectedDotType, ...paintOptions },
+      cornersSquareOptions: { type: computedCornerType, ...paintOptions },
+      cornersDotOptions: { type: 'dot', ...paintOptions },
+      backgroundOptions: { color: curBg },
+      qrOptions: { errorCorrectionLevel: 'H' },
+      ...maskConfig
+    });
+    
+    masterQR.append(el);
 
     if(currentActiveStyleMode === 'text') {
       setTimeout(() => {
@@ -1778,37 +1481,8 @@ function pickDesign(dots, corner, label, styleMode, isPro, el) {
   document.getElementById('charFieldBlock').style.display = (styleMode === 'text') ? 'block' : 'none';
   document.getElementById('photoFieldBlock').style.display = (styleMode === 'photo') ? 'block' : 'none';
   
-  if (styleMode === 'artistic') {
-    const posterSelect = document.getElementById('poster-theme-select');
-    if (posterSelect) {
-      if (dots === 'bowl') {
-        posterSelect.value = 'lounge';
-        curColor = '#78350F';
-        curBg = '#FFFBF7';
-      } else if (dots === 'cat') {
-        posterSelect.value = 'airbnb';
-        curColor = '#1E293B';
-        curBg = '#ECFDF5';
-      } else if (dots === 'heart') {
-        posterSelect.value = 'wedding';
-        curColor = '#DC2626';
-        curBg = '#FFF5F5';
-      } else if (dots === 'eye') {
-        posterSelect.value = 'slate';
-        curColor = '#0891B2';
-        curBg = '#1E293B';
-      } else if (dots === 'butterfly') {
-        posterSelect.value = 'vintage';
-        curColor = '#7C3AED';
-        curBg = '#FAF5FF';
-      }
-      updatePosterTheme(posterSelect.value);
-    }
-  }
-
   document.querySelectorAll('#acc-list-style .acc-item').forEach(i => i.classList.remove('on'));
-  if (el) el.classList.add('on');
-  document.getElementById('acc-lbl').textContent = "Design: " + label;
+  el.classList.add('on'); document.getElementById('acc-lbl').textContent = "Design: " + label;
   document.getElementById('acc-list-style').classList.remove('open');
   document.getElementById('acc-arr-style').classList.remove('open');
   genQR();
@@ -1817,8 +1491,7 @@ function pickDesign(dots, corner, label, styleMode, isPro, el) {
 function pickSquareDesign(dots, corner, label, styleMode, isPro, el) {
   curDots = dots; curCorner = corner; currentActiveStyleMode = styleMode;
   document.querySelectorAll('#acc-list-style .acc-item').forEach(i => i.classList.remove('on'));
-  if (el) el.classList.add('on');
-  document.getElementById('acc-lbl').textContent = "Design: " + label;
+  el.classList.add('on'); document.getElementById('acc-lbl').textContent = "Design: " + label;
   document.getElementById('acc-list-style').classList.remove('open');
   document.getElementById('acc-arr-style').classList.remove('open');
   genQR();
@@ -2130,75 +1803,7 @@ function quickLoadExample(type) {
   if(document.getElementById('lock-overlay')) document.getElementById('lock-overlay').style.display = 'none';
   if(document.getElementById('qr-out')) document.getElementById('qr-out').style.filter = 'none';
 
-  if (type === 'bowl' || type === 'cat' || type === 'butterfly' || type === 'heart' || type === 'eye') {
-    let dots = type;
-    let label = '';
-    if (type === 'bowl') label = 'Artistic Food Bowl';
-    else if (type === 'cat') label = 'Artistic Cute Cat';
-    else if (type === 'butterfly') label = 'Artistic Butterfly';
-    else if (type === 'heart') label = 'Artistic Love Heart';
-    else if (type === 'eye') label = 'Artistic Human Eye';
-
-    let itemEl = null;
-    const items = document.querySelectorAll('#acc-list-style .acc-item');
-    items.forEach(item => {
-      if (item.textContent.includes(label)) {
-        itemEl = item;
-      }
-    });
-
-    pickDesign(dots, 'extra-rounded', label, 'artistic', false, itemEl);
-
-    if (type === 'bowl') {
-      switchTool('capsule', tbCapsule);
-      const inTitle = document.getElementById('in-capsule-title');
-      const inLink = document.getElementById('in-capsule-link');
-      const inShop = document.getElementById('in-shop');
-      if (inTitle) inTitle.value = "Le Petit Bistro Menu";
-      if (inLink) inLink.value = "https://menu.lepetitbistro.fr";
-      if (inShop) inShop.value = "LE PETIT BISTRO";
-    } else if (type === 'cat') {
-      switchTool('social', tbSocial);
-      const inHandle = document.getElementById('in-social-handle');
-      const inLink = document.getElementById('in-social-link');
-      const inDesc = document.getElementById('in-social-desc');
-      const inShop = document.getElementById('in-shop');
-      if (inHandle) inHandle.value = "@WhiskersTheCat";
-      if (inLink) inLink.value = "https://instagram.com/whiskers";
-      if (inDesc) inDesc.value = "Follow my cozy cat life and cute art!";
-      if (inShop) inShop.value = "WHISKERS ART";
-    } else if (type === 'butterfly') {
-      switchTool('social', tbSocial);
-      const inHandle = document.getElementById('in-social-handle');
-      const inLink = document.getElementById('in-social-link');
-      const inDesc = document.getElementById('in-social-desc');
-      const inShop = document.getElementById('in-shop');
-      if (inHandle) inHandle.value = "@ButterflyVibes";
-      if (inLink) inLink.value = "https://linktr.ee/butterflyvibes";
-      if (inDesc) inDesc.value = "Fluttering through music, art & dance";
-      if (inShop) inShop.value = "BUTTERFLY CO";
-    } else if (type === 'heart') {
-      switchTool('wedding', tbWedding);
-      const inNames = document.getElementById('in-wedding-names');
-      const inLink = document.getElementById('in-wedding-link');
-      const inVenue = document.getElementById('in-wedding-venue');
-      const inShop = document.getElementById('in-shop');
-      if (inNames) inNames.value = "Emma & David";
-      if (inLink) inLink.value = "https://wedding.emma-david.rsvp";
-      if (inVenue) inVenue.value = "St. Paul Cathedral & Grand Ballroom";
-      if (inShop) inShop.value = "EMMA & DAVID";
-    } else if (type === 'eye') {
-      switchTool('social', tbSocial);
-      const inHandle = document.getElementById('in-social-handle');
-      const inLink = document.getElementById('in-social-link');
-      const inDesc = document.getElementById('in-social-desc');
-      const inShop = document.getElementById('in-shop');
-      if (inHandle) inHandle.value = "@FocusEyeVision";
-      if (inLink) inLink.value = "https://vision-insight.io";
-      if (inDesc) inDesc.value = "Exploring future tech & cybernetic concepts";
-      if (inShop) inShop.value = "FOCUS EYE";
-    }
-  } else if (type === 'wedding') {
+  if (type === 'wedding') {
     switchTool('wedding', tbWedding);
     const inNames = document.getElementById('in-wedding-names');
     const inLink = document.getElementById('in-wedding-link');
@@ -2231,23 +1836,6 @@ function quickLoadExample(type) {
     curBg = '#ECFDF5';
     curDots = 'rounded';
     curCorner = 'rounded';
-    currentActiveStyleMode = 'standard';
-  } else if (type === 'makeup') {
-    switchTool('social', tbSocial);
-    const inHandle = document.getElementById('in-social-handle');
-    const inLink = document.getElementById('in-social-link');
-    const inDesc = document.getElementById('in-social-desc');
-    const inShop = document.getElementById('in-shop');
-    if(inHandle) inHandle.value = "Glow & Co. Cosmetics";
-    if(inLink) inLink.value = "https://glowandco.com/luxury-collection";
-    if(inDesc) inDesc.value = "Premium organic vegan cosmetics & makeup essentials";
-    if(inShop) inShop.value = "GLOW & CO.";
-    
-    curColor = '#5C3E35';
-    isMultiToned = false;
-    curBg = 'linear-gradient(135deg, #FFF9F6 0%, #F5E5DC 100%)';
-    curDots = 'rounded';
-    curCorner = 'extra-rounded';
     currentActiveStyleMode = 'standard';
   } else if (type === 'vinyl' || type === 'vintage' || type === 'restaurant') {
     switchTool('capsule', tbCapsule);
@@ -2287,8 +1875,7 @@ function quickLoadExample(type) {
   
   const posterSelect = document.getElementById('poster-theme-select');
   if (posterSelect) {
-    if (type === 'makeup') posterSelect.value = 'makeup';
-    else if (curTool === 'wedding') posterSelect.value = 'wedding';
+    if (curTool === 'wedding') posterSelect.value = 'wedding';
     else if (curTool === 'airbnb') posterSelect.value = 'airbnb';
     else if (curTool === 'capsule') posterSelect.value = 'vintage';
     else if (curTool === 'social') posterSelect.value = 'slate';
@@ -2594,51 +2181,6 @@ function updatePosterTheme(themeName) {
     if(botText) {
       botText.style.color = "#854D0E";
       botText.textContent = "restaurant.ezqr";
-    }
-  } else if (themeName === 'makeup') {
-    card.style.background = "linear-gradient(135deg, #FFF9F6 0%, #F5E5DC 100%)"; // Soft Champagne Nude
-    card.style.border = "2px solid #D4AF37"; // Golden Border
-    card.style.boxShadow = "0 8px 32px rgba(184, 134, 11, 0.12)";
-    card.style.fontFamily = "Georgia, serif";
-    
-    if(badge) {
-      badge.style.display = "inline-block";
-      badge.textContent = "✨ LUXURY COSMETICS ✨";
-      badge.style.background = "#D4AF37"; // Gold Badge
-      badge.style.color = "#4A3B32";
-      badge.style.fontWeight = "900";
-    }
-    if(topText) {
-      topText.style.color = "#5C3E35"; // Deep warm chocolate/rose-brown
-      topText.style.fontWeight = "900";
-      topText.textContent = v('in-shop') || "GLOW & CO.";
-    }
-    if(subtitle) {
-      subtitle.style.display = "block";
-      subtitle.textContent = "Scan for Exclusive 20% Off Makeup Collection";
-      subtitle.style.color = "#8C6A5E";
-    }
-    if(details) {
-      details.style.display = "block";
-      details.innerHTML = `
-        <div style="font-weight:800; margin-bottom: 2px; color: #5C3E35;">💄 Premium Makeup Artistry</div>
-        <div style="font-size: 7px; color: #8C6A5E; display: flex; justify-content: center; gap: 8px; font-weight: bold;">
-          <span>🌿 Vegan</span>
-          <span>✨ Cruelty-Free</span>
-          <span>🌟 Organic</span>
-        </div>
-      `;
-      details.style.background = "rgba(212, 175, 55, 0.08)";
-      details.style.color = "#5C3E35";
-    }
-    if(desc) {
-      desc.style.display = "block";
-      desc.textContent = "✦ Scan to Shop Online Catalog ✦";
-      desc.style.color = "#D4AF37";
-    }
-    if(botText) {
-      botText.style.color = "#8C6A5E";
-      botText.textContent = "glow-and-co.premium";
     }
   } else if (themeName === 'medical') {
     card.style.background = "#FFFFFF"; // Clinical Safety White

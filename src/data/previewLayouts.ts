@@ -35,5 +35,12 @@ export const PREVIEW_LAYOUTS_DATABASE: Record<string, PreviewLayoutConfig> = {
     previewType: 'wifi-card',
     formats: ['Guest Desk Stand Flyer', 'Hotel Bedside Smart QR Sticker', 'Corporate Conference Room Card'],
     mockupBg: 'linear-gradient(to bottom, #EEF2FF, #818CF8)'
+  },
+  'general-preview': {
+    id: 'general-preview',
+    name: 'Premium High-Resolution Badge / Screen',
+    previewType: 'poster',
+    formats: ['Standard A4 Print Sheet', 'Square Matte Sticker Label', 'Digital Screen Sharing Card'],
+    mockupBg: 'linear-gradient(to bottom, #111122, #1E1B4B)'
   }
 };

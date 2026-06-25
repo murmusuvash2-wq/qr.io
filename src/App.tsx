@@ -21,30 +21,66 @@ const getToolIcon = (type: string) => {
   }
 };
 
-const getToolContent = (toolId: string) => {
-  const matchKey = Object.keys(TOOL_CONTENT_DATABASE).find(k => toolId.includes(k) || k.includes(toolId));
+const getToolContent = (tool: QRTool) => {
+  const matchKey = Object.keys(TOOL_CONTENT_DATABASE).find(k => tool.id === k || tool.id.includes(k) || k.includes(tool.id));
   if (matchKey) {
     return TOOL_CONTENT_DATABASE[matchKey];
   }
+
+  const cleanName = tool.name
+    .replace('QR Code', '')
+    .replace('Generator', '')
+    .replace('Maker', '')
+    .replace('Creator', '')
+    .trim();
+
+  let dynamicUseCases = [
+    `Direct Channel Sharing: Place your ${cleanName} code on printed materials or digital banner screens.`,
+    `Frictionless Access: Let users bypass typing long, complicated link protocols manually with a quick scan.`,
+    `Instant Promotions: Add vectors onto posters or packaging labels to drive higher scanner engagement rates.`
+  ];
+
+  if (tool.category === 'Crypto & Web3') {
+    dynamicUseCases = [
+      `Secure Wallet Sharing: Show QR vectors to safely receive decentralized ${cleanName} transfer payments.`,
+      `Over-the-Counter Checkouts: Frame custom printed stickers next to cashier desks for convenient local payments.`,
+      `Verified Address Verification: Instantly verify receiving blockchain addresses to completely eliminate manual copy-paste typos.`
+    ];
+  } else if (tool.category === 'Social Media') {
+    dynamicUseCases = [
+      `Instant Profile Growth: Direct offline clients to subscribe, follow, or interact with your ${cleanName} portal.`,
+      `Content Distribution Hub: Embed within newsletters, video guides, and flyers to share modern interactive stories.`,
+      `High-Speed Engagements: Let scanners immediately double-tap, like, retweet, or comment on your target feeds safely.`
+    ];
+  } else if (tool.category === 'Business & Promo') {
+    dynamicUseCases = [
+      `Polished NFC Business Cards: Embed customized ${cleanName} codes onto modern, contact-free business cards.`,
+      `Retail Window Signages: Distribute scans across storefront showcases, pamphlets, and catalog sheets.`,
+      `Lead Generation Portals: Place custom frames inside display stands to capture client inquiry forms.`
+    ];
+  } else if (tool.category === 'E-Commerce') {
+    dynamicUseCases = [
+      `Dynamic Purchase Links: Guide offline buyers to immediate secure ${cleanName} product checkout points.`,
+      `Post-Purchase Inserts: Apply branded stickers inside shipping boxes to encourage instant feedback and support rating reviews.`,
+      `Special Outlet Discounts: Deliver custom barcode voucher layouts at checkout points to secure repeat consumers.`
+    ];
+  }
+
   return {
-    seoTitle: 'Free QR Code Generator | Permanent No-Expiry Codes',
-    metaDescription: 'Create custom QR codes quickly and safely. Free forever with no boundaries, direct browser conversion, and high-DPI export.',
-    heroTitle: 'Custom Dynamic Vector QR Codes',
-    heroSubtitle: 'Easily design barcode standards for high-speed offline data connections, website links, or smart Wi-Fi details.',
-    useCases: [
-      'Digital Business Cards: Distribute your phone numbers and socials at local meetups.',
-      'Offline Marketing Boards: Place scan squares on printed flyers, storefront windows, and package envelopes.',
-      'Instant Web Redirects: Forward scanners to custom video channels, landing galleries, and newsletters.'
-    ],
+    seoTitle: `${tool.name} Generator | Free Permanent QR Suite`,
+    metaDescription: `${tool.description} Fast, robust, and permanent with zero-expiries. Customize and download high-DPI vectors in seconds.`,
+    heroTitle: `${tool.name}`,
+    heroSubtitle: tool.description,
+    useCases: dynamicUseCases,
     benefits: [
-      'Zero maintenance: Permanent static layouts function completely indefinitely.',
-      'Immediate scanning: Works natively inside any iOS or Android default camera frame.',
-      'Device local: Generation complies locally inside browser memory. Extremely safe.'
+      `Permanent Static Layout: Generated ${cleanName} patterns remain valid forever and never expire.`,
+      `Zero Setup Backlogs: Direct device-to-address redirection requires no cloud servers or background accounts.`,
+      `Full-Scope Customization: Personalize foreground and backend matrix designs using professional palette swatches.`
     ],
     bestPractices: [
-      'Perfect Contrast: Maintain clear contrast by keeping dots dark and the background light.',
-      'Add calling frames: Group with simple descriptive words like "Scan to View" to increase scanner counts.',
-      'Double Check Data: Ensure correct spelling of SSIDs or raw URLs before printing bulk products.'
+      `Keep High Contrast: Maintain brilliant focal visibility by combining classic white backdrops with dark colors.`,
+      `Utilize Calling Frames: Place clear instructional phrases such as "Scan to Connect" or "Scan to Pay" directly next to code blocks.`,
+      `Double-Test Live Outputs: Always perform test scans with native Android and iOS devices before publishing large-scale print batches.`
     ]
   };
 };
@@ -72,17 +108,17 @@ export default function App() {
   const [scans, setScans] = useState(49284);
   const [expandedFaqId, setExpandedFaqId] = useState<string | null>(null);
 
-  const toolContent = getToolContent(activeTool.id);
+  const toolContent = getToolContent(activeTool);
   const toolFAQs = getToolFAQs(activeTool.id);
   const relatedTools = getRelatedToolsItems(activeTool.id, QR_TOOLS);
 
   const UI_CATEGORIES = [
     { label: 'All', filter: () => true },
-    { label: '🏢 Business', filter: (t: QRTool) => t.category === 'Business & Promo' || t.category === 'E-Commerce' || t.category === 'Popular' },
-    { label: '🎉 Events', filter: (t: QRTool) => t.type === 'event' || t.slug.includes('wedding') || t.slug.includes('event') },
-    { label: '❤️ Personal', filter: (t: QRTool) => t.category === 'Utility & Personal' || t.category === 'Social Media' },
-    { label: '🔒 Security', filter: (t: QRTool) => t.type === 'wifi' || t.slug.includes('pass') || t.slug.includes('secure') || t.category === 'Crypto & Web3' },
-    { label: '🇮🇳 India', filter: (t: QRTool) => t.name.includes('UPI') || t.slug.includes('upi') || t.keywords.some(k => k.includes('india') || k.includes('upi')) },
+    { label: '🏢 Business', filter: (t: QRTool) => t.category === 'B2B & Compliance' || t.category === 'Real Estate & Auto' || t.category === 'Crypto & Payments' || t.category === 'Business' },
+    { label: '🍽️ Restaurant', filter: (t: QRTool) => t.category === 'Restaurant & Hospitality' || t.category === 'Restaurant' },
+    { label: '🎉 Events', filter: (t: QRTool) => t.category === 'Education & Events' || t.category === 'Cultural & Festive' || t.category === 'Events' },
+    { label: '❤️ Personal', filter: (t: QRTool) => t.category === 'Utilities & Daily Life' || t.category === 'Emotional & Safety' || t.category === 'Healthcare & Medical' || t.category === 'India Regional & Civic' || t.category === 'Personal' },
+    { label: '🎨 Art & Math QR', filter: (t: QRTool) => t.category === 'Technical & Math' || t.category === 'Cyber Security & Privacy' || t.category === 'Art QR' },
   ];
 
   useEffect(() => {
@@ -484,7 +520,7 @@ export default function App() {
 
       {/* Features Section */}
       <section className="relative z-10 max-w-5xl mx-auto w-full px-4 mb-20 text-center">
-        <h2 className="font-syne text-3xl font-extrabold mb-10">Why A2ZQR?</h2>
+        <h2 className="font-syne text-3xl font-extrabold mb-10">Why EZQR.IO?</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-6">
           <div className="flex flex-col items-center">
             <div className="w-12 h-12 rounded-full bg-[#12121E] border border-[#28283E] flex items-center justify-center mb-4 text-emerald-400">
@@ -538,10 +574,10 @@ export default function App() {
             <QrCode className="w-5 h-5" />
           </div>
           <span className="font-syne font-extrabold text-[19px] tracking-tight mb-2">
-            A2Z<em className="font-normal not-italic text-[#A89EFF]">QR</em>
+            EZ<em className="font-normal not-italic text-[#A89EFF]">QR.IO</em>
           </span>
           <p className="text-[12px] text-[#42425A] mb-1">
-            © 2026 A2ZQR · Clean generation in your browser
+            © 2026 EZQR.IO · Clean generation in your browser
           </p>
           <p className="text-[10px] text-[#28283E]">
             Powered by open source

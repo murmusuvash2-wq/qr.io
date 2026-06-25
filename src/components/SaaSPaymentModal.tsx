@@ -23,7 +23,7 @@ export default function SaaSPaymentModal({
   const [activeStep, setActiveStep] = useState<'auth' | 'checkout' | 'success'>('auth');
   
   // Auth states
-  const [email, setEmail] = useState('test@a2zqr.com');
+  const [email, setEmail] = useState('test@ezqr.io');
   const [password, setPassword] = useState('password123');
   const [isRegister, setIsRegister] = useState(false);
   const [country, setCountry] = useState<'IN' | 'US'>('IN');
@@ -134,7 +134,7 @@ export default function SaaSPaymentModal({
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-indigo-500 animate-ping"></span>
             <span className="text-xs font-bold text-slate-300 tracking-wider font-mono uppercase">
-              Secure Subscription Wizard • A2ZQR Premium
+              Secure Subscription Wizard • EZQR.IO Premium
             </span>
           </div>
           <button 

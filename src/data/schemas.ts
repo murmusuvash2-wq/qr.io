@@ -1,7 +1,7 @@
 export interface Field {
   id: string;
   label: string;
-  type: 'text' | 'password' | 'textarea' | 'select' | 'number' | 'email' | 'tel' | 'url';
+  type: 'text' | 'password' | 'textarea' | 'select' | 'number' | 'email' | 'tel' | 'url' | 'color' | 'date';
   required: boolean;
   maxLength?: number;
   placeholder: string;

@@ -61,7 +61,7 @@ function simulateLocalLogin(email) {
   localStorage.setItem('isUserPremiumPro', 'true');
   
   const mockUserDoc = { email: email, isPro: true, simulated: true };
-  localStorage.setItem('a2zqr_secure_user_doc', JSON.stringify(mockUserDoc));
+  localStorage.setItem('ezqr_secure_user_doc', JSON.stringify(mockUserDoc));
   
   if (typeof window.unlockProUI === 'function') {
     window.unlockProUI();
@@ -172,7 +172,7 @@ function transitionToPayment() {
 
 // Check initial load fallback state immediately
 (function initFallbackLoad() {
-  const stored = localStorage.getItem('a2zqr_secure_user_doc');
+  const stored = localStorage.getItem('ezqr_secure_user_doc');
   if (stored) {
     try {
       const parsed = JSON.parse(stored);
@@ -203,7 +203,7 @@ onAuthStateChanged(auth, async (user) => {
     
     // Check fallback simulation if firestore direct fails or doesn't have it
     if (!proFound) {
-      const stored = localStorage.getItem('a2zqr_secure_user_doc');
+      const stored = localStorage.getItem('ezqr_secure_user_doc');
       if (stored) {
         try {
           const parsed = JSON.parse(stored);
@@ -224,7 +224,7 @@ onAuthStateChanged(auth, async (user) => {
     }
   } else {
     // Keep simulation active if it was logged in through simulation
-    const stored = localStorage.getItem('a2zqr_secure_user_doc');
+    const stored = localStorage.getItem('ezqr_secure_user_doc');
     if (stored) {
       try {
         const parsed = JSON.parse(stored);

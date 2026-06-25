@@ -35,8 +35,8 @@ export interface UserStats {
 }
 
 // Local simulation fallback store helpers
-const MOCK_AUTH_KEY = 'a2zqr_secure_auth';
-const MOCK_USER_KEY = 'a2zqr_secure_user_doc';
+const MOCK_AUTH_KEY = 'ezqr_secure_auth';
+const MOCK_USER_KEY = 'ezqr_secure_user_doc';
 
 const loadMockUserDoc = (email: string, country: string = 'US'): UserStats => {
   const isIndia = country === 'IN';
@@ -45,7 +45,7 @@ const loadMockUserDoc = (email: string, country: string = 'US'): UserStats => {
     try {
       const parsed = JSON.parse(item);
       if (parsed.email === email) {
-        if (email.toLowerCase() === 'test@a2zqr.com') {
+        if (email.toLowerCase() === 'test@ezqr.io') {
           parsed.isPro = true;
           parsed.planType = 'yearly';
         }
@@ -53,7 +53,7 @@ const loadMockUserDoc = (email: string, country: string = 'US'): UserStats => {
       }
     } catch {}
   }
-  const isTestUser = email.toLowerCase() === 'test@a2zqr.com';
+  const isTestUser = email.toLowerCase() === 'test@ezqr.io';
   const newUser: UserStats = {
     email,
     uid: isTestUser ? 'usr_test_pro_123' : 'usr_' + Math.random().toString(36).substr(2, 9),

@@ -4,8 +4,7 @@ import QRCodeStyling from 'qr-code-styling';
 import { QRTool } from '../data/tools';
 import { UserStats } from '../lib/firebase';
 
-import { FORMS_DATABASE } from '../data/forms';
-import { FIELD_GROUPS } from '../data/fieldGroups';
+import { getResolvedFieldsForTool, generateQRStringForTool } from '../data/forms';
 import { THEMES_DATABASE } from '../data/themes';
 import { QR_STYLES_DATABASE } from '../data/qrStyles';
 import { PREVIEW_LAYOUTS_DATABASE } from '../data/previewLayouts';
@@ -21,34 +20,6 @@ interface QRCodeGeneratorProps {
   user: UserStats | null;
   onOpenPayModal: () => void;
 }
-
-// Programmatic form fields resolver helper
-const getResolvedFields = (toolId: string, defaultInputs: any[]): Field[] => {
-  const formKey = Object.keys(FORMS_DATABASE).find(k => k === toolId || toolId.includes(k));
-  if (formKey) {
-    const config = FORMS_DATABASE[formKey];
-    let resolvedFields: Field[] = [...config.fields];
-    
-    if (config.fieldGroupIds) {
-      config.fieldGroupIds.forEach(groupId => {
-        const group = FIELD_GROUPS[groupId];
-        if (group) {
-          resolvedFields = [...resolvedFields, ...group.fields];
-        }
-      });
-    }
-    return resolvedFields;
-  }
-  
-  return defaultInputs.map(input => ({
-    id: input.key,
-    label: input.label,
-    type: input.type as any,
-    required: input.isRequired || false,
-    placeholder: input.placeholder,
-    defaultValue: input.defaultValue
-  }));
-};
 
 const getToolGroup = (toolId: string, category: string) => {
   const id = toolId.toLowerCase();
@@ -83,6 +54,48 @@ const getSocialMediaBrandDetails = (toolId: string) => {
 export default function QRCodeGenerator({ tool, user, onOpenPayModal }: QRCodeGeneratorProps) {
   const [formValues, setFormValues] = useState<Record<string, string>>({});
   const [qrString, setQrString] = useState<string>('');
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validateField = (id: string, val: string, validationType?: string): string => {
+    if (!val || val.trim() === '') return '';
+    
+    if (validationType === 'url' || id === 'url' || id.includes('website') || id.includes('link') || id.includes('target-url')) {
+      const pattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/i;
+      if (!pattern.test(val)) {
+        return 'Please enter a valid URL (e.g. https://example.com)';
+      }
+    }
+    
+    if (validationType === 'email' || id.includes('email') || id === 'mail') {
+      const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!pattern.test(val)) {
+        return 'Please enter a valid email address';
+      }
+    }
+
+    if (validationType === 'phone' || id.includes('phone') || id.includes('mobile') || id.includes('whatsapp') || id === 'contact') {
+      const cleanPhone = val.replace(/[\s\-\(\)]/g, '');
+      if (cleanPhone && !/^\+?\d{7,15}$/.test(cleanPhone)) {
+        return 'Please enter a valid phone number with country code (e.g., +919876543210)';
+      }
+    }
+
+    if (id.includes('vpa') || id.includes('upi')) {
+      const pattern = /^[\w-.]+@[\w-]+$/;
+      if (!pattern.test(val)) {
+        return 'Please enter a valid UPI ID (e.g., recipient@bank)';
+      }
+    }
+
+    if (id.includes('crypto') || id.includes('wallet') || id.includes('addr')) {
+      const cleanAddr = val.trim();
+      if (cleanAddr.length < 26 || cleanAddr.length > 62 || !/^[a-zA-Z0-9]+$/.test(cleanAddr.replace(/^0x/, ''))) {
+        return 'Please enter a valid cryptographic address';
+      }
+    }
+
+    return '';
+  };
   
   // Customization Toggles
   const [logoFile, setLogoFile] = useState<string>('');
@@ -102,7 +115,7 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal }: QRCodeGe
   const [showWifiPass, setShowWifiPass] = useState<boolean>(false);
 
   // Dynamic values resolved from programmatic schemas
-  const fields = getResolvedFields(tool.id, tool.inputs);
+  const fields = getResolvedFieldsForTool(tool);
   
   // Dynamic theme matching
   const themeKey = Object.keys(THEMES_DATABASE).find(k => tool.id.includes(k.replace('-theme', '')) || k.startsWith(tool.id.split('-')[0]));
@@ -113,8 +126,26 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal }: QRCodeGe
   const activeStyle = QR_STYLES_DATABASE[styleKey];
 
   // Dynamic preview formats matching
-  const previewLayout = Object.values(PREVIEW_LAYOUTS_DATABASE).find(p => tool.id.includes(p.id) || tool.id.includes(p.previewType)) || PREVIEW_LAYOUTS_DATABASE['wedding-invitation'];
-  const printGuide = Object.values(PRINT_GUIDES_DATABASE).find(g => tool.id.includes(g.id) || (themeKey && themeKey.includes('wedding') && g.id === 'standard-card')) || PRINT_GUIDES_DATABASE['standard-card'];
+  const previewLayout = (() => {
+    const id = tool.id.toLowerCase();
+    if (id.includes('wedding') || id.includes('invitation') || id.includes('event')) {
+      return PREVIEW_LAYOUTS_DATABASE['wedding-invitation'];
+    }
+    if (id.includes('menu') || id.includes('restaurant') || id.includes('cafe') || id.includes('bistro') || id.includes('food')) {
+      return PREVIEW_LAYOUTS_DATABASE['menu-stand'];
+    }
+    if (id.includes('card') || id.includes('contact') || id.includes('vcard') || id.includes('mecard') || id.includes('portfolio') || id.includes('business')) {
+      return PREVIEW_LAYOUTS_DATABASE['business-card'];
+    }
+    if (id.includes('property') || id.includes('flyer') || id.includes('real-estate') || id.includes('brochure')) {
+      return PREVIEW_LAYOUTS_DATABASE['property-flyer'];
+    }
+    if (id.includes('wifi') || id.includes('network') || id.includes('internet') || id.includes('ssid')) {
+      return PREVIEW_LAYOUTS_DATABASE['wifi-card'];
+    }
+    return PREVIEW_LAYOUTS_DATABASE['general-preview'];
+  })();
+  const printGuide = Object.values(PRINT_GUIDES_DATABASE).find(g => g.id === tool.id || tool.id.includes(g.id) || (themeKey && themeKey.includes('wedding') && g.id === 'standard-card')) || PRINT_GUIDES_DATABASE['standard-card'];
 
   // Dynamic capability matching
   const capability = CAPABILITIES_DATABASE[tool.id] || DEFAULT_CAPABILITY;
@@ -126,6 +157,7 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal }: QRCodeGe
       defaults[input.id] = input.defaultValue || '';
     });
     setFormValues(defaults);
+    setErrors({});
     
     if (activeTheme) {
       setFgColor(activeTheme.primaryColor);
@@ -139,40 +171,11 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal }: QRCodeGe
 
   // Generate QR Raw Data String
   useEffect(() => {
-    const keys = Object.keys(formValues);
-    if (keys.length > 0) {
-      try {
-        let generated = '';
-        // If the tool has a direct generator in standard list, always use it to avoid wrong formatting!
-        if (tool.generateQRString && !['wedding', 'vcard_full', 'vcard-full', 'restaurant_menu_database'].includes(tool.id)) {
-          generated = tool.generateQRString(formValues);
-        } else {
-          // Resolve special database-backed forms
-          const mainUrlKey = Object.keys(formValues).find(k => k.includes('url') || k.includes('link') || k.includes('website'));
-          if (mainUrlKey && formValues[mainUrlKey]) {
-            generated = formValues[mainUrlKey];
-          } else {
-            const lines: string[] = [];
-            if (formValues.groom_name && formValues.bride_name) {
-              lines.push(`❤️ wedding: ${formValues.groom_name} & ${formValues.bride_name}`);
-              if (formValues.wedding_date) lines.push(`📅 date: ${formValues.wedding_date}`);
-              if (formValues.venue) lines.push(`📍 venue: ${formValues.venue}`);
-              if (formValues.rsvp_phone) lines.push(`📞 rsvp: ${formValues.rsvp_phone}`);
-            } else {
-              Object.entries(formValues).forEach(([k, v]) => {
-                if (v) {
-                  const label = k.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase());
-                  lines.push(`${label}: ${v}`);
-                }
-              });
-            }
-            generated = lines.join('\n') || 'A2ZQR Static Code';
-          }
-        }
-        setQrString(generated || 'Welcome User');
-      } catch (e) {
-        setQrString('Error processing inputs');
-      }
+    try {
+      const generated = generateQRStringForTool(tool, formValues);
+      setQrString(generated);
+    } catch (e) {
+      setQrString('Error processing inputs');
     }
   }, [formValues, tool]);
 
@@ -213,6 +216,10 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal }: QRCodeGe
 
   const handleInputChange = (key: string, val: string) => {
     setFormValues(prev => ({ ...prev, [key]: val }));
+    
+    const fieldObj = fields.find(f => f.id === key);
+    const err = validateField(key, val, fieldObj?.validation);
+    setErrors(prev => ({ ...prev, [key]: err }));
   };
 
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -318,6 +325,9 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal }: QRCodeGe
       
       // A. WIFI SPECIAL PREVIEW
       if (id.includes('wifi') || id.includes('hotspot')) {
+        const ssidVal = formValues['in-wifi-ssid'] || formValues['ssid'] || formValues['network'] || 'WiFi Network';
+        const passVal = formValues['in-wifi-pass'] || formValues['password'] || '';
+        const secVal = formValues['in-wifi-sec'] || formValues['sec'] || formValues['encryption'] || 'WPA';
         return (
           <div className="bg-[#12121E]/80 border border-[#28283E]/60 rounded-xl p-4 relative overflow-hidden transition-all hover:border-[#7C6EFA]/40 shadow-inner">
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#7C6EFA]/10 to-transparent rounded-full pointer-events-none"></div>
@@ -335,14 +345,14 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal }: QRCodeGe
               </div>
               <div>
                 <h5 className="font-syne font-bold text-sm text-white leading-tight">
-                  SSID: <span className="font-mono text-[#A89EFF]">{formValues['ssid'] || 'WiFi Network'}</span>
+                  SSID: <span className="font-mono text-[#A89EFF]">{ssidVal}</span>
                 </h5>
                 <p className="text-[11px] text-[#8080A0] mt-1">
-                  Security: <span className="font-mono text-white">{formValues['encryption'] || 'WPA'}</span>
+                  Security: <span className="font-mono text-white">{secVal}</span>
                 </p>
-                {formValues['password'] && (
+                {passVal && (
                   <p className="text-[10px] text-[#A89EFF]/80 mt-1 font-mono">
-                     Password: {showWifiPass ? formValues['password'] : '••••••••'}
+                     Password: {showWifiPass ? passVal : '••••••••'}
                   </p>
                 )}
               </div>
@@ -737,9 +747,9 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal }: QRCodeGe
                     <span className="pl-3.5 text-[#8080A0] shrink-0 font-bold select-none">
                       {isUrlType ? (
                         <Globe className="w-4 h-4 text-[#7C6EFA]" />
-                      ) : input.id === 'password' ? (
+                      ) : (input.id === 'password' || input.id.includes('pass')) ? (
                         <span>🔒</span>
-                      ) : input.id === 'ssid' || input.id === 'network' ? (
+                      ) : (input.id === 'ssid' || input.id.includes('ssid') || input.id === 'network') ? (
                         <Wifi className="w-4 h-4 text-[#7C6EFA]" />
                       ) : isPhoneType ? (
                         <Phone className="w-4 h-4 text-emerald-400" />
@@ -754,7 +764,7 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal }: QRCodeGe
                     
                     {/* Exact Input */}
                     <input
-                      type={input.id === 'password' ? (showWifiPass ? 'text' : 'password') : (input.type || 'text')}
+                      type={(input.id === 'password' || input.id.includes('pass')) ? (showWifiPass ? 'text' : 'password') : (input.type || 'text')}
                       value={val}
                       onChange={(e) => handleInputChange(input.id, e.target.value)}
                       placeholder={input.placeholder}
@@ -762,7 +772,7 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal }: QRCodeGe
                     />
 
                     {/* Password toggle icon */}
-                    {input.id === 'password' && (
+                    {(input.id === 'password' || input.id.includes('pass')) && (
                       <button
                         type="button"
                         onClick={() => setShowWifiPass(!showWifiPass)}
@@ -878,6 +888,14 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal }: QRCodeGe
                         {tpl.name}
                       </button>
                     ))}
+                  </div>
+                )}
+
+                {/* Validation error feed alert */}
+                {errors[input.id] && (
+                  <div className="text-[11px] font-medium text-pink-300 mt-1.5 flex items-start gap-1.5 bg-pink-500/10 border border-pink-500/20 px-3 py-2 rounded-lg animate-fade-in">
+                    <span className="shrink-0 text-[12px] pt-0.5">⚠️</span>
+                    <span>{errors[input.id]}</span>
                   </div>
                 )}
               </div>
@@ -1070,7 +1088,7 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal }: QRCodeGe
                     {/* Render raw code inline */}
                     <div ref={qrRef} className="scale-35 origin-center" />
                     {/* Visual mockup fallback */}
-                    <img src={`https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(qrString || 'a2zqr')}&color=${fgColor.replace('#','')}&bgcolor=${bgColor.replace('#','')}`} className="w-24 h-24 rounded" alt="Mockup QR code" />
+                    <img src={`https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(qrString || 'ezqr')}&color=${fgColor.replace('#','')}&bgcolor=${bgColor.replace('#','')}`} className="w-24 h-24 rounded" alt="Mockup QR code" />
                   </div>
                 </div>
                 <span className="text-[7px] font-mono tracking-widest mt-2 overflow-hidden text-ellipsis whitespace-nowrap w-full" style={{ color: fgColor }}>
@@ -1091,12 +1109,12 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal }: QRCodeGe
               {/* The QR Code */}
               <div ref={qrRef} className="flex justify-center items-center h-[280px] bg-[#12121E]/10 rounded-xl p-2" />
               <div className="text-[10px] font-bold tracking-[1.5px] lowercase mt-[16px]" style={{ color: fgColor }}>
-                a2zqr.com
+                ezqr.io
               </div>
               
               {!user?.isPro && (
                 <div className="absolute bottom-2 right-2 flex flex-col items-end opacity-80 mix-blend-difference text-white">
-                  <span className="text-[8px] font-bold">A2ZQR Watermark</span>
+                  <span className="text-[8px] font-bold">EZQR Watermark</span>
                 </div>
               )}
             </div>

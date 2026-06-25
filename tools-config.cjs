@@ -19,9 +19,32 @@ module.exports = {
     "fields": [
       {
         "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "label": "Target URL / Text",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://example.com/math-portal",
+        "guard": "url"
+      },
+      {
+        "id": "spiral-density",
+        "label": "Spiral Density",
+        "type": "select",
+        "options": ["Low Density", "Medium Density", "High Density"]
+      },
+      {
+        "id": "spiral-color",
+        "label": "Spiral Color",
+        "type": "color"
+      },
+      {
+        "id": "bg-color",
+        "label": "Background Color",
+        "type": "color"
+      },
+      {
+        "id": "logo-url",
+        "label": "Logo Upload / URL",
+        "type": "url",
+        "placeholder": "https://example.com/logo.png (optional)",
         "guard": "url"
       }
     ],
@@ -72,9 +95,34 @@ module.exports = {
     "fields": [
       {
         "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "label": "Target URL / Text",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://example.com/fractal-portal",
+        "guard": "url"
+      },
+      {
+        "id": "fractal-intensity",
+        "label": "Fractal Intensity",
+        "type": "select",
+        "options": ["Standard", "High-Definition Contrast", "Deep Render (Complex)"]
+      },
+      {
+        "id": "color-theme",
+        "label": "Color Theme",
+        "type": "select",
+        "options": ["Neon Violet", "Cosmic Blue", "Cyberpunk Emerald", "Monochrome Dark"]
+      },
+      {
+        "id": "quiet-zone-size",
+        "label": "Quiet Zone Size",
+        "type": "select",
+        "options": ["Standard Padding (4x)", "Slim Padding (2x)", "No Padding"]
+      },
+      {
+        "id": "logo-url",
+        "label": "Logo Upload / URL",
+        "type": "url",
+        "placeholder": "https://example.com/logo.png (optional)",
         "guard": "url"
       }
     ],
@@ -125,10 +173,26 @@ module.exports = {
     "fields": [
       {
         "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "label": "Target URL / Text",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://example.com/sierpinski",
         "guard": "url"
+      },
+      {
+        "id": "triangle-density",
+        "label": "Triangle Density",
+        "type": "select",
+        "options": ["Level 3 (Minimal)", "Level 4 (Standard)", "Level 5 (Intricate)"]
+      },
+      {
+        "id": "primary-color",
+        "label": "Primary Color",
+        "type": "color"
+      },
+      {
+        "id": "bg-color",
+        "label": "Background Color",
+        "type": "color"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -178,10 +242,27 @@ module.exports = {
     "fields": [
       {
         "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "label": "URL / Text",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://your-schematics.com",
         "guard": "url"
+      },
+      {
+        "id": "company-name",
+        "label": "Company Name",
+        "type": "text",
+        "placeholder": "e.g. Acme Tech Circuitry"
+      },
+      {
+        "id": "pcb-style",
+        "label": "PCB Style",
+        "type": "select",
+        "options": ["Matte Green (Standard)", "Luxe Glossy Black", "Minimalist White Board", "Electro Blue Trace"]
+      },
+      {
+        "id": "accent-color",
+        "label": "Accent Color",
+        "type": "color"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -230,11 +311,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "song-url",
+        "label": "Song URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://spotify.link/your-song",
         "guard": "url"
+      },
+      {
+        "id": "album-name",
+        "label": "Album Name",
+        "type": "text",
+        "placeholder": "e.g. Midnight Memories"
+      },
+      {
+        "id": "artist-name",
+        "label": "Artist Name",
+        "type": "text",
+        "placeholder": "e.g. The Retro Vibe"
+      },
+      {
+        "id": "record-theme",
+        "label": "Record Theme",
+        "type": "select",
+        "options": ["Classic Vinyl Black", "Retro Cherry Red", "Disco Gold Special", "Deep Space Indigo"]
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -284,10 +383,27 @@ module.exports = {
     "fields": [
       {
         "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "label": "URL / Text",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://example.com",
         "guard": "url"
+      },
+      {
+        "id": "letter",
+        "label": "Letter (A-Z)",
+        "type": "text",
+        "placeholder": "e.g. A"
+      },
+      {
+        "id": "primary-color",
+        "label": "Color",
+        "type": "color"
+      },
+      {
+        "id": "letter-style",
+        "label": "Style",
+        "type": "select",
+        "options": ["Bold Display", "Modern Sans", "Classic Serif", "Graffiti Outline"]
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -337,10 +453,27 @@ module.exports = {
     "fields": [
       {
         "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "label": "URL / Text",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://example.com/team-store",
         "guard": "url"
+      },
+      {
+        "id": "jersey-number",
+        "label": "Number",
+        "type": "number",
+        "placeholder": "e.g. 7"
+      },
+      {
+        "id": "team-name",
+        "label": "Team Name",
+        "type": "text",
+        "placeholder": "e.g. Red Devils FC"
+      },
+      {
+        "id": "jersey-color",
+        "label": "Jersey Color",
+        "type": "color"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -389,11 +522,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "audio-url",
+        "label": "Audio URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://soundcloud.com/track-name",
         "guard": "url"
+      },
+      {
+        "id": "track-name",
+        "label": "Track Name",
+        "type": "text",
+        "placeholder": "e.g. Golden Hour Vibes"
+      },
+      {
+        "id": "artist-name",
+        "label": "Artist",
+        "type": "text",
+        "placeholder": "e.g. DJ Horizon"
+      },
+      {
+        "id": "wave-style",
+        "label": "Wave Style",
+        "type": "select",
+        "options": ["Symmetric Bars", "Liquid Smooth Fluid", "Radial Pulse Circle", "Linear Digital Beats"]
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -442,11 +593,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "in-text-data",
-        "label": "Content / Message",
+        "id": "formula-name",
+        "label": "Formula Name",
         "type": "text",
-        "placeholder": "Enter your text payload here...",
-        "guard": "text"
+        "placeholder": "e.g. Schrödinger Wave Equation"
+      },
+      {
+        "id": "pdf-url",
+        "label": "PDF URL",
+        "type": "url",
+        "placeholder": "https://education.edu/papers/schrodinger.pdf",
+        "guard": "url"
+      },
+      {
+        "id": "subject",
+        "label": "Subject",
+        "type": "select",
+        "options": ["Quantum Mechanics", "Thermodynamics", "Relativity & Astrophysics", "Electromagnetism"]
+      },
+      {
+        "id": "poster-theme",
+        "label": "Poster Theme",
+        "type": "select",
+        "options": ["Minimal Academic Slate", "Vintage Parchment", "Blueprint Blue Grid", "High-Contrast Laboratory Board"]
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -495,11 +664,23 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "reference-url",
+        "label": "Reference URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://constants.nist.gov",
         "guard": "url"
+      },
+      {
+        "id": "subject",
+        "label": "Subject",
+        "type": "select",
+        "options": ["Physics Constants", "Chemistry Constants", "Astronomical Units", "Universal Mathematics Values"]
+      },
+      {
+        "id": "theme",
+        "label": "Theme",
+        "type": "select",
+        "options": ["Dark Cosmic Lab", "Clean Academic White", "Mechanical Engineering Draft"]
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -548,11 +729,23 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "molecule-name",
+        "label": "Molecule Name",
+        "type": "text",
+        "placeholder": "e.g. Caffeine / C8H10N4O2"
+      },
+      {
+        "id": "reference-link",
+        "label": "URL / PDF",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://pubchem.ncbi.nlm.nih.gov/...caffeine",
         "guard": "url"
+      },
+      {
+        "id": "lab-name",
+        "label": "Lab Name",
+        "type": "text",
+        "placeholder": "e.g. Biomolecular Synthesis Suite"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -601,11 +794,22 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "in-text-data",
-        "label": "Content / Message",
+        "id": "password",
+        "label": "Password",
         "type": "text",
-        "placeholder": "Enter your text payload here...",
-        "guard": "text"
+        "placeholder": "Enter your secure key..."
+      },
+      {
+        "id": "label",
+        "label": "Label",
+        "type": "text",
+        "placeholder": "e.g. Personal Email Vault"
+      },
+      {
+        "id": "expiry-note",
+        "label": "Expiry Note",
+        "type": "text",
+        "placeholder": "e.g. Change before December 2026"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -654,11 +858,22 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
-        "type": "url",
-        "placeholder": "https://example.com/your-link",
-        "guard": "url"
+        "id": "secret-key",
+        "label": "Secret Key",
+        "type": "text",
+        "placeholder": "e.g. JBSWY3DPEHPK3PXP"
+      },
+      {
+        "id": "account-name",
+        "label": "Account Name",
+        "type": "text",
+        "placeholder": "e.g. user@gmail.com"
+      },
+      {
+        "id": "issuer-name",
+        "label": "Issuer Name",
+        "type": "text",
+        "placeholder": "e.g. Google, GitHub"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -707,11 +922,22 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "in-text-data",
-        "label": "Content / Message",
+        "id": "secret-message",
+        "label": "Secret Message",
+        "type": "textarea",
+        "placeholder": "Enter dynamic text cipher payload here..."
+      },
+      {
+        "id": "password-hint",
+        "label": "Password Hint",
         "type": "text",
-        "placeholder": "Enter your text payload here...",
-        "guard": "text"
+        "placeholder": "e.g. Your first pet's name"
+      },
+      {
+        "id": "encryption-type",
+        "label": "Encryption Type",
+        "type": "select",
+        "options": ["AES-256 (Cyber Standard)", "Simple ROT13 Cypher", "XOR String Shuffling"]
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -761,16 +987,30 @@ module.exports = {
     "fields": [
       {
         "id": "in-wifi-ssid",
-        "label": "Network Name (SSID)",
+        "label": "WiFi Name",
         "type": "text",
-        "placeholder": "e.g. HomeNetwork",
+        "placeholder": "e.g. SecureHostNet",
         "guard": "wifi"
       },
       {
         "id": "in-wifi-pass",
         "label": "Password",
         "type": "text",
-        "placeholder": "e.g. secret123",
+        "placeholder": "e.g. super-secret-key-123",
+        "guard": "wifi"
+      },
+      {
+        "id": "in-wifi-sec",
+        "label": "Encryption",
+        "type": "select",
+        "options": ["WPA", "WEP", "Unsecured (Open)"],
+        "guard": "wifi"
+      },
+      {
+        "id": "in-wifi-hidden",
+        "label": "Hidden Network",
+        "type": "select",
+        "options": ["No (Visible Network)", "Yes (Hidden SSID)"],
         "guard": "wifi"
       }
     ],
@@ -821,10 +1061,22 @@ module.exports = {
     "fields": [
       {
         "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "label": "URL / Text",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://example.com/spring-festival",
         "guard": "url"
+      },
+      {
+        "id": "greeting-message",
+        "label": "Message",
+        "type": "text",
+        "placeholder": "e.g. May your season bloom beautifully!"
+      },
+      {
+        "id": "theme-color",
+        "label": "Theme Color",
+        "type": "select",
+        "options": ["Sakura Pink (Standard)", "Hanami Pastel Rose", "Fuji Purple Sky", "Imperial Gold Blossom"]
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -874,10 +1126,21 @@ module.exports = {
     "fields": [
       {
         "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "label": "URL / Text",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://example.com/art-gallery",
         "guard": "url"
+      },
+      {
+        "id": "ink-style",
+        "label": "Ink Style",
+        "type": "select",
+        "options": ["Thick Splatter Wash", "Fine Bamboo Hairline", "Zen Circle (Enso) Edge", "Charcoal Diluted Fade"]
+      },
+      {
+        "id": "primary-color",
+        "label": "Color",
+        "type": "color"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -927,10 +1190,22 @@ module.exports = {
     "fields": [
       {
         "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "label": "URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://example.com/torii-shrine",
         "guard": "url"
+      },
+      {
+        "id": "shrine-name",
+        "label": "Shrine/Event Name",
+        "type": "text",
+        "placeholder": "e.g. Fushimi Inari Taisha"
+      },
+      {
+        "id": "shrine-theme",
+        "label": "Theme",
+        "type": "select",
+        "options": ["Vermilion Red Gate", "Stone Lantern Gray", "Autumn Maple Gold", "Shinto Forest Jade"]
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -979,11 +1254,29 @@ module.exports = {
     },
     "fields": [
       {
+        "id": "fan-club",
+        "label": "Fan Club Name",
+        "type": "text",
+        "placeholder": "e.g. ARMY Union, BLINK Squad"
+      },
+      {
         "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "label": "Social Link",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://instagram.com/your-fan-handle",
         "guard": "url"
+      },
+      {
+        "id": "artist-name",
+        "label": "Artist Name",
+        "type": "text",
+        "placeholder": "e.g. BTS, BLACKPINK, NewJeans"
+      },
+      {
+        "id": "photo-url",
+        "label": "Photo / Image URL",
+        "type": "url",
+        "placeholder": "https://example.com/profile-or-card.jpg"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -1033,10 +1326,22 @@ module.exports = {
     "fields": [
       {
         "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "label": "URL / Text",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://example.com/arabic-heritage",
         "guard": "url"
+      },
+      {
+        "id": "arabic-phrase",
+        "label": "Arabic Phrase",
+        "type": "text",
+        "placeholder": "e.g. bismillah ar-rahman ar-rahim"
+      },
+      {
+        "id": "calligraphy-style",
+        "label": "Style",
+        "type": "select",
+        "options": ["Thuluth Script (Decorative)", "Naskh Script (Legible)", "Diwani Script (Complex Geometric)"]
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -1086,10 +1391,22 @@ module.exports = {
     "fields": [
       {
         "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "label": "URL / Text",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://example.com/ramadan-eid",
         "guard": "url"
+      },
+      {
+        "id": "greeting-message",
+        "label": "Greeting Message",
+        "type": "text",
+        "placeholder": "e.g. Eid Mubarak / Ramadan Kareem"
+      },
+      {
+        "id": "moon-theme",
+        "label": "Theme",
+        "type": "select",
+        "options": ["Gilded Gold Star", "Midnight Teal Sky", "Silver Crescent Light", "Sunset Lantern Glow"]
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -1138,18 +1455,22 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "in-map-lat",
-        "label": "Latitude / Search Query",
-        "type": "text",
-        "placeholder": "e.g. 40.7128 or 'Times Square'",
-        "guard": "map"
+        "id": "target-url",
+        "label": "URL / Text",
+        "type": "url",
+        "placeholder": "https://example.com/tile-heritage",
+        "guard": "url"
       },
       {
-        "id": "in-map-lng",
-        "label": "Longitude (Optional)",
-        "type": "text",
-        "placeholder": "e.g. -74.0060",
-        "guard": "map"
+        "id": "pattern-style",
+        "label": "Pattern Style",
+        "type": "select",
+        "options": ["Girih Star Decagon (Standard)", "Arabesque Floral Lace", "Zellige Terracotta Intricate"]
+      },
+      {
+        "id": "pattern-color",
+        "label": "Color",
+        "type": "color"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -1199,10 +1520,22 @@ module.exports = {
     "fields": [
       {
         "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "label": "URL / Text",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://example.com/holiday-greetings",
         "guard": "url"
+      },
+      {
+        "id": "festival-name",
+        "label": "Festival Name",
+        "type": "text",
+        "placeholder": "e.g. Diwali, Christmas, Hanukkah"
+      },
+      {
+        "id": "greeting-message",
+        "label": "Greeting Message",
+        "type": "text",
+        "placeholder": "e.g. Wishing you light, love, and laughter!"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -1251,11 +1584,41 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "capsule-title",
+        "label": "Capsule Title",
+        "type": "text",
+        "placeholder": "e.g. High School Graduation Class of 2026"
+      },
+      {
+        "id": "capsule-message",
+        "label": "Message",
+        "type": "textarea",
+        "placeholder": "Write your letter to the future self here..."
+      },
+      {
+        "id": "unlock-date",
+        "label": "Unlock Date",
+        "type": "date"
+      },
+      {
+        "id": "photo-url",
+        "label": "Photo Upload / URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://example.com/capsule-image.jpg",
         "guard": "url"
+      },
+      {
+        "id": "video-url",
+        "label": "Video Upload / URL",
+        "type": "url",
+        "placeholder": "https://example.com/capsule-video.mp4",
+        "guard": "url"
+      },
+      {
+        "id": "recipient-name",
+        "label": "Recipient Name",
+        "type": "text",
+        "placeholder": "e.g. John Doe & Sarah Smith"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -1304,10 +1667,40 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "baby-name",
+        "label": "Baby Name",
+        "type": "text",
+        "placeholder": "e.g. Liam Alexander Miller"
+      },
+      {
+        "id": "birth-date",
+        "label": "Birth Date",
+        "type": "date"
+      },
+      {
+        "id": "baby-weight",
+        "label": "Weight",
+        "type": "text",
+        "placeholder": "e.g. 7 lbs 4 oz / 3.3 kg"
+      },
+      {
+        "id": "parents-name",
+        "label": "Parents Name",
+        "type": "text",
+        "placeholder": "e.g. Robert & Clara Miller"
+      },
+      {
+        "id": "photo-url",
+        "label": "Photo Upload / URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://example.com/baby-photo.jpg",
+        "guard": "url"
+      },
+      {
+        "id": "gallery-url",
+        "label": "Gallery URL",
+        "type": "url",
+        "placeholder": "https://example.com/full-shower-gallery",
         "guard": "url"
       }
     ],
@@ -1357,11 +1750,40 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "full-name",
+        "label": "Full Name",
+        "type": "text",
+        "placeholder": "e.g. Robert Edward Johnson"
+      },
+      {
+        "id": "birth-date",
+        "label": "Birth Date",
+        "type": "date"
+      },
+      {
+        "id": "passing-date",
+        "label": "Passing Date",
+        "type": "date"
+      },
+      {
+        "id": "bio-url",
+        "label": "Biography URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://everloved.com/memorial/robert-johnson",
         "guard": "url"
+      },
+      {
+        "id": "photo-url",
+        "label": "Photo Upload / URL",
+        "type": "url",
+        "placeholder": "https://example.com/robert-portrait.jpg (optional)",
+        "guard": "url"
+      },
+      {
+        "id": "family-contact",
+        "label": "Family Contact (Optional)",
+        "type": "text",
+        "placeholder": "e.g. Sarah J. (Daughter) - +1 555-0199"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -1410,11 +1832,46 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
-        "type": "url",
-        "placeholder": "https://example.com/your-link",
-        "guard": "url"
+        "id": "pet-name",
+        "label": "Pet Name",
+        "type": "text",
+        "placeholder": "e.g. Max / Bella"
+      },
+      {
+        "id": "pet-type",
+        "label": "Pet Type",
+        "type": "select",
+        "options": ["Dog", "Cat", "Bird", "Rabbit", "Other"]
+      },
+      {
+        "id": "pet-breed",
+        "label": "Breed",
+        "type": "text",
+        "placeholder": "e.g. Golden Retriever / Persian"
+      },
+      {
+        "id": "owner-name",
+        "label": "Owner Name",
+        "type": "text",
+        "placeholder": "e.g. Jane Doe"
+      },
+      {
+        "id": "owner-phone",
+        "label": "Phone Number",
+        "type": "tel",
+        "placeholder": "e.g. +1 555-0199"
+      },
+      {
+        "id": "owner-address",
+        "label": "Address",
+        "type": "textarea",
+        "placeholder": "Enter home address for returning pet..."
+      },
+      {
+        "id": "medical-notes",
+        "label": "Medical Notes",
+        "type": "textarea",
+        "placeholder": "e.g. Diabetic - needs insulin twice a day (optional)"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -1463,11 +1920,40 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
-        "type": "url",
-        "placeholder": "https://example.com/your-link",
-        "guard": "url"
+        "id": "full-name",
+        "label": "Full Name",
+        "type": "text",
+        "placeholder": "e.g. John Albert Smith"
+      },
+      {
+        "id": "blood-group",
+        "label": "Blood Group",
+        "type": "select",
+        "options": ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]
+      },
+      {
+        "id": "allergies",
+        "label": "Allergies",
+        "type": "textarea",
+        "placeholder": "e.g. Severe Penicillin & Peanut Allergy"
+      },
+      {
+        "id": "emergency-contact",
+        "label": "Emergency Contact",
+        "type": "tel",
+        "placeholder": "e.g. +1 555-0144 (Spouse)"
+      },
+      {
+        "id": "medical-conditions",
+        "label": "Medical Conditions",
+        "type": "textarea",
+        "placeholder": "e.g. Type 1 Diabetes, Asthma (uses inhaler)"
+      },
+      {
+        "id": "doctor-contact",
+        "label": "Doctor Contact",
+        "type": "text",
+        "placeholder": "e.g. Dr. Davis - +1 555-0188"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -1516,11 +2002,34 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
-        "type": "url",
-        "placeholder": "https://example.com/your-link",
-        "guard": "url"
+        "id": "child-name",
+        "label": "Child Name",
+        "type": "text",
+        "placeholder": "e.g. Tommy Miller"
+      },
+      {
+        "id": "parent-name",
+        "label": "Parent Name",
+        "type": "text",
+        "placeholder": "e.g. Robert Miller"
+      },
+      {
+        "id": "parent-phone",
+        "label": "Parent Phone",
+        "type": "tel",
+        "placeholder": "e.g. +1 555-0133"
+      },
+      {
+        "id": "address",
+        "label": "Address",
+        "type": "textarea",
+        "placeholder": "Enter child's home address..."
+      },
+      {
+        "id": "emergency-phone",
+        "label": "Emergency Contact",
+        "type": "tel",
+        "placeholder": "e.g. +1 555-0177 (Grandmother)"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -1569,11 +2078,40 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
-        "type": "url",
-        "placeholder": "https://example.com/your-link",
-        "guard": "url"
+        "id": "patient-name",
+        "label": "Patient Name",
+        "type": "text",
+        "placeholder": "e.g. Alice Peterson"
+      },
+      {
+        "id": "medicine-name",
+        "label": "Medicine Name",
+        "type": "text",
+        "placeholder": "e.g. Metformin 500mg"
+      },
+      {
+        "id": "dosage",
+        "label": "Dosage",
+        "type": "text",
+        "placeholder": "e.g. 1 Tablet"
+      },
+      {
+        "id": "frequency",
+        "label": "Frequency",
+        "type": "select",
+        "options": ["Once daily (Morning)", "Once daily (Night)", "Twice daily (Morning/Night)", "Three times daily (With Meals)", "Every 4-6 hours (As needed)"]
+      },
+      {
+        "id": "doctor-name",
+        "label": "Doctor Name",
+        "type": "text",
+        "placeholder": "e.g. Dr. Angela Carson"
+      },
+      {
+        "id": "emergency-contact",
+        "label": "Emergency Contact",
+        "type": "tel",
+        "placeholder": "e.g. +1 555-0122 (Guardian)"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -1622,25 +2160,48 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "in-contact-name",
+        "id": "full-name",
         "label": "Full Name",
         "type": "text",
-        "placeholder": "e.g. John Doe",
-        "guard": "contact"
+        "placeholder": "e.g. Liam Alexander Miller"
       },
       {
-        "id": "in-contact-phone",
-        "label": "Phone Number",
+        "id": "phone",
+        "label": "Phone",
         "type": "tel",
-        "placeholder": "e.g. +1 234 567 8900",
-        "guard": "contact"
+        "placeholder": "e.g. +1 555-0155"
       },
       {
-        "id": "in-contact-email",
-        "label": "Email Address",
+        "id": "email",
+        "label": "Email",
         "type": "email",
-        "placeholder": "e.g. john@example.com",
-        "guard": "contact"
+        "placeholder": "e.g. liam@instantcard.me"
+      },
+      {
+        "id": "website",
+        "label": "Website",
+        "type": "url",
+        "placeholder": "https://instantcard.me/liam",
+        "guard": "url"
+      },
+      {
+        "id": "company",
+        "label": "Company",
+        "type": "text",
+        "placeholder": "e.g. Creative Horizon Ltd"
+      },
+      {
+        "id": "address",
+        "label": "Address",
+        "type": "textarea",
+        "placeholder": "e.g. Suite 404, Tech Park, Austin, TX"
+      },
+      {
+        "id": "profile-photo-url",
+        "label": "Profile Photo Upload / URL",
+        "type": "url",
+        "placeholder": "https://example.com/liam-avatar.jpg (optional)",
+        "guard": "url"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -1689,11 +2250,41 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "brand-name",
+        "label": "Brand Name",
+        "type": "text",
+        "placeholder": "e.g. Vertex Innovations"
+      },
+      {
+        "id": "website",
+        "label": "Website",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://vertexbrand.com",
         "guard": "url"
+      },
+      {
+        "id": "brand-color",
+        "label": "Brand Color",
+        "type": "color"
+      },
+      {
+        "id": "logo-url",
+        "label": "Logo Upload / URL",
+        "type": "url",
+        "placeholder": "https://vertexbrand.com/assets/logo.png (optional)",
+        "guard": "url"
+      },
+      {
+        "id": "tagline",
+        "label": "Tagline",
+        "type": "text",
+        "placeholder": "e.g. Peak Efficiency. Reimagined."
+      },
+      {
+        "id": "industry",
+        "label": "Industry",
+        "type": "select",
+        "options": ["Technology / Software", "Creative Agency / Design", "Retail / E-commerce", "Health & Wellness", "Finance / Legal"]
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -1742,11 +2333,36 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "product-name",
+        "label": "Product Name",
+        "type": "text",
+        "placeholder": "e.g. Lavender Oats Scented Candle"
+      },
+      {
+        "id": "product-url",
+        "label": "Product URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://etsy.com/listing/your-product",
         "guard": "url"
+      },
+      {
+        "id": "brand-name",
+        "label": "Brand Name",
+        "type": "text",
+        "placeholder": "e.g. Serene Craft Co."
+      },
+      {
+        "id": "instagram-url",
+        "label": "Instagram Link",
+        "type": "url",
+        "placeholder": "https://instagram.com/serenecrafts",
+        "guard": "url"
+      },
+      {
+        "id": "care-instructions",
+        "label": "Care Instructions",
+        "type": "textarea",
+        "placeholder": "e.g. Trim wick to 1/4 inch before lighting. Do not burn for more than 4 hours at a time."
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -1795,18 +2411,35 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "in-crypto-addr",
-        "label": "Wallet Address",
+        "id": "property-name",
+        "label": "Property Name",
         "type": "text",
-        "placeholder": "Paste public address here...",
-        "guard": "crypto"
+        "placeholder": "e.g. The Blue Horizon Beachfront Chalet"
       },
       {
-        "id": "in-crypto-amt",
-        "label": "Transfer Amount (Optional)",
-        "type": "number",
-        "placeholder": "e.g. 1.5",
-        "guard": "crypto"
+        "id": "welcome-guide-url",
+        "label": "Welcome Guide URL",
+        "type": "url",
+        "placeholder": "https://guide.booking.com/p/your-chalet",
+        "guard": "url"
+      },
+      {
+        "id": "wifi-name",
+        "label": "WiFi Name",
+        "type": "text",
+        "placeholder": "e.g. Blue_Horizon_Guest_5G"
+      },
+      {
+        "id": "wifi-pass",
+        "label": "WiFi Password",
+        "type": "text",
+        "placeholder": "e.g. oceanwaves2026"
+      },
+      {
+        "id": "host-contact",
+        "label": "Host Contact",
+        "type": "text",
+        "placeholder": "e.g. Clara Miller - +1 555-0182"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -1855,11 +2488,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "restaurant-name",
+        "label": "Restaurant Name",
+        "type": "text",
+        "placeholder": "e.g. Olive Garden Delights"
+      },
+      {
+        "id": "menu-url",
+        "label": "PDF/Menu URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://olivegardendelights.com/allergen-menu.pdf",
         "guard": "url"
+      },
+      {
+        "id": "allergy-info",
+        "label": "Allergy Information",
+        "type": "textarea",
+        "placeholder": "e.g. Gluten-Free options marked. Contains nuts in some desserts."
+      },
+      {
+        "id": "contact-phone",
+        "label": "Contact Number",
+        "type": "tel",
+        "placeholder": "e.g. +1 555-0191 (Front Desk)"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -1908,11 +2559,35 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "product-name",
+        "label": "Product Name",
+        "type": "text",
+        "placeholder": "e.g. Leather Designer Handbag Edition X"
+      },
+      {
+        "id": "product-id",
+        "label": "Product ID",
+        "type": "text",
+        "placeholder": "e.g. SN-89201-BHA"
+      },
+      {
+        "id": "verification-url",
+        "label": "Verification URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://verify.branddna.com/sn-89201-bha",
         "guard": "url"
+      },
+      {
+        "id": "manufacturer-name",
+        "label": "Manufacturer Name",
+        "type": "text",
+        "placeholder": "e.g. Apex Luxury Handmades Ltd"
+      },
+      {
+        "id": "support-contact",
+        "label": "Support Contact",
+        "type": "text",
+        "placeholder": "e.g. support@apexhandmades.com"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -1961,18 +2636,34 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "in-wifi-ssid",
-        "label": "Network Name (SSID)",
+        "id": "hotel-name",
+        "label": "Hotel Name",
         "type": "text",
-        "placeholder": "e.g. HomeNetwork",
-        "guard": "wifi"
+        "placeholder": "e.g. Grand Palace Resort"
       },
       {
-        "id": "in-wifi-pass",
+        "id": "room-number",
+        "label": "Room Number",
+        "type": "text",
+        "placeholder": "e.g. 504"
+      },
+      {
+        "id": "wifi-name",
+        "label": "WiFi Name",
+        "type": "text",
+        "placeholder": "e.g. GrandPalace_Room_504"
+      },
+      {
+        "id": "wifi-pass",
         "label": "Password",
         "type": "text",
-        "placeholder": "e.g. secret123",
-        "guard": "wifi"
+        "placeholder": "e.g. palace504secure"
+      },
+      {
+        "id": "reception-phone",
+        "label": "Reception Number",
+        "type": "tel",
+        "placeholder": "e.g. +1 555-0100 (Dial 9 from room)"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -2021,11 +2712,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "chemical-name",
+        "label": "Chemical Name",
+        "type": "text",
+        "placeholder": "e.g. Isopropyl Alcohol 99%"
+      },
+      {
+        "id": "sds-url",
+        "label": "SDS PDF URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://www.sigmaaldrich.com/sds/isopropyl-99.pdf",
         "guard": "url"
+      },
+      {
+        "id": "manufacturer",
+        "label": "Manufacturer",
+        "type": "text",
+        "placeholder": "e.g. Sigma-Aldrich Co."
+      },
+      {
+        "id": "emergency-phone",
+        "label": "Emergency Number",
+        "type": "tel",
+        "placeholder": "e.g. +1 800-424-9300 (Chemtrec)"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -2077,22 +2786,31 @@ module.exports = {
         "id": "in-upi-vpa",
         "label": "UPI ID / VPA",
         "type": "text",
-        "placeholder": "e.g. merchant@upi",
-        "guard": "upi"
+        "placeholder": "e.g. merchant@upi"
       },
       {
         "id": "in-upi-name",
         "label": "Payee Name",
         "type": "text",
-        "placeholder": "e.g. Shop Name",
-        "guard": "upi"
+        "placeholder": "e.g. Shop Name"
       },
       {
         "id": "in-upi-amt",
-        "label": "Amount (₹)",
+        "label": "Amount (Optional)",
         "type": "number",
-        "placeholder": "e.g. 500",
-        "guard": "upi"
+        "placeholder": "e.g. 500"
+      },
+      {
+        "id": "upi-currency",
+        "label": "Currency",
+        "type": "select",
+        "options": ["INR"]
+      },
+      {
+        "id": "upi-note",
+        "label": "Note",
+        "type": "text",
+        "placeholder": "e.g. Payment for Groceries"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -2141,11 +2859,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "name",
+        "label": "Name",
+        "type": "text",
+        "placeholder": "e.g. Rajesh Kumar"
+      },
+      {
+        "id": "masked-aadhaar",
+        "label": "Masked Aadhaar Number",
+        "type": "text",
+        "placeholder": "e.g. XXXX-XXXX-9012"
+      },
+      {
+        "id": "verification-url",
+        "label": "Verification URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://myaadhaar.uidai.gov.in/verify",
         "guard": "url"
+      },
+      {
+        "id": "contact-phone",
+        "label": "Contact Number",
+        "type": "tel",
+        "placeholder": "e.g. +91 98765-43210"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -2194,10 +2930,35 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "brand-name",
+        "label": "Brand Name",
+        "type": "text",
+        "placeholder": "e.g. PureDelight Organics"
+      },
+      {
+        "id": "fssai-number",
+        "label": "FSSAI Number",
+        "type": "text",
+        "placeholder": "e.g. 10020031000456"
+      },
+      {
+        "id": "product-name",
+        "label": "Product Name",
+        "type": "text",
+        "placeholder": "e.g. Pure Premium Cow Ghee"
+      },
+      {
+        "id": "website",
+        "label": "Website",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://puredelight.in",
+        "guard": "url"
+      },
+      {
+        "id": "nutrition-url",
+        "label": "Nutrition PDF URL",
+        "type": "url",
+        "placeholder": "https://puredelight.in/nutrition-chart.pdf",
         "guard": "url"
       }
     ],
@@ -2247,18 +3008,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "in-map-lat",
-        "label": "Latitude / Search Query",
-        "type": "text",
-        "placeholder": "e.g. 40.7128 or 'Times Square'",
-        "guard": "map"
+        "id": "address",
+        "label": "Address",
+        "type": "textarea",
+        "placeholder": "Enter full delivery/residential address..."
       },
       {
-        "id": "in-map-lng",
-        "label": "Longitude (Optional)",
+        "id": "map-url",
+        "label": "Google Maps URL",
+        "type": "url",
+        "placeholder": "https://maps.app.goo.gl/your-location-link",
+        "guard": "url"
+      },
+      {
+        "id": "contact-phone",
+        "label": "Contact Number",
+        "type": "tel",
+        "placeholder": "e.g. +91 98765-43210"
+      },
+      {
+        "id": "landmark",
+        "label": "Landmark",
         "type": "text",
-        "placeholder": "e.g. -74.0060",
-        "guard": "map"
+        "placeholder": "e.g. Near Rose Garden Metro Pillar 102"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -2307,11 +3079,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "seed-name",
+        "label": "Seed Name",
+        "type": "text",
+        "placeholder": "e.g. Hybrid Basmati Rice Seed Type-A"
+      },
+      {
+        "id": "batch-number",
+        "label": "Batch Number",
+        "type": "text",
+        "placeholder": "e.g. BATCH-2026-AGRO-77"
+      },
+      {
+        "id": "verification-url",
+        "label": "Verification URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://verify.agroseeds.in/batch-77",
         "guard": "url"
+      },
+      {
+        "id": "company-name",
+        "label": "Company Name",
+        "type": "text",
+        "placeholder": "e.g. Bharat Agro Seeds Ltd"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -2360,25 +3150,36 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "in-contact-name",
+        "id": "full-name",
         "label": "Full Name",
         "type": "text",
-        "placeholder": "e.g. John Doe",
-        "guard": "contact"
+        "placeholder": "e.g. Ramesh Kumar Sharma"
       },
       {
-        "id": "in-contact-phone",
-        "label": "Phone Number",
+        "id": "biodata-url",
+        "label": "Biodata PDF URL",
+        "type": "url",
+        "placeholder": "https://sharmamatrimony.in/profiles/ramesh-biodata.pdf",
+        "guard": "url"
+      },
+      {
+        "id": "contact-phone",
+        "label": "Contact Number",
         "type": "tel",
-        "placeholder": "e.g. +1 234 567 8900",
-        "guard": "contact"
+        "placeholder": "e.g. +91 991122-3344"
       },
       {
-        "id": "in-contact-email",
-        "label": "Email Address",
-        "type": "email",
-        "placeholder": "e.g. john@example.com",
-        "guard": "contact"
+        "id": "photo-url",
+        "label": "Photo Upload / URL",
+        "type": "url",
+        "placeholder": "https://sharmamatrimony.in/profiles/ramesh-photo.png",
+        "guard": "url"
+      },
+      {
+        "id": "occupation",
+        "label": "Occupation",
+        "type": "text",
+        "placeholder": "e.g. Senior Software Engineer at Google"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -2427,10 +3228,28 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "temple-name",
+        "label": "Temple Name",
+        "type": "text",
+        "placeholder": "e.g. Sri Venkateswara Swamy Temple"
+      },
+      {
+        "id": "donation-upi",
+        "label": "UPI ID",
+        "type": "text",
+        "placeholder": "e.g. svst_mumbai@upi"
+      },
+      {
+        "id": "donation-amt",
+        "label": "Donation Amount (Optional)",
+        "type": "number",
+        "placeholder": "e.g. 501"
+      },
+      {
+        "id": "website",
+        "label": "Website",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://tirumala.org",
         "guard": "url"
       }
     ],
@@ -2480,10 +3299,28 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "element-name",
+        "label": "Element Name",
+        "type": "text",
+        "placeholder": "e.g. Carbon"
+      },
+      {
+        "id": "atomic-number",
+        "label": "Atomic Number",
+        "type": "text",
+        "placeholder": "e.g. 6"
+      },
+      {
+        "id": "element-symbol",
+        "label": "Symbol",
+        "type": "text",
+        "placeholder": "e.g. C"
+      },
+      {
+        "id": "wiki-url",
+        "label": "Learn More URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://wikipedia.org/wiki/Carbon",
         "guard": "url"
       }
     ],
@@ -2533,11 +3370,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "monument-name",
+        "label": "Monument Name",
+        "type": "text",
+        "placeholder": "e.g. Taj Mahal"
+      },
+      {
+        "id": "construction-year",
+        "label": "Construction Year",
+        "type": "text",
+        "placeholder": "e.g. 1631 - 1648 AD"
+      },
+      {
+        "id": "guide-url",
+        "label": "Audio Guide URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://audioguide.tourism.in/tajmahal",
         "guard": "url"
+      },
+      {
+        "id": "monument-desc",
+        "label": "Description",
+        "type": "textarea",
+        "placeholder": "Write a short historical overview about the monument..."
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -2586,11 +3441,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "group-name",
+        "label": "Group Name",
+        "type": "text",
+        "placeholder": "e.g. Advanced AI Study Circle"
+      },
+      {
+        "id": "platform-name",
+        "label": "Platform Name",
+        "type": "select",
+        "options": ["WhatsApp", "Discord", "Telegram", "Google Meet", "Zoom"]
+      },
+      {
+        "id": "invite-url",
+        "label": "Invite Link URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://discord.gg/ai-study-circle",
         "guard": "url"
+      },
+      {
+        "id": "subject",
+        "label": "Subject / Topic",
+        "type": "text",
+        "placeholder": "e.g. Deep Learning & Antigravity Agent Architectures"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -2639,25 +3512,28 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "in-upi-vpa",
-        "label": "UPI ID / VPA",
+        "id": "wallet-label",
+        "label": "Wallet Name / Label",
         "type": "text",
-        "placeholder": "e.g. merchant@upi",
-        "guard": "upi"
+        "placeholder": "e.g. My Personal SOL Wallet"
       },
       {
-        "id": "in-upi-name",
-        "label": "Payee Name",
+        "id": "sol-address",
+        "label": "SOL Address",
         "type": "text",
-        "placeholder": "e.g. Shop Name",
-        "guard": "upi"
+        "placeholder": "e.g. HN7cAB...8E9"
       },
       {
-        "id": "in-upi-amt",
-        "label": "Amount (₹)",
+        "id": "sol-amount",
+        "label": "Amount (SOL) (Optional)",
         "type": "number",
-        "placeholder": "e.g. 500",
-        "guard": "upi"
+        "placeholder": "e.g. 1.5"
+      },
+      {
+        "id": "message",
+        "label": "Message",
+        "type": "text",
+        "placeholder": "e.g. Payment for design services"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -2706,25 +3582,28 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "in-upi-vpa",
-        "label": "UPI ID / VPA",
+        "id": "wallet-label",
+        "label": "Wallet Name / Label",
         "type": "text",
-        "placeholder": "e.g. merchant@upi",
-        "guard": "upi"
+        "placeholder": "e.g. Main Savings Wallet"
       },
       {
-        "id": "in-upi-name",
-        "label": "Payee Name",
+        "id": "usdt-address",
+        "label": "USDT Address",
         "type": "text",
-        "placeholder": "e.g. Shop Name",
-        "guard": "upi"
+        "placeholder": "e.g. 0x71C...39"
       },
       {
-        "id": "in-upi-amt",
-        "label": "Amount (₹)",
+        "id": "network",
+        "label": "Network",
+        "type": "select",
+        "options": ["TRC-20 (Tron)", "ERC-20 (Ethereum)", "BEP-20 (BSC)", "Solana"]
+      },
+      {
+        "id": "usdt-amount",
+        "label": "Amount (USDT) (Optional)",
         "type": "number",
-        "placeholder": "e.g. 500",
-        "guard": "upi"
+        "placeholder": "e.g. 100"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -2773,25 +3652,28 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "in-upi-vpa",
-        "label": "UPI ID / VPA",
+        "id": "wallet-label",
+        "label": "Wallet Name / Label",
         "type": "text",
-        "placeholder": "e.g. merchant@upi",
-        "guard": "upi"
+        "placeholder": "e.g. My Ledger BNB"
       },
       {
-        "id": "in-upi-name",
-        "label": "Payee Name",
+        "id": "wallet-address",
+        "label": "Wallet Address",
         "type": "text",
-        "placeholder": "e.g. Shop Name",
-        "guard": "upi"
+        "placeholder": "e.g. 0x71C8efd92...89"
       },
       {
-        "id": "in-upi-amt",
-        "label": "Amount (₹)",
+        "id": "network",
+        "label": "Network (BEP20/BEP2)",
+        "type": "select",
+        "options": ["BEP-20 (BSC)", "BEP-2"]
+      },
+      {
+        "id": "bnb-amount",
+        "label": "Amount (Optional)",
         "type": "number",
-        "placeholder": "e.g. 500",
-        "guard": "upi"
+        "placeholder": "e.g. 0.5"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -2840,25 +3722,34 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "in-upi-vpa",
-        "label": "UPI ID / VPA",
+        "id": "coin-name",
+        "label": "Coin Name",
         "type": "text",
-        "placeholder": "e.g. merchant@upi",
-        "guard": "upi"
+        "placeholder": "e.g. Cardano (ADA)"
       },
       {
-        "id": "in-upi-name",
-        "label": "Payee Name",
+        "id": "wallet-address",
+        "label": "Wallet Address",
         "type": "text",
-        "placeholder": "e.g. Shop Name",
-        "guard": "upi"
+        "placeholder": "e.g. addr1..."
       },
       {
-        "id": "in-upi-amt",
-        "label": "Amount (₹)",
+        "id": "network",
+        "label": "Network",
+        "type": "text",
+        "placeholder": "e.g. Cardano Mainnet"
+      },
+      {
+        "id": "amount",
+        "label": "Amount",
         "type": "number",
-        "placeholder": "e.g. 500",
-        "guard": "upi"
+        "placeholder": "e.g. 100"
+      },
+      {
+        "id": "wallet-label",
+        "label": "Label",
+        "type": "text",
+        "placeholder": "e.g. Trezor Wallet"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -2907,10 +3798,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "restaurant-name",
+        "label": "Restaurant Name",
+        "type": "text",
+        "placeholder": "e.g. Olive Garden Delights"
+      },
+      {
+        "id": "pdf-url",
+        "label": "PDF URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://olivegardendelights.com/menu.pdf",
+        "guard": "url"
+      },
+      {
+        "id": "phone-number",
+        "label": "Phone Number",
+        "type": "tel",
+        "placeholder": "e.g. +1 555-0190"
+      },
+      {
+        "id": "website",
+        "label": "Website",
+        "type": "url",
+        "placeholder": "https://olivegardendelights.com",
         "guard": "url"
       }
     ],
@@ -2960,10 +3870,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "restaurant-name",
+        "label": "Restaurant Name",
+        "type": "text",
+        "placeholder": "e.g. Bella Italia Bistro"
+      },
+      {
+        "id": "menu-url",
+        "label": "Menu URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://bellaitaliabistro.com/menu",
+        "guard": "url"
+      },
+      {
+        "id": "phone-number",
+        "label": "Phone Number",
+        "type": "tel",
+        "placeholder": "e.g. +1 555-0143"
+      },
+      {
+        "id": "table-booking-url",
+        "label": "Table Booking URL",
+        "type": "url",
+        "placeholder": "https://bellaitaliabistro.com/reserve",
         "guard": "url"
       }
     ],
@@ -3013,11 +3942,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "restaurant-name",
+        "label": "Restaurant Name",
+        "type": "text",
+        "placeholder": "e.g. Spicy Sichuan"
+      },
+      {
+        "id": "ordering-url",
+        "label": "Ordering URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://spicysichuan.com/order?table=12",
         "guard": "url"
+      },
+      {
+        "id": "table-number",
+        "label": "Table Number",
+        "type": "text",
+        "placeholder": "e.g. Table 12"
+      },
+      {
+        "id": "contact-number",
+        "label": "Contact Number",
+        "type": "tel",
+        "placeholder": "e.g. +1 555-0188"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -3066,11 +4013,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "restaurant-name",
+        "label": "Restaurant Name",
+        "type": "text",
+        "placeholder": "e.g. Le Parisien"
+      },
+      {
+        "id": "table-number",
+        "label": "Table Number",
+        "type": "text",
+        "placeholder": "e.g. Table 5"
+      },
+      {
+        "id": "service-url",
+        "label": "Service URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://leparisien.smartwaiter.app/call?table=5",
         "guard": "url"
+      },
+      {
+        "id": "phone-number",
+        "label": "Phone Number",
+        "type": "tel",
+        "placeholder": "e.g. +1 555-0177"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -3119,18 +4084,28 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "in-wifi-ssid",
-        "label": "Network Name (SSID)",
+        "id": "hotel-name",
+        "label": "Hotel Name",
         "type": "text",
-        "placeholder": "e.g. HomeNetwork",
-        "guard": "wifi"
+        "placeholder": "e.g. Horizon Suite Hotel"
       },
       {
-        "id": "in-wifi-pass",
+        "id": "room-number",
+        "label": "Room Number",
+        "type": "text",
+        "placeholder": "e.g. Room 302"
+      },
+      {
+        "id": "wifi-name",
+        "label": "WiFi Name",
+        "type": "text",
+        "placeholder": "e.g. Horizon_Guest_302"
+      },
+      {
+        "id": "wifi-pass",
         "label": "Password",
         "type": "text",
-        "placeholder": "e.g. secret123",
-        "guard": "wifi"
+        "placeholder": "e.g. horizon302safe"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -3179,18 +4154,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "in-crypto-addr",
-        "label": "Wallet Address",
+        "id": "property-name",
+        "label": "Property Name",
         "type": "text",
-        "placeholder": "Paste public address here...",
-        "guard": "crypto"
+        "placeholder": "e.g. The Sunny Beachside Villa"
       },
       {
-        "id": "in-crypto-amt",
-        "label": "Transfer Amount (Optional)",
-        "type": "number",
-        "placeholder": "e.g. 1.5",
-        "guard": "crypto"
+        "id": "guide-url",
+        "label": "Guide URL (Optional)",
+        "type": "url",
+        "placeholder": "https://airbnb.com/posts/guide-info...",
+        "guard": "url"
+      },
+      {
+        "id": "host-name",
+        "label": "Host Name",
+        "type": "text",
+        "placeholder": "e.g. Clara Miller"
+      },
+      {
+        "id": "contact-number",
+        "label": "Contact Number",
+        "type": "tel",
+        "placeholder": "e.g. +1 555-0182"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -3239,25 +4225,28 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "in-contact-name",
-        "label": "Full Name",
+        "id": "hotel-name",
+        "label": "Hotel Name",
         "type": "text",
-        "placeholder": "e.g. John Doe",
-        "guard": "contact"
+        "placeholder": "e.g. Grand Palace Resort"
       },
       {
-        "id": "in-contact-phone",
+        "id": "concierge-name",
+        "label": "Concierge Name",
+        "type": "text",
+        "placeholder": "e.g. Liam Alexander"
+      },
+      {
+        "id": "phone-number",
         "label": "Phone Number",
         "type": "tel",
-        "placeholder": "e.g. +1 234 567 8900",
-        "guard": "contact"
+        "placeholder": "e.g. +1 555-0100"
       },
       {
-        "id": "in-contact-email",
-        "label": "Email Address",
-        "type": "email",
-        "placeholder": "e.g. john@example.com",
-        "guard": "contact"
+        "id": "whatsapp-number",
+        "label": "WhatsApp Number",
+        "type": "tel",
+        "placeholder": "e.g. +1 555-0101"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -3306,11 +4295,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "restaurant-name",
+        "label": "Restaurant Name",
+        "type": "text",
+        "placeholder": "e.g. Burger Palace"
+      },
+      {
+        "id": "delivery-url",
+        "label": "Delivery URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://zomato.com/burgerpalace",
         "guard": "url"
+      },
+      {
+        "id": "phone-number",
+        "label": "Phone Number",
+        "type": "tel",
+        "placeholder": "e.g. +1 555-0125"
+      },
+      {
+        "id": "promo-code",
+        "label": "Promo Code",
+        "type": "text",
+        "placeholder": "e.g. PIZZA50"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -3359,11 +4366,34 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
-        "type": "url",
-        "placeholder": "https://example.com/your-link",
-        "guard": "url"
+        "id": "full-name",
+        "label": "Full Name",
+        "type": "text",
+        "placeholder": "e.g. Liam Alexander Miller"
+      },
+      {
+        "id": "blood-group",
+        "label": "Blood Group",
+        "type": "select",
+        "options": ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]
+      },
+      {
+        "id": "allergies",
+        "label": "Allergies",
+        "type": "textarea",
+        "placeholder": "e.g. Peanuts, Penicillin (optional)"
+      },
+      {
+        "id": "emergency-contact",
+        "label": "Emergency Contact",
+        "type": "text",
+        "placeholder": "e.g. Clara Miller - +1 555-0182"
+      },
+      {
+        "id": "medical-conditions",
+        "label": "Medical Conditions",
+        "type": "textarea",
+        "placeholder": "e.g. Asthma, High Blood Pressure (optional)"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -3412,11 +4442,34 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
-        "type": "url",
-        "placeholder": "https://example.com/your-link",
-        "guard": "url"
+        "id": "pet-name",
+        "label": "Pet Name",
+        "type": "text",
+        "placeholder": "e.g. Max"
+      },
+      {
+        "id": "breed",
+        "label": "Breed",
+        "type": "text",
+        "placeholder": "e.g. Golden Retriever"
+      },
+      {
+        "id": "owner-name",
+        "label": "Owner Name",
+        "type": "text",
+        "placeholder": "e.g. Rajesh Kumar"
+      },
+      {
+        "id": "phone-number",
+        "label": "Phone Number",
+        "type": "tel",
+        "placeholder": "e.g. +91 98765-43210"
+      },
+      {
+        "id": "reward-note",
+        "label": "Reward Note",
+        "type": "textarea",
+        "placeholder": "e.g. Friendly but shy. $100 reward if returned safely."
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -3465,11 +4518,28 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
-        "type": "url",
-        "placeholder": "https://example.com/your-link",
-        "guard": "url"
+        "id": "child-name",
+        "label": "Child Name",
+        "type": "text",
+        "placeholder": "e.g. Leo Alexander"
+      },
+      {
+        "id": "parent-name",
+        "label": "Parent Name",
+        "type": "text",
+        "placeholder": "e.g. Liam Alexander"
+      },
+      {
+        "id": "phone-number",
+        "label": "Phone Number",
+        "type": "tel",
+        "placeholder": "e.g. +1 555-0155"
+      },
+      {
+        "id": "address",
+        "label": "Address",
+        "type": "textarea",
+        "placeholder": "e.g. Suite 404, Tech Park, Austin, TX"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -3518,25 +4588,34 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "in-contact-name",
-        "label": "Full Name",
+        "id": "donor-name",
+        "label": "Donor Name",
         "type": "text",
-        "placeholder": "e.g. John Doe",
-        "guard": "contact"
+        "placeholder": "e.g. Rajesh Kumar"
       },
       {
-        "id": "in-contact-phone",
+        "id": "blood-group",
+        "label": "Blood Group",
+        "type": "select",
+        "options": ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]
+      },
+      {
+        "id": "phone-number",
         "label": "Phone Number",
         "type": "tel",
-        "placeholder": "e.g. +1 234 567 8900",
-        "guard": "contact"
+        "placeholder": "e.g. +91 98765-43210"
       },
       {
-        "id": "in-contact-email",
-        "label": "Email Address",
-        "type": "email",
-        "placeholder": "e.g. john@example.com",
-        "guard": "contact"
+        "id": "city",
+        "label": "City",
+        "type": "text",
+        "placeholder": "e.g. New Delhi"
+      },
+      {
+        "id": "emergency-contact",
+        "label": "Emergency Contact",
+        "type": "text",
+        "placeholder": "e.g. Clara Miller - +1 555-0182"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -3585,11 +4664,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "hospital-name",
+        "label": "Hospital Name",
+        "type": "text",
+        "placeholder": "e.g. City General Hospital"
+      },
+      {
+        "id": "appointment-url",
+        "label": "Appointment Booking URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://citygeneral.com/book-slot",
         "guard": "url"
+      },
+      {
+        "id": "department",
+        "label": "Department",
+        "type": "text",
+        "placeholder": "e.g. Cardiology"
+      },
+      {
+        "id": "doctor-name",
+        "label": "Doctor Name (Optional)",
+        "type": "text",
+        "placeholder": "e.g. Dr. Liam Alexander"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -3638,11 +4735,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "pharmacy-name",
+        "label": "Pharmacy Name",
+        "type": "text",
+        "placeholder": "e.g. Wellness Pharmacy"
+      },
+      {
+        "id": "upload-url",
+        "label": "Upload Portal URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://wellnesspharmacy.com/upload-rx",
         "guard": "url"
+      },
+      {
+        "id": "patient-name",
+        "label": "Patient Name",
+        "type": "text",
+        "placeholder": "e.g. Liam Alexander"
+      },
+      {
+        "id": "contact-number",
+        "label": "Contact Number",
+        "type": "tel",
+        "placeholder": "e.g. +1 555-0199"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -3691,11 +4806,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "location-name",
+        "label": "Location / Venue Name",
+        "type": "text",
+        "placeholder": "e.g. Central Library Entrance"
+      },
+      {
+        "id": "assistance-number",
+        "label": "Assistance Phone Number",
+        "type": "tel",
+        "placeholder": "e.g. +1 555-0105"
+      },
+      {
+        "id": "guide-url",
+        "label": "Accessibility Guide URL (Optional)",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://library.city.gov/access-map",
         "guard": "url"
+      },
+      {
+        "id": "notes",
+        "label": "Access Notes",
+        "type": "textarea",
+        "placeholder": "e.g. Ramp is located on the west side of the building."
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -3744,11 +4877,22 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
-        "type": "url",
-        "placeholder": "https://example.com/your-link",
-        "guard": "url"
+        "id": "person-name",
+        "label": "Person Name",
+        "type": "text",
+        "placeholder": "e.g. Liam Alexander"
+      },
+      {
+        "id": "restrictions",
+        "label": "Dietary Restrictions / Allergies",
+        "type": "textarea",
+        "placeholder": "e.g. Strictly Gluten-Free, Severe Peanut Allergy"
+      },
+      {
+        "id": "emergency-contact",
+        "label": "Emergency Contact",
+        "type": "text",
+        "placeholder": "e.g. Clara Miller - +1 555-0182"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -3797,11 +4941,28 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
-        "type": "url",
-        "placeholder": "https://example.com/your-link",
-        "guard": "url"
+        "id": "full-name",
+        "label": "Full Name",
+        "type": "text",
+        "placeholder": "e.g. Rajesh Kumar"
+      },
+      {
+        "id": "certificate-id",
+        "label": "Certificate ID",
+        "type": "text",
+        "placeholder": "e.g. VAC-9876543-A"
+      },
+      {
+        "id": "vaccine-type",
+        "label": "Vaccine Type / Name",
+        "type": "text",
+        "placeholder": "e.g. Covishield / Pfizer-BioNTech"
+      },
+      {
+        "id": "doses-taken",
+        "label": "Doses Taken",
+        "type": "select",
+        "options": ["1 Dose", "2 Doses", "3 Doses (Booster)", "4 Doses"]
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -3850,11 +5011,23 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "guideline-title",
+        "label": "Guideline / Kit Title",
+        "type": "text",
+        "placeholder": "e.g. Workplace First Aid Plan"
+      },
+      {
+        "id": "pdf-url",
+        "label": "Instructions PDF URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://redcross.org/first-aid-instructions.pdf",
         "guard": "url"
+      },
+      {
+        "id": "emergency-number",
+        "label": "Emergency Phone Number",
+        "type": "tel",
+        "placeholder": "e.g. 911 / 112"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -3903,11 +5076,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "property-title",
+        "label": "Property Name / Title",
+        "type": "text",
+        "placeholder": "e.g. Luxury Penthouse Suite"
+      },
+      {
+        "id": "tour-url",
+        "label": "Virtual Tour / Video URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://matterport.com/demo-tour-uuid",
         "guard": "url"
+      },
+      {
+        "id": "price",
+        "label": "Asking Price (Optional)",
+        "type": "text",
+        "placeholder": "e.g. $1,250,000"
+      },
+      {
+        "id": "agent-phone",
+        "label": "Agent Phone Number",
+        "type": "tel",
+        "placeholder": "e.g. +1 555-0155"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -3956,25 +5147,35 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "in-contact-name",
-        "label": "Full Name",
+        "id": "agent-name",
+        "label": "Agent Full Name",
         "type": "text",
-        "placeholder": "e.g. John Doe",
-        "guard": "contact"
+        "placeholder": "e.g. Liam Alexander"
       },
       {
-        "id": "in-contact-phone",
+        "id": "agency-name",
+        "label": "Agency / Brokerage Name",
+        "type": "text",
+        "placeholder": "e.g. Horizon Premium Realty"
+      },
+      {
+        "id": "phone-number",
         "label": "Phone Number",
         "type": "tel",
-        "placeholder": "e.g. +1 234 567 8900",
-        "guard": "contact"
+        "placeholder": "e.g. +1 555-0155"
       },
       {
-        "id": "in-contact-email",
+        "id": "email-address",
         "label": "Email Address",
         "type": "email",
-        "placeholder": "e.g. john@example.com",
-        "guard": "contact"
+        "placeholder": "e.g. liam@horizonrealty.com"
+      },
+      {
+        "id": "website-url",
+        "label": "Website URL",
+        "type": "url",
+        "placeholder": "https://horizonrealty.com",
+        "guard": "url"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -4023,11 +5224,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "property-name",
+        "label": "Property Name",
+        "type": "text",
+        "placeholder": "e.g. Oakridge Crest Condos"
+      },
+      {
+        "id": "brochure-url",
+        "label": "Brochure PDF URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://oakridgecrest.com/brochure.pdf",
         "guard": "url"
+      },
+      {
+        "id": "contact-number",
+        "label": "Contact Number",
+        "type": "tel",
+        "placeholder": "e.g. +1 555-0155"
+      },
+      {
+        "id": "agency-name",
+        "label": "Agency Name",
+        "type": "text",
+        "placeholder": "e.g. Horizon Realty"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -4076,11 +5295,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "property-address",
+        "label": "Property Address",
+        "type": "text",
+        "placeholder": "e.g. 742 Evergreen Terrace, Springfield"
+      },
+      {
+        "id": "registration-url",
+        "label": "Registration Form URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://forms.gle/openhouse-reg",
         "guard": "url"
+      },
+      {
+        "id": "event-date-time",
+        "label": "Event Date & Time",
+        "type": "text",
+        "placeholder": "e.g. Saturday, Oct 14th @ 2:00 PM"
+      },
+      {
+        "id": "agent-name",
+        "label": "Hosting Agent Name",
+        "type": "text",
+        "placeholder": "e.g. John Doe"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -4129,25 +5366,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "in-upi-vpa",
-        "label": "UPI ID / VPA",
+        "id": "landlord-or-property",
+        "label": "Landlord or Property Name",
         "type": "text",
-        "placeholder": "e.g. merchant@upi",
-        "guard": "upi"
+        "placeholder": "e.g. Apex Property Management"
       },
       {
-        "id": "in-upi-name",
-        "label": "Payee Name",
-        "type": "text",
-        "placeholder": "e.g. Shop Name",
-        "guard": "upi"
+        "id": "payment-url",
+        "label": "Payment Portal/UPI URL",
+        "type": "url",
+        "placeholder": "https://portal.apexproperties.com/rent",
+        "guard": "url"
       },
       {
-        "id": "in-upi-amt",
-        "label": "Amount (₹)",
-        "type": "number",
-        "placeholder": "e.g. 500",
-        "guard": "upi"
+        "id": "tenant-unit",
+        "label": "Tenant / Unit Number",
+        "type": "text",
+        "placeholder": "e.g. Unit 4B"
+      },
+      {
+        "id": "amount-due",
+        "label": "Amount Due (Optional)",
+        "type": "text",
+        "placeholder": "e.g. $1,850"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -4196,11 +5437,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "dealership-name",
+        "label": "Dealership Name",
+        "type": "text",
+        "placeholder": "e.g. Apex Motors"
+      },
+      {
+        "id": "vehicle-model",
+        "label": "Vehicle Model",
+        "type": "text",
+        "placeholder": "e.g. Tesla Model 3 (2024)"
+      },
+      {
+        "id": "booking-url",
+        "label": "Test Drive Booking URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://apexmotors.com/book-test-drive",
         "guard": "url"
+      },
+      {
+        "id": "sales-contact",
+        "label": "Sales Contact",
+        "type": "text",
+        "placeholder": "e.g. Liam Alexander - +1 555-0155"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -4249,11 +5508,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "vehicle-number",
+        "label": "Vehicle Number",
+        "type": "text",
+        "placeholder": "e.g. DL-1CA-1234"
+      },
+      {
+        "id": "owner-name",
+        "label": "Owner Name",
+        "type": "text",
+        "placeholder": "e.g. Rajesh Kumar"
+      },
+      {
+        "id": "service-history-url",
+        "label": "Service History URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://serviceportal.com/records/DL1CA1234",
         "guard": "url"
+      },
+      {
+        "id": "garage-contact",
+        "label": "Garage Contact",
+        "type": "text",
+        "placeholder": "e.g. AutoTech Garage - +91 98765-43210"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -4302,10 +5579,28 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "vehicle-number",
+        "label": "Vehicle Number",
+        "type": "text",
+        "placeholder": "e.g. MH-12-AB-1234"
+      },
+      {
+        "id": "emergency-contact",
+        "label": "Emergency Contact",
+        "type": "text",
+        "placeholder": "e.g. Tow Service - +91 91111-12222"
+      },
+      {
+        "id": "insurance-number",
+        "label": "Insurance Number",
+        "type": "text",
+        "placeholder": "e.g. INS-9876543-X"
+      },
+      {
+        "id": "assistance-url",
+        "label": "Assistance URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://roadsidehelp.com/sos",
         "guard": "url"
       }
     ],
@@ -4355,11 +5650,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "vehicle-model",
+        "label": "Vehicle Model",
+        "type": "text",
+        "placeholder": "e.g. Honda Civic (2018)"
+      },
+      {
+        "id": "listing-url",
+        "label": "Listing URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://cars.com/listing-123456",
         "guard": "url"
+      },
+      {
+        "id": "seller-name",
+        "label": "Seller Name",
+        "type": "text",
+        "placeholder": "e.g. John Doe"
+      },
+      {
+        "id": "contact-number",
+        "label": "Contact Number",
+        "type": "tel",
+        "placeholder": "e.g. +1 555-0199"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -4408,25 +5721,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "in-upi-vpa",
-        "label": "UPI ID / VPA",
+        "id": "parking-name",
+        "label": "Parking Name/Lot",
         "type": "text",
-        "placeholder": "e.g. merchant@upi",
-        "guard": "upi"
+        "placeholder": "e.g. Downtown Central Plaza Parking"
       },
       {
-        "id": "in-upi-name",
-        "label": "Payee Name",
-        "type": "text",
-        "placeholder": "e.g. Shop Name",
-        "guard": "upi"
+        "id": "payment-url",
+        "label": "Payment URL / Portal Link",
+        "type": "url",
+        "placeholder": "https://parkpay.com/pay?lot=22B",
+        "guard": "url"
       },
       {
-        "id": "in-upi-amt",
-        "label": "Amount (₹)",
-        "type": "number",
-        "placeholder": "e.g. 500",
-        "guard": "upi"
+        "id": "spot-number",
+        "label": "Spot Number",
+        "type": "text",
+        "placeholder": "e.g. Lot B - Spot #42"
+      },
+      {
+        "id": "contact-number",
+        "label": "Contact Number",
+        "type": "tel",
+        "placeholder": "e.g. +1 555-0111"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -4475,11 +5792,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "student-name",
+        "label": "Student Name",
+        "type": "text",
+        "placeholder": "e.g. Liam Alexander"
+      },
+      {
+        "id": "student-id",
+        "label": "Student ID / Roll No.",
+        "type": "text",
+        "placeholder": "e.g. STU-2024-897"
+      },
+      {
+        "id": "verification-url",
+        "label": "Verification URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://schoolportal.edu/verify/stu-2024-897",
         "guard": "url"
+      },
+      {
+        "id": "institution-name",
+        "label": "Institution Name",
+        "type": "text",
+        "placeholder": "e.g. Stanford University"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -4528,11 +5863,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "class-name",
+        "label": "Class Name",
+        "type": "text",
+        "placeholder": "e.g. Grade 10 - Section B"
+      },
+      {
+        "id": "attendance-form-url",
+        "label": "Attendance Form URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://forms.gle/classroom-attendance-id",
         "guard": "url"
+      },
+      {
+        "id": "teacher-name",
+        "label": "Teacher Name",
+        "type": "text",
+        "placeholder": "e.g. Clara Miller"
+      },
+      {
+        "id": "subject",
+        "label": "Subject / Topic",
+        "type": "text",
+        "placeholder": "e.g. Introduction to Calculus"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -4581,11 +5934,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "exam-name",
+        "label": "Exam / Quiz Name",
+        "type": "text",
+        "placeholder": "e.g. Midterm Physics Evaluation"
+      },
+      {
+        "id": "exam-url",
+        "label": "Exam Portal URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://quiz.school.edu/start?id=phys-mid",
         "guard": "url"
+      },
+      {
+        "id": "subject",
+        "label": "Subject",
+        "type": "text",
+        "placeholder": "e.g. Physics"
+      },
+      {
+        "id": "start-date",
+        "label": "Start Date / Time",
+        "type": "text",
+        "placeholder": "e.g. Monday, Nov 12th @ 9:00 AM"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -4634,11 +6005,23 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "course-name",
+        "label": "Course Name",
+        "type": "text",
+        "placeholder": "e.g. CS101: Introduction to Computer Science"
+      },
+      {
+        "id": "pdf-url",
+        "label": "Syllabus / Study Material PDF URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://school.edu/courses/cs101/syllabus.pdf",
         "guard": "url"
+      },
+      {
+        "id": "instructor-name",
+        "label": "Instructor Name",
+        "type": "text",
+        "placeholder": "e.g. Dr. Liam Alexander"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -4687,11 +6070,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "event-name",
+        "label": "Event Name",
+        "type": "text",
+        "placeholder": "e.g. Annual Tech Conference 2024"
+      },
+      {
+        "id": "registration-url",
+        "label": "Registration URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://conf.com/tickets/register",
         "guard": "url"
+      },
+      {
+        "id": "date",
+        "label": "Event Date",
+        "type": "text",
+        "placeholder": "e.g. October 15-17, 2024"
+      },
+      {
+        "id": "venue",
+        "label": "Venue / Location",
+        "type": "text",
+        "placeholder": "e.g. Convention Center, Hall A"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -4740,10 +6141,34 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "bride-name",
+        "label": "Bride Name",
+        "type": "text",
+        "placeholder": "e.g. Clara Miller"
+      },
+      {
+        "id": "groom-name",
+        "label": "Groom Name",
+        "type": "text",
+        "placeholder": "e.g. Liam Alexander"
+      },
+      {
+        "id": "wedding-date",
+        "label": "Wedding Date",
+        "type": "text",
+        "placeholder": "e.g. Saturday, Oct 14th, 2024"
+      },
+      {
+        "id": "venue",
+        "label": "Venue / Location",
+        "type": "text",
+        "placeholder": "e.g. St. Patrick's Cathedral, Austin, TX"
+      },
+      {
+        "id": "rsvp-url",
+        "label": "RSVP URL / Link",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://claraandliam.wedding/rsvp",
         "guard": "url"
       }
     ],
@@ -4793,11 +6218,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "event-name",
+        "label": "Event Name",
+        "type": "text",
+        "placeholder": "e.g. Annual Music Festival"
+      },
+      {
+        "id": "schedule-pdf-url",
+        "label": "Schedule PDF URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://musicfest.com/schedule.pdf",
         "guard": "url"
+      },
+      {
+        "id": "date",
+        "label": "Event Date",
+        "type": "text",
+        "placeholder": "e.g. October 15-17, 2024"
+      },
+      {
+        "id": "venue",
+        "label": "Venue / Location",
+        "type": "text",
+        "placeholder": "e.g. Central Park Amphitheater"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -4846,10 +6289,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "charity-name",
+        "label": "Charity Name",
+        "type": "text",
+        "placeholder": "e.g. Hope Worldwide Foundation"
+      },
+      {
+        "id": "donation-url",
+        "label": "Donation URL / Portal Link",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://hopeww.org/donate",
+        "guard": "url"
+      },
+      {
+        "id": "contact-number",
+        "label": "Contact Number",
+        "type": "tel",
+        "placeholder": "e.g. +1 555-0133"
+      },
+      {
+        "id": "website",
+        "label": "Website",
+        "type": "url",
+        "placeholder": "https://hopeww.org",
         "guard": "url"
       }
     ],
@@ -4899,11 +6361,23 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "event-name",
+        "label": "Event Name",
+        "type": "text",
+        "placeholder": "e.g. Annual Tech Summit"
+      },
+      {
+        "id": "gallery-url",
+        "label": "Gallery URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://flickr.com/photos/tech-summit-2024",
         "guard": "url"
+      },
+      {
+        "id": "date",
+        "label": "Event Date",
+        "type": "text",
+        "placeholder": "e.g. October 15, 2024"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -4952,11 +6426,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "webinar-name",
+        "label": "Webinar Name",
+        "type": "text",
+        "placeholder": "e.g. Masterclass on AI Trends"
+      },
+      {
+        "id": "registration-url",
+        "label": "Registration URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://zoom.us/webinar/register/id",
         "guard": "url"
+      },
+      {
+        "id": "speaker-name",
+        "label": "Speaker Name",
+        "type": "text",
+        "placeholder": "e.g. Clara Miller"
+      },
+      {
+        "id": "date",
+        "label": "Webinar Date & Time",
+        "type": "text",
+        "placeholder": "e.g. Wednesday, Sep 20th @ 3:00 PM EST"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -5005,11 +6497,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "gym-name",
+        "label": "Gym Name",
+        "type": "text",
+        "placeholder": "e.g. Iron & Fitness Club"
+      },
+      {
+        "id": "check-in-url",
+        "label": "Check-in URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://gymportal.com/checkin/iron-club",
         "guard": "url"
+      },
+      {
+        "id": "membership-id",
+        "label": "Membership ID",
+        "type": "text",
+        "placeholder": "e.g. MEM-98745"
+      },
+      {
+        "id": "contact-number",
+        "label": "Contact Number",
+        "type": "tel",
+        "placeholder": "e.g. +1 555-0182"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -5058,11 +6568,22 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "in-text-data",
-        "label": "Content / Message",
+        "id": "secret-message",
+        "label": "Secret Message",
+        "type": "textarea",
+        "placeholder": "e.g. Meet me at 8 PM at the corner cafe..."
+      },
+      {
+        "id": "password",
+        "label": "Password (Optional)",
         "type": "text",
-        "placeholder": "Enter your text payload here...",
-        "guard": "text"
+        "placeholder": "e.g. MyPassword123"
+      },
+      {
+        "id": "expiry-date",
+        "label": "Expiry Date",
+        "type": "text",
+        "placeholder": "e.g. Valid until Oct 31, 2024"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -5111,10 +6632,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "device-name",
+        "label": "Device Name",
+        "type": "text",
+        "placeholder": "e.g. Philips Hue Smart Bridge"
+      },
+      {
+        "id": "setup-url",
+        "label": "Setup URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://setup.meethue.com/bridge",
+        "guard": "url"
+      },
+      {
+        "id": "wifi-name",
+        "label": "WiFi Name (SSID)",
+        "type": "text",
+        "placeholder": "e.g. Home_Network"
+      },
+      {
+        "id": "support-url",
+        "label": "Support URL / Manual",
+        "type": "url",
+        "placeholder": "https://meethue.com/support/docs.pdf",
         "guard": "url"
       }
     ],
@@ -5164,18 +6704,28 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "in-wifi-ssid",
-        "label": "Network Name (SSID)",
+        "id": "wifi-name",
+        "label": "WiFi Name (SSID)",
         "type": "text",
-        "placeholder": "e.g. HomeNetwork",
-        "guard": "wifi"
+        "placeholder": "e.g. Guest_WiFi"
       },
       {
-        "id": "in-wifi-pass",
+        "id": "password",
         "label": "Password",
         "type": "text",
-        "placeholder": "e.g. secret123",
-        "guard": "wifi"
+        "placeholder": "e.g. guestpwd987"
+      },
+      {
+        "id": "encryption",
+        "label": "Encryption Type",
+        "type": "select",
+        "options": ["WPA/WPA2", "WEP", "None"]
+      },
+      {
+        "id": "expiry-note",
+        "label": "Expiry Note",
+        "type": "text",
+        "placeholder": "e.g. Expires end of day / 24 hours"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -5224,11 +6774,23 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "recipe-name",
+        "label": "Recipe Name",
+        "type": "text",
+        "placeholder": "e.g. Classic Chocolate Chip Cookies"
+      },
+      {
+        "id": "recipe-url",
+        "label": "Recipe URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://cooking.com/recipes/chocolate-chip-cookies",
         "guard": "url"
+      },
+      {
+        "id": "author-name",
+        "label": "Author Name",
+        "type": "text",
+        "placeholder": "e.g. Clara Miller"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -5277,11 +6839,23 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "book-name",
+        "label": "Book Name",
+        "type": "text",
+        "placeholder": "e.g. The Great Gatsby"
+      },
+      {
+        "id": "review-url",
+        "label": "Review URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://goodreads.com/book/show/12345/reviews",
         "guard": "url"
+      },
+      {
+        "id": "author-name",
+        "label": "Author Name",
+        "type": "text",
+        "placeholder": "e.g. F. Scott Fitzgerald"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -5330,11 +6904,29 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "album-name",
+        "label": "Album Name",
+        "type": "text",
+        "placeholder": "e.g. Echoes of Silence"
+      },
+      {
+        "id": "streaming-url",
+        "label": "Streaming URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://spotify.link/album-echoes",
         "guard": "url"
+      },
+      {
+        "id": "artist-name",
+        "label": "Artist Name",
+        "type": "text",
+        "placeholder": "e.g. Echoes Band"
+      },
+      {
+        "id": "release-date",
+        "label": "Release Date",
+        "type": "text",
+        "placeholder": "e.g. October 15, 2024"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -5383,11 +6975,23 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "podcast-name",
+        "label": "Podcast Name",
+        "type": "text",
+        "placeholder": "e.g. Modern Developer Talks"
+      },
+      {
+        "id": "episode-url",
+        "label": "Episode URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://apple.co/podcasts/devtalks-12",
         "guard": "url"
+      },
+      {
+        "id": "host-name",
+        "label": "Host Name",
+        "type": "text",
+        "placeholder": "e.g. Clara Miller"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -5436,11 +7040,36 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "full-name",
+        "label": "Full Name",
+        "type": "text",
+        "placeholder": "e.g. Liam Alexander"
+      },
+      {
+        "id": "resume-pdf-url",
+        "label": "Resume PDF URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://liamresume.com/cv.pdf",
         "guard": "url"
+      },
+      {
+        "id": "linkedin-url",
+        "label": "LinkedIn URL",
+        "type": "url",
+        "placeholder": "https://linkedin.com/in/liamalexander",
+        "guard": "url"
+      },
+      {
+        "id": "email",
+        "label": "Email",
+        "type": "email",
+        "placeholder": "e.g. liam@example.com"
+      },
+      {
+        "id": "phone-number",
+        "label": "Phone Number",
+        "type": "tel",
+        "placeholder": "e.g. +1 555-0155"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
@@ -5489,11 +7118,44 @@ module.exports = {
     },
     "fields": [
       {
-        "id": "target-url",
-        "label": "Target Destination URL / Link",
+        "id": "full-name",
+        "label": "Full Name",
+        "type": "text",
+        "placeholder": "e.g. Clara Miller"
+      },
+      {
+        "id": "portfolio-url",
+        "label": "Portfolio URL",
         "type": "url",
-        "placeholder": "https://example.com/your-link",
+        "placeholder": "https://claramiller.design",
         "guard": "url"
+      },
+      {
+        "id": "github-url",
+        "label": "GitHub URL",
+        "type": "url",
+        "placeholder": "https://github.com/claramiller",
+        "guard": "url"
+      },
+      {
+        "id": "behance-url",
+        "label": "Behance URL",
+        "type": "url",
+        "placeholder": "https://behance.net/claramiller",
+        "guard": "url"
+      },
+      {
+        "id": "linkedin-url",
+        "label": "LinkedIn URL",
+        "type": "url",
+        "placeholder": "https://linkedin.com/in/claramiller",
+        "guard": "url"
+      },
+      {
+        "id": "email",
+        "label": "Email",
+        "type": "email",
+        "placeholder": "e.g. clara@example.com"
       }
     ],
     "howToUse": "1. <strong>Enter Details:</strong> Fill out the required information in the form above.<br>2. <strong>Style It:</strong> Select the design pattern and theme that suits your brand.<br>3. <strong>Download:</strong> See the preview update instantly and click download to get your QR code.",
