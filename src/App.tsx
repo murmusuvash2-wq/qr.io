@@ -5,6 +5,7 @@ import QRCodeGenerator from './components/QRCodeGenerator';
 import SaaSPaymentModal from './components/SaaSPaymentModal';
 import AssetLibraryViewer from './components/AssetLibraryViewer';
 import PremiumTemplates from './components/PremiumTemplates';
+import TemplateEditor from './components/TemplateEditor';
 import LandingPage from './components/LandingPage';
 import { authService, UserStats } from './lib/firebase';
 
@@ -104,6 +105,7 @@ const getRelatedToolsItems = (toolId: string, allTools: QRTool[]) => {
 
 export default function App() {
   const [showLanding, setShowLanding] = useState(true);
+  const [directTemplateToEdit, setDirectTemplateToEdit] = useState<any | null>(null);
   const [showAssetLibrary, setShowAssetLibrary] = useState(false);
   const [showTemplateGallery, setShowTemplateGallery] = useState(false);
   const [activeTool, setActiveTool] = useState<QRTool>(QR_TOOLS[0]);
@@ -188,8 +190,24 @@ export default function App() {
     }
   };
 
+  if (directTemplateToEdit) {
+    return (
+      <TemplateEditor 
+        template={directTemplateToEdit} 
+        user={user}
+        onOpenPayModal={() => setIsPayModalOpen(true)}
+        onBack={() => setDirectTemplateToEdit(null)}
+      />
+    );
+  }
+
   if (showLanding) {
-    return <LandingPage onEnter={handleEnterFromLanding} />;
+    return (
+      <LandingPage 
+        onEnter={handleEnterFromLanding} 
+        onSelectTemplate={setDirectTemplateToEdit}
+      />
+    );
   }
 
   if (showAssetLibrary) {
@@ -197,7 +215,13 @@ export default function App() {
   }
 
   if (showTemplateGallery) {
-    return <PremiumTemplates onBack={() => setShowTemplateGallery(false)} />;
+    return (
+      <PremiumTemplates 
+        user={user} 
+        onOpenPayModal={() => setIsPayModalOpen(true)} 
+        onBack={() => setShowTemplateGallery(false)} 
+      />
+    );
   }
 
   return (
@@ -245,13 +269,6 @@ export default function App() {
             >
               <LayoutGrid className="w-4 h-4" />
               Templates
-            </button>
-            <button 
-              onClick={() => setShowAssetLibrary(true)}
-              className="mr-2 px-3 py-1.5 bg-[#12121E] border border-[#28283E] text-xs font-bold text-[#A89EFF] rounded-lg hover:bg-[#1C1C2E] transition-colors"
-            >
-              <Box className="w-4 h-4 inline-block mr-1.5" />
-              Asset Library
             </button>
             <div className="hidden md:flex items-center gap-1.5 mr-2">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></div>

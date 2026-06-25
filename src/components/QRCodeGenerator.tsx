@@ -105,6 +105,38 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal }: QRCodeGe
   const [bgColor, setBgColor] = useState('#0A0A12');
   const [isMockupMode, setIsMockupMode] = useState(false);
   const [selectedFormatIndex, setSelectedFormatIndex] = useState(0);
+
+  // Integrated Asset Library States
+  const [assetSearchQuery, setAssetSearchQuery] = useState('');
+  const [assetSearchResults, setAssetSearchResults] = useState<string[]>([]);
+  const [isSearchingAssets, setIsSearchingAssets] = useState(false);
+  const [activeAssetTab, setActiveAssetTab] = useState<'preset' | 'search'>('preset');
+
+  // Trigger live search for cloud icons
+  useEffect(() => {
+    if (activeAssetTab === 'search' && assetSearchQuery.trim() !== '') {
+      const delay = setTimeout(() => {
+        const searchIconify = async () => {
+          setIsSearchingAssets(true);
+          try {
+            const res = await fetch(`https://api.iconify.design/search?query=${encodeURIComponent(assetSearchQuery)}&limit=24`);
+            const data = await res.json();
+            if (data && data.icons) {
+              setAssetSearchResults(data.icons.map((icon: string) => `https://api.iconify.design/${icon}.svg`));
+            } else {
+              setAssetSearchResults([]);
+            }
+          } catch (err) {
+            console.error("Iconify search error", err);
+          } finally {
+            setIsSearchingAssets(false);
+          }
+        };
+        searchIconify();
+      }, 600);
+      return () => clearTimeout(delay);
+    }
+  }, [activeAssetTab, assetSearchQuery]);
   
   const [copied, setCopied] = useState(false);
   const qrRef = useRef<HTMLDivElement>(null);
@@ -1010,14 +1042,124 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal }: QRCodeGe
             </div>
             <div className="col-span-2">
               <label className="text-[10px] font-bold text-[#8080A0] uppercase tracking-[1.2px] block mb-2">Center Logo Override</label>
-              <div className="relative">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleLogoUpload}
-                  onClick={(e) => { if(!user?.isPro) { e.preventDefault(); onOpenPayModal(); } }}
-                  className="w-full text-xs text-[#8080A0] file:mr-3 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-[12px] file:font-semibold file:bg-[rgba(124,110,250,0.1)] file:text-[#A89EFF] hover:file:bg-[rgba(124,110,250,0.2)] transition-all cursor-pointer"
-                />
+              <div className="flex flex-col gap-4">
+                <div className="relative">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleLogoUpload}
+                    onClick={(e) => { if(!user?.isPro) { e.preventDefault(); onOpenPayModal(); } }}
+                    className="w-full text-xs text-[#8080A0] file:mr-3 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-[12px] file:font-semibold file:bg-[rgba(124,110,250,0.1)] file:text-[#A89EFF] hover:file:bg-[rgba(124,110,250,0.2)] transition-all cursor-pointer"
+                  />
+                </div>
+
+                {/* Inline Premium Asset Library Picker */}
+                <div className="bg-[#080812] border border-[#1E1E34] rounded-xl p-4 space-y-4">
+                  <div className="flex items-center justify-between border-b border-[#1E1E34] pb-2.5">
+                    <span className="text-[11px] font-extrabold text-[#7C6EFA] tracking-wider uppercase flex items-center gap-1">
+                      👑 PREMIUM ASSET LIBRARY
+                    </span>
+                    {logoFile && (
+                      <button 
+                        type="button"
+                        onClick={() => setLogoFile('')}
+                        className="text-[10px] font-bold bg-red-950 text-red-400 hover:bg-red-900 border border-red-500/20 px-2.5 py-1 rounded-lg transition-colors animate-pulse"
+                      >
+                        Remove Logo
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Preset vs Search Tabs */}
+                  <div className="flex gap-2 bg-black/45 p-1 rounded-lg border border-[#1E1E34]/50">
+                    <button
+                      type="button"
+                      onClick={() => setActiveAssetTab('preset')}
+                      className={`flex-1 py-1 text-[10px] font-bold rounded-md transition-all ${activeAssetTab === 'preset' ? 'bg-[#7C6EFA] text-white' : 'text-[#8080A0] hover:text-white'}`}
+                    >
+                      Preset Badges
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveAssetTab('search')}
+                      className={`flex-1 py-1 text-[10px] font-bold rounded-md transition-all ${activeAssetTab === 'search' ? 'bg-[#7C6EFA] text-white' : 'text-[#8080A0] hover:text-white'}`}
+                    >
+                      Live Icon Search
+                    </button>
+                  </div>
+
+                  {activeAssetTab === 'preset' && (
+                    <div className="grid grid-cols-4 gap-2.5 max-h-[140px] overflow-y-auto pr-1 scrollbar-thin">
+                      {[
+                        { name: 'Instagram', url: 'https://api.iconify.design/lucide:instagram.svg?color=%23E4405F' },
+                        { name: 'YouTube', url: 'https://api.iconify.design/lucide:youtube.svg?color=%23FF0000' },
+                        { name: 'Facebook', url: 'https://api.iconify.design/lucide:facebook.svg?color=%231877F2' },
+                        { name: 'Twitter', url: 'https://api.iconify.design/lucide:twitter.svg?color=%231DA1F2' },
+                        { name: 'WhatsApp', url: 'https://api.iconify.design/lucide:phone.svg?color=%2325D366' },
+                        { name: 'Globe', url: 'https://api.iconify.design/lucide:globe.svg?color=%234F46E5' },
+                        { name: 'Mail', url: 'https://api.iconify.design/lucide:mail.svg?color=%23EA4335' },
+                        { name: 'WiFi', url: 'https://api.iconify.design/lucide:wifi.svg?color=%2310B981' },
+                        { name: 'Heart', url: 'https://api.iconify.design/lucide:heart.svg?color=%23EF4444' },
+                        { name: 'Star', url: 'https://api.iconify.design/lucide:star.svg?color=%23F59E0B' },
+                        { name: 'Coffee', url: 'https://api.iconify.design/lucide:coffee.svg?color=%23A16207' },
+                        { name: 'Scan', url: 'https://api.iconify.design/lucide:qr-code.svg?color=%234F46E5' },
+                      ].map((badge) => (
+                        <button
+                          type="button"
+                          key={badge.name}
+                          onClick={() => {
+                            if (!user?.isPro) return onOpenPayModal();
+                            setLogoFile(badge.url);
+                          }}
+                          className={`p-2 rounded-xl bg-[#030308]/60 border transition-all flex flex-col items-center justify-center gap-1.5 hover:scale-105 hover:bg-[#12121E]/80 ${logoFile === badge.url ? 'border-[#7C6EFA] bg-[#12121E]' : 'border-[#1E1E34]'}`}
+                        >
+                          <img src={badge.url} alt={badge.name} className="w-5 h-5 object-contain" referrerPolicy="no-referrer" />
+                          <span className="text-[9px] text-[#8080A0] font-medium truncate w-full text-center">{badge.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  {activeAssetTab === 'search' && (
+                    <div className="space-y-3">
+                      <div className="relative">
+                        <input
+                          type="text"
+                          value={assetSearchQuery}
+                          onChange={(e) => setAssetSearchQuery(e.target.value)}
+                          placeholder="Search 200,000+ icons (e.g. 'rocket')..."
+                          className="w-full bg-[#030308] border border-[#1E1E34] rounded-xl py-2 px-3 text-[11px] text-white placeholder-slate-500 focus:outline-none focus:border-[#7C6EFA] transition-colors"
+                        />
+                      </div>
+
+                      {isSearchingAssets ? (
+                        <div className="flex items-center justify-center py-4">
+                          <div className="w-5 h-5 border-2 border-[#7C6EFA] border-t-transparent rounded-full animate-spin"></div>
+                        </div>
+                      ) : assetSearchResults.length === 0 ? (
+                        <p className="text-[10px] text-slate-500 text-center py-2">
+                          {assetSearchQuery ? 'No icons found. Try another term!' : 'Type a keyword above to load cloud vectors.'}
+                        </p>
+                      ) : (
+                        <div className="grid grid-cols-6 gap-2 max-h-[140px] overflow-y-auto pr-1 scrollbar-thin">
+                          {assetSearchResults.map((url, i) => (
+                            <button
+                              type="button"
+                              key={i}
+                              onClick={() => {
+                                if (!user?.isPro) return onOpenPayModal();
+                                setLogoFile(url);
+                              }}
+                              className={`p-2.5 rounded-lg bg-[#030308]/60 border transition-all flex items-center justify-center hover:scale-105 hover:bg-[#12121E]/80 ${logoFile === url ? 'border-[#7C6EFA] bg-[#12121E]' : 'border-[#1E1E34]'}`}
+                            >
+                              <img src={url} className="w-5 h-5 object-contain" alt="" referrerPolicy="no-referrer" />
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

@@ -5,8 +5,9 @@ import {
   ArrowUpRight, Check, Heart, Shield, Layers, Search, Star, Globe, ShieldCheck, 
   Smartphone, Scan, RefreshCw, Sliders, ChevronDown, ChevronRight, MessageSquare, 
   Activity, HelpCircle, Mail, Phone, MapPin, Laptop, Menu, X, ArrowLeft, ArrowRight as ArrowRightIcon,
-  Wifi, HelpCircle as HelpIcon, FileText, Send, Share2, Award, Printer, Lock, Download, Copy
+  Wifi, HelpCircle as HelpIcon, FileText, Send, Share2, Award, Printer, Lock, Download, Copy, Crown
 } from 'lucide-react';
+import { DUMMY_TEMPLATES } from './PremiumTemplates';
 
 // ==========================================
 // STATIC MOCK DATA MATCHING MASTER BLUEPRINT
@@ -230,11 +231,18 @@ function PremiumQRArtwork({ shapeName = 'Mandala', color = '#4F46E5' }) {
 // MAIN LANDING PAGE COMPONENT (Master SaaS)
 // ==========================================
 
-export default function LandingPage({ onEnter }: { onEnter: (toolId?: string, searchStr?: string, categoryName?: string) => void }) {
+export default function LandingPage({ 
+  onEnter,
+  onSelectTemplate
+}: { 
+  onEnter: (toolId?: string, searchStr?: string, categoryName?: string) => void;
+  onSelectTemplate?: (template: any) => void;
+}) {
   const [searchQuery, setSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [faqOpenIndex, setFaqOpenIndex] = useState<number | null>(null);
+  const [isUniversalModalOpen, setIsUniversalModalOpen] = useState(false);
 
   // ==========================================
   // LIVE UNIVERSAL QR GENERATOR STATE
@@ -310,7 +318,7 @@ export default function LandingPage({ onEnter }: { onEnter: (toolId?: string, se
       });
       qrCodeInstance.current.append(qrRef.current);
     }
-  }, [selectedType, urlInput, wifiSsid, wifiPassword, wifiEncryption, upiId, upiName, upiAmount, dotsStyle, cornersStyle, fgColor, bgColor]);
+  }, [selectedType, urlInput, wifiSsid, wifiPassword, wifiEncryption, upiId, upiName, upiAmount, dotsStyle, cornersStyle, fgColor, bgColor, isUniversalModalOpen]);
 
   const downloadLiveQR = () => {
     if (qrCodeInstance.current) {
@@ -590,395 +598,109 @@ export default function LandingPage({ onEnter }: { onEnter: (toolId?: string, se
       </section>
 
       {/* ==========================================
-          LIVE UNIVERSAL QR STUDIO SECTION
+          LIVE UNIVERSAL QR STUDIO SECTION REMOVED FROM MAIN FLOW
           ========================================== */}
-      <section className="py-20 bg-slate-950 text-white relative overflow-hidden border-b border-slate-900">
-        {/* Decorative background lights */}
-        <div className="absolute top-[20%] left-[-10%] w-[400px] h-[400px] bg-purple-900/15 blur-[120px] rounded-full pointer-events-none"></div>
-        <div className="absolute bottom-[10%] right-[-10%] w-[450px] h-[450px] bg-indigo-950/20 blur-[130px] rounded-full pointer-events-none"></div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          
-          <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-            <span className="text-xs font-bold text-indigo-400 uppercase tracking-widest bg-indigo-950/60 border border-indigo-900/40 px-3.5 py-1.5 rounded-full">LIVE EXPERIMENT STUDIO</span>
-            <h2 className="font-syne text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-              Interactive Universal QR Generator
-            </h2>
-            <p className="text-slate-400 text-sm sm:text-base">
-              Try A2ZQR's live engine right now. Customize colors, patterns, and dynamic content formats in real-time, then scan or export immediately!
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
-            
-            {/* Left Column: Form & Style Selectors */}
-            <div className="lg:col-span-7 bg-[#0E0E1B] border border-[#1F1F35] rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-8">
-              <div>
-                {/* 1. Tool Type Selector Tabs */}
-                <div className="space-y-3">
-                  <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest block">1. SELECT QR FUNCTIONALITY</span>
-                  <div className="grid grid-cols-3 gap-2.5 bg-[#07070D] p-1.5 rounded-2xl border border-[#19192C]">
-                    <button
-                      onClick={() => setSelectedType('url')}
-                      className={`py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
-                        selectedType === 'url'
-                          ? 'bg-indigo-600 text-white shadow-sm'
-                          : 'text-slate-400 hover:text-white hover:bg-white/5'
-                      }`}
-                    >
-                      <Globe className="w-4 h-4" /> URL / Text
-                    </button>
-                    <button
-                      onClick={() => setSelectedType('wifi')}
-                      className={`py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
-                        selectedType === 'wifi'
-                          ? 'bg-indigo-600 text-white shadow-sm'
-                          : 'text-slate-400 hover:text-white hover:bg-white/5'
-                      }`}
-                    >
-                      <Wifi className="w-4 h-4" /> WiFi
-                    </button>
-                    <button
-                      onClick={() => setSelectedType('upi')}
-                      className={`py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
-                        selectedType === 'upi'
-                          ? 'bg-indigo-600 text-white shadow-sm'
-                          : 'text-slate-400 hover:text-white hover:bg-white/5'
-                      }`}
-                    >
-                      <CreditCard className="w-4 h-4" /> UPI Pay
-                    </button>
-                  </div>
-                </div>
-
-                {/* 2. Dynamic Input Fields based on type */}
-                <div className="mt-6 space-y-4">
-                  <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest block">2. CONFIGURE QR DATA</span>
-                  
-                  {selectedType === 'url' && (
-                    <div className="space-y-2">
-                      <label className="text-xs text-slate-300 font-semibold block">Website URL or Text Payload</label>
-                      <input
-                        type="text"
-                        value={urlInput}
-                        onChange={(e) => setUrlInput(e.target.value)}
-                        placeholder="e.g. https://yourbrand.com/review"
-                        className="w-full px-4 py-3 bg-[#07070D] border border-[#1E1E34] rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                      />
-                    </div>
-                  )}
-
-                  {selectedType === 'wifi' && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <label className="text-xs text-slate-300 font-semibold block">Network SSID (WiFi Name)</label>
-                        <input
-                          type="text"
-                          value={wifiSsid}
-                          onChange={(e) => setWifiSsid(e.target.value)}
-                          placeholder="My_Home_WiFi"
-                          className="w-full px-4 py-3 bg-[#07070D] border border-[#1E1E34] rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-xs text-slate-300 font-semibold block">Password</label>
-                        <input
-                          type="password"
-                          value={wifiPassword}
-                          onChange={(e) => setWifiPassword(e.target.value)}
-                          placeholder="Password"
-                          className="w-full px-4 py-3 bg-[#07070D] border border-[#1E1E34] rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        />
-                      </div>
-                      <div className="col-span-1 sm:col-span-2 space-y-2">
-                        <label className="text-xs text-slate-300 font-semibold block">Security Protocol</label>
-                        <select
-                          value={wifiEncryption}
-                          onChange={(e) => setWifiEncryption(e.target.value)}
-                          className="w-full px-4 py-3 bg-[#07070D] border border-[#1E1E34] rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        >
-                          <option value="WPA">WPA/WPA2 Personal</option>
-                          <option value="WEP">WEP</option>
-                          <option value="nopass">No password (Unsecured)</option>
-                        </select>
-                      </div>
-                    </div>
-                  )}
-
-                  {selectedType === 'upi' && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <label className="text-xs text-slate-300 font-semibold block">UPI Address ID</label>
-                        <input
-                          type="text"
-                          value={upiId}
-                          onChange={(e) => setUpiId(e.target.value)}
-                          placeholder="recipient@okaxis"
-                          className="w-full px-4 py-3 bg-[#07070D] border border-[#1E1E34] rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-xs text-slate-300 font-semibold block">Payee Name</label>
-                        <input
-                          type="text"
-                          value={upiName}
-                          onChange={(e) => setUpiName(e.target.value)}
-                          placeholder="Recipient Name"
-                          className="w-full px-4 py-3 bg-[#07070D] border border-[#1E1E34] rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        />
-                      </div>
-                      <div className="col-span-1 sm:col-span-2 space-y-2">
-                        <label className="text-xs text-slate-300 font-semibold block">Request Amount (INR - Optional)</label>
-                        <input
-                          type="number"
-                          value={upiAmount}
-                          onChange={(e) => setUpiAmount(e.target.value)}
-                          placeholder="e.g. 500"
-                          className="w-full px-4 py-3 bg-[#07070D] border border-[#1E1E34] rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* 3. Style Configurations */}
-                <div className="mt-8 space-y-4">
-                  <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest block">3. LIVE AESTHETICS & DESIGNS</span>
-                  
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    {/* Dots design */}
-                    <div className="space-y-2">
-                      <label className="text-xs text-slate-300 font-semibold">Dot Pattern Style</label>
-                      <div className="grid grid-cols-2 gap-2">
-                        {[
-                          { name: 'Rounded', id: 'rounded' },
-                          { name: 'Circular Dots', id: 'dots' },
-                          { name: 'Sophisticated', id: 'classy' },
-                          { name: 'Classic Matrix', id: 'square' }
-                        ].map((d) => (
-                          <button
-                            key={d.id}
-                            onClick={() => setDotsStyle(d.id as any)}
-                            className={`py-2 px-3 rounded-lg text-xs font-semibold text-center border transition-all ${
-                              dotsStyle === d.id
-                                ? 'bg-[#1F1F3D] border-indigo-500 text-white font-extrabold'
-                                : 'bg-[#07070D] border-[#1A1A2E] text-slate-400 hover:text-white'
-                            }`}
-                          >
-                            {d.name}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Corner Squares design */}
-                    <div className="space-y-2">
-                      <label className="text-xs text-slate-300 font-semibold">Corner Eye Style</label>
-                      <div className="grid grid-cols-2 gap-2">
-                        {[
-                          { name: 'Smooth Rounded', id: 'extra-rounded' },
-                          { name: 'Bespoke Point', id: 'dot' },
-                          { name: 'Standard Box', id: 'square' }
-                        ].map((c) => (
-                          <button
-                            key={c.id}
-                            onClick={() => setCornersStyle(c.id as any)}
-                            className={`py-2 px-3 rounded-lg text-xs font-semibold text-center border transition-all ${
-                              cornersStyle === c.id
-                                ? 'bg-[#1F1F3D] border-indigo-500 text-white font-extrabold'
-                                : 'bg-[#07070D] border-[#1A1A2E] text-slate-400 hover:text-white'
-                            }`}
-                          >
-                            {c.name}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Colors selectors */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
-                    <div className="space-y-2">
-                      <label className="text-xs text-slate-300 font-semibold block">Foreground Color</label>
-                      <div className="flex items-center gap-3">
-                        <input
-                          type="color"
-                          value={fgColor}
-                          onChange={(e) => setFgColor(e.target.value)}
-                          className="w-10 h-10 rounded-lg cursor-pointer bg-transparent border border-slate-700 overflow-hidden"
-                        />
-                        <div className="flex flex-wrap gap-1.5">
-                          {['#4F46E5', '#EC4899', '#10B981', '#F59E0B', '#000000', '#FFFFFF'].map((hex) => (
-                            <button
-                              key={hex}
-                              onClick={() => setFgColor(hex)}
-                              className="w-6 h-6 rounded-full border border-white/10 transition-transform hover:scale-110 shadow-xs"
-                              style={{ backgroundColor: hex }}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="text-xs text-slate-300 font-semibold block">Background Color</label>
-                      <div className="flex items-center gap-3">
-                        <input
-                          type="color"
-                          value={bgColor}
-                          onChange={(e) => setBgColor(e.target.value)}
-                          className="w-10 h-10 rounded-lg cursor-pointer bg-transparent border border-slate-700 overflow-hidden"
-                        />
-                        <div className="flex flex-wrap gap-1.5">
-                          {['#FFFFFF', '#F8FAFC', '#F1F5F9', '#0F172A', '#080812'].map((hex) => (
-                            <button
-                              key={hex}
-                              onClick={() => setBgColor(hex)}
-                              className="w-6 h-6 rounded-full border border-white/10 transition-transform hover:scale-110 shadow-xs"
-                              style={{ backgroundColor: hex }}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Workspace Action Button */}
-              <div className="pt-6 border-t border-[#1C1C2F] flex flex-col sm:flex-row gap-4 items-center">
-                <button
-                  onClick={onEnter}
-                  className="w-full sm:w-auto px-7 py-3.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white rounded-xl text-sm font-bold shadow-lg shadow-purple-900/20 transition-all hover:scale-[1.01] flex items-center justify-center gap-2"
-                >
-                  <Sparkles className="w-4 h-4" /> Load inside Designer Studio
-                </button>
-                <p className="text-[11px] text-slate-500 text-center sm:text-left leading-tight">
-                  Unlock fully-editable luxury templates, stickers, posters, and advanced Dynamic scan tracking!
-                </p>
-              </div>
-            </div>
-
-            {/* Right Column: Live Mockup Stand / Premium Preview Frame */}
-            <div className="lg:col-span-5 flex items-center justify-center">
-              <div className="w-full max-w-[360px] bg-gradient-to-b from-[#1C1C2F] to-[#0D0D19] border border-[#2D2D49] rounded-3xl p-6 shadow-2xl flex flex-col justify-between items-center text-center relative group">
-                
-                {/* Visual Glass Accent */}
-                <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-t-3xl"></div>
-                
-                {/* Scanning Device Border Backdrop */}
-                <div className="w-full mb-6 pt-4">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#131322] border border-[#2A2A42] text-[10px] text-indigo-400 font-bold uppercase tracking-widest mb-4">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                    Live Scan Safe Guarantee
-                  </div>
-                  
-                  {/* Real Live QR Code Container */}
-                  <div className="bg-white rounded-2xl p-4.5 shadow-2xl inline-block transition-transform duration-300 group-hover:scale-[1.02] border border-[#2A2A42]">
-                    <div ref={qrRef} className="mx-auto flex items-center justify-center overflow-hidden rounded-lg min-h-[240px] min-w-[240px]" />
-                  </div>
-                </div>
-
-                {/* Info & Download CTAs */}
-                <div className="space-y-4 w-full">
-                  <div>
-                    <h3 className="font-syne font-extrabold text-white text-base">
-                      {selectedType === 'url' && 'Universal Link QR'}
-                      {selectedType === 'wifi' && `${wifiSsid || 'WiFi'} Hotspot QR`}
-                      {selectedType === 'upi' && `UPI Request QR`}
-                    </h3>
-                    <p className="text-xs text-slate-400 mt-1 truncate max-w-[280px] mx-auto">
-                      {getLiveQRString()}
-                    </p>
-                  </div>
-
-                  <div className="flex gap-2.5">
-                    <button
-                      onClick={downloadLiveQR}
-                      className="flex-1 py-3 bg-[#131322] hover:bg-slate-900 border border-[#2C2C47] hover:border-slate-700 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2"
-                    >
-                      <Download className="w-4 h-4" /> Export PNG
-                    </button>
-                    <button
-                      onClick={() => {
-                        navigator.clipboard.writeText(getLiveQRString());
-                        alert('QR payload text copied to clipboard!');
-                      }}
-                      className="px-4 py-3 bg-[#131322] hover:bg-slate-900 border border-[#2C2C47] hover:border-slate-700 text-white text-xs font-bold rounded-xl transition-all"
-                      title="Copy QR Payload String"
-                    >
-                      <Copy className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-      {/* 4. FEATURED EXPERIENCES (Real Previews with Custom Frames) */}
+      {/* 4. INTERACTIVE READYMADE TEMPLATES (Real Previews & Form Editor on Click) */}
       <section id="experiences" className="py-20 bg-slate-50 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
-              <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest block mb-1">FEATURED SHOWCASE</span>
+              <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest block mb-1">⚡ READY-TO-USE TEMPLATES</span>
               <h2 className="font-syne text-3xl sm:text-4xl font-extrabold text-slate-950 tracking-tight">
-                Explore Premium QR Experiences
+                Click Any Readymade Template to Edit Instantly
               </h2>
             </div>
             <p className="text-slate-500 text-sm max-w-md">
-              A collection of bespoke real-world layouts that you can load directly into the template editor inside your dashboard workspace.
+              Select a gorgeous coordinated card template below to personalize your brand details instantly in our live editor form!
             </p>
           </div>
 
-          {/* Swipe-friendly Horizontal Cards on Mobile, elegant flex grid on desktop */}
-          <div className="flex overflow-x-auto pb-6 gap-6 scrollbar-hide md:grid md:grid-cols-3 lg:grid-cols-5 md:overflow-visible">
-            {FEATURED_EXPERIENCES.map((item) => (
-              <div 
-                key={item.id}
-                className="w-72 md:w-auto shrink-0 bg-white border border-slate-100 rounded-3xl overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col justify-between group cursor-pointer"
-                onClick={onEnter}
-              >
-                <div>
-                  {/* Backdrop Visual frame */}
-                  <div className="aspect-[3/4] overflow-hidden relative bg-slate-100 border-b border-slate-100">
-                    <img 
-                      src={item.image} 
-                      alt={item.title} 
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-102"
-                    />
-                    
-                    {/* Glowing Accent QR overlay on image */}
-                    <div className="absolute inset-0 bg-black/40 backdrop-blur-2xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-6">
-                      <div className="bg-white rounded-xl p-3 shadow-2xl max-w-[120px] aspect-square flex items-center justify-center">
-                        <PremiumQRArtwork shapeName={item.shape} color={item.qrColor} />
-                      </div>
+          {/* Grid of real templates */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {DUMMY_TEMPLATES.map((item) => {
+              // Build dynamic background styling matching the editor canvas
+              const cardBgStyle: React.CSSProperties = {
+                aspectRatio: '2/3',
+                position: 'relative',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              };
+              
+              if (item.bgType === 'gradient' && item.gradient) {
+                const { from, to, via, angle = '135deg' } = item.gradient as any;
+                cardBgStyle.background = `linear-gradient(${angle}, ${from}, ${via ? via + ', ' : ''}${to})`;
+              } else {
+                cardBgStyle.backgroundImage = `url(${item.imgUrl})`;
+              }
+
+              return (
+                <div 
+                  key={item.id}
+                  className="bg-white border border-slate-200/80 rounded-3xl p-4 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group cursor-pointer"
+                  onClick={() => {
+                    if (onSelectTemplate) {
+                      onSelectTemplate(item);
+                    } else {
+                      onEnter();
+                    }
+                  }}
+                >
+                  {/* Miniature Poster canvas */}
+                  <div 
+                    className="rounded-2xl overflow-hidden shadow-md relative group-hover:scale-[1.01] transition-transform duration-300 flex items-center justify-center p-4 border border-slate-100"
+                    style={cardBgStyle}
+                  >
+                    {/* Visual QR element placed exactly on mini-card */}
+                    <div 
+                      className="absolute w-24 h-24 rounded-lg flex items-center justify-center p-1.5 shadow-lg transition-transform"
+                      style={{ 
+                        backgroundColor: item.qrConfig?.bgColor || '#FFFFFF',
+                        border: '1px solid rgba(255,255,255,0.1)'
+                      }}
+                    >
+                      <PremiumQRArtwork shapeName={item.qrConfig?.dotsStyle === 'classy' ? 'Lotus' : 'Mandala'} color={item.qrConfig?.fgColor || '#4F46E5'} />
                     </div>
 
-                    <div className="absolute top-4 left-4 bg-slate-950/80 backdrop-blur-md px-2.5 py-1 rounded text-[9px] font-extrabold text-white tracking-widest uppercase">
-                      {item.tag}
+                    {/* Badge details */}
+                    <div className="absolute top-3 left-3 bg-slate-900/90 backdrop-blur-sm px-2 py-0.5 rounded text-[8px] font-black text-white tracking-widest uppercase flex items-center gap-1">
+                      {item.type === 'Pro' ? (
+                        <>
+                          <Crown className="w-2.5 h-2.5 text-amber-400 fill-amber-400 animate-pulse" /> PRO
+                        </>
+                      ) : (
+                        "FREE"
+                      )}
                     </div>
                   </div>
 
-                  <div className="p-5 space-y-2">
-                    <h3 className="font-syne font-bold text-slate-950 text-base">{item.title}</h3>
-                    <p className="text-xs text-slate-400 leading-relaxed truncate">{item.desc}</p>
+                  {/* Title and category details */}
+                  <div className="mt-4 px-1 space-y-1">
+                    <div className="flex justify-between items-start gap-2">
+                      <h3 className="font-syne font-bold text-slate-950 text-sm leading-snug group-hover:text-indigo-600 transition-colors">
+                        {item.title}
+                      </h3>
+                      <span className="text-[9px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-bold uppercase shrink-0">
+                        {item.category}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-relaxed line-clamp-2">
+                      {item.description}
+                    </p>
+                  </div>
+
+                  <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                    <span className="text-[10px] font-extrabold text-[#7C6EFA] bg-[#7C6EFA]/10 px-2.5 py-1 rounded-full uppercase tracking-wider">
+                      {item.type === 'Pro' ? "Premium Template" : "Free Layout"}
+                    </span>
+                    <button className="text-xs font-bold text-slate-800 group-hover:text-indigo-600 flex items-center gap-1 transition-colors">
+                      Edit Preset <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                 </div>
-
-                <div className="px-5 pb-5 pt-2 border-t border-slate-50 flex items-center justify-between">
-                  <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded uppercase tracking-wider">Free Presets</span>
-                  <button className="text-xs font-bold text-slate-800 hover:text-indigo-600 flex items-center gap-1 transition-colors">
-                    Open <ArrowUpRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
         </div>
@@ -1445,10 +1167,10 @@ export default function LandingPage({ onEnter }: { onEnter: (toolId?: string, se
 
         {/* Floating primary action */}
         <button 
-          onClick={onEnter}
+          onClick={() => setIsUniversalModalOpen(true)}
           className="w-12 h-12 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full flex items-center justify-center shadow-lg shadow-indigo-600/30 transform -translate-y-3 border-4 border-white transition-all active:scale-95"
         >
-          <QrCode className="w-5 h-5" />
+          <QrCode className="w-5 h-5 animate-pulse" />
         </button>
 
         <a href="#shapes" className="flex flex-col items-center gap-1 text-slate-500 hover:text-indigo-600 transition-all">
@@ -1462,6 +1184,353 @@ export default function LandingPage({ onEnter }: { onEnter: (toolId?: string, se
         </a>
 
       </div>
+
+      {/* UNIVERSAL QR GENERATOR MODAL / DRAWER */}
+      {isUniversalModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10">
+          {/* Backdrop */}
+          <div 
+            onClick={() => setIsUniversalModalOpen(false)}
+            className="absolute inset-0 bg-[#020205]/90 backdrop-blur-md transition-opacity"
+          ></div>
+
+          {/* Modal Container */}
+          <div className="bg-[#090911] border border-[#1F1F35] w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl relative z-10 max-h-[90vh] flex flex-col">
+            {/* Header */}
+            <div className="p-5 sm:p-6 border-b border-[#1F1F35] flex items-center justify-between bg-[#0E0E1B]">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-indigo-600/20 text-indigo-400 flex items-center justify-center">
+                  <QrCode className="w-4 h-4 animate-pulse" />
+                </div>
+                <div className="text-left">
+                  <h3 className="text-white font-syne font-extrabold text-base sm:text-lg leading-tight">Universal QR Code Generator</h3>
+                  <p className="text-[#8080A0] text-[10px] sm:text-[11px] font-medium uppercase tracking-wider">Quick Studio Live Scan Tool</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setIsUniversalModalOpen(false)}
+                className="w-8 h-8 rounded-full bg-[#18182D] hover:bg-red-950 hover:text-red-400 text-slate-400 flex items-center justify-center transition-colors text-sm font-bold"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Scrollable Content */}
+            <div className="flex-1 overflow-y-auto p-5 sm:p-6 md:p-8 space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
+                
+                {/* Left Column: Form & Style Selectors */}
+                <div className="lg:col-span-7 bg-[#0E0E1B] border border-[#1F1F35]/70 rounded-2xl p-5 sm:p-6 flex flex-col justify-between space-y-6">
+                  <div>
+                    {/* 1. Tool Type Selector Tabs */}
+                    <div className="space-y-3">
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block text-left">1. SELECT QR FUNCTIONALITY</span>
+                      <div className="grid grid-cols-3 gap-2 bg-[#07070D] p-1 rounded-xl border border-[#19192C]">
+                        <button
+                          onClick={() => setSelectedType('url')}
+                          className={`py-2 px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
+                            selectedType === 'url'
+                              ? 'bg-indigo-600 text-white shadow-sm'
+                              : 'text-slate-400 hover:text-white hover:bg-white/5'
+                          }`}
+                        >
+                          <Globe className="w-3.5 h-3.5" /> URL / Text
+                        </button>
+                        <button
+                          onClick={() => setSelectedType('wifi')}
+                          className={`py-2 px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
+                            selectedType === 'wifi'
+                              ? 'bg-indigo-600 text-white shadow-sm'
+                              : 'text-slate-400 hover:text-white hover:bg-white/5'
+                          }`}
+                        >
+                          <Wifi className="w-3.5 h-3.5" /> WiFi
+                        </button>
+                        <button
+                          onClick={() => setSelectedType('upi')}
+                          className={`py-2 px-2.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
+                            selectedType === 'upi'
+                              ? 'bg-indigo-600 text-white shadow-sm'
+                              : 'text-slate-400 hover:text-white hover:bg-white/5'
+                          }`}
+                        >
+                          <CreditCard className="w-3.5 h-3.5" /> UPI Pay
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* 2. Dynamic Input Fields based on type */}
+                    <div className="mt-5 space-y-4 text-left">
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">2. CONFIGURE QR DATA</span>
+                      
+                      {selectedType === 'url' && (
+                        <div className="space-y-2">
+                          <label className="text-[11px] text-slate-300 font-semibold block">Website URL or Text Payload</label>
+                          <input
+                            type="text"
+                            value={urlInput}
+                            onChange={(e) => setUrlInput(e.target.value)}
+                            placeholder="e.g. https://yourbrand.com/review"
+                            className="w-full px-3.5 py-2.5 bg-[#07070D] border border-[#1E1E34] rounded-xl text-xs text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                          />
+                        </div>
+                      )}
+
+                      {selectedType === 'wifi' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <label className="text-[11px] text-slate-300 font-semibold block">Network SSID (WiFi Name)</label>
+                            <input
+                              type="text"
+                              value={wifiSsid}
+                              onChange={(e) => setWifiSsid(e.target.value)}
+                              placeholder="My_Home_WiFi"
+                              className="w-full px-3.5 py-2.5 bg-[#07070D] border border-[#1E1E34] rounded-xl text-xs text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-[11px] text-slate-300 font-semibold block">Password</label>
+                            <input
+                              type="password"
+                              value={wifiPassword}
+                              onChange={(e) => setWifiPassword(e.target.value)}
+                              placeholder="Password"
+                              className="w-full px-3.5 py-2.5 bg-[#07070D] border border-[#1E1E34] rounded-xl text-xs text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            />
+                          </div>
+                          <div className="col-span-1 sm:col-span-2 space-y-2">
+                            <label className="text-[11px] text-slate-300 font-semibold block">Security Protocol</label>
+                            <select
+                              value={wifiEncryption}
+                              onChange={(e) => setWifiEncryption(e.target.value)}
+                              className="w-full px-3.5 py-2.5 bg-[#07070D] border border-[#1E1E34] rounded-xl text-xs text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            >
+                              <option value="WPA">WPA/WPA2 Personal</option>
+                              <option value="WEP">WEP</option>
+                              <option value="nopass">No password (Unsecured)</option>
+                            </select>
+                          </div>
+                        </div>
+                      )}
+
+                      {selectedType === 'upi' && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <label className="text-[11px] text-slate-300 font-semibold block">UPI Address ID</label>
+                            <input
+                              type="text"
+                              value={upiId}
+                              onChange={(e) => setUpiId(e.target.value)}
+                              placeholder="recipient@okaxis"
+                              className="w-full px-3.5 py-2.5 bg-[#07070D] border border-[#1E1E34] rounded-xl text-xs text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-[11px] text-slate-300 font-semibold block">Payee Name</label>
+                            <input
+                              type="text"
+                              value={upiName}
+                              onChange={(e) => setUpiName(e.target.value)}
+                              placeholder="Recipient Name"
+                              className="w-full px-3.5 py-2.5 bg-[#07070D] border border-[#1E1E34] rounded-xl text-xs text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            />
+                          </div>
+                          <div className="col-span-1 sm:col-span-2 space-y-2">
+                            <label className="text-[11px] text-slate-300 font-semibold block">Request Amount (INR - Optional)</label>
+                            <input
+                              type="number"
+                              value={upiAmount}
+                              onChange={(e) => setUpiAmount(e.target.value)}
+                              placeholder="e.g. 500"
+                              className="w-full px-3.5 py-2.5 bg-[#07070D] border border-[#1E1E34] rounded-xl text-xs text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 3. Style Configurations */}
+                    <div className="mt-6 space-y-4 text-left">
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">3. LIVE AESTHETICS & DESIGNS</span>
+                      
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {/* Dots design */}
+                        <div className="space-y-2">
+                          <label className="text-[11px] text-slate-300 font-semibold">Dot Pattern Style</label>
+                          <div className="grid grid-cols-2 gap-2">
+                            {[
+                              { name: 'Rounded', id: 'rounded' },
+                              { name: 'Circular', id: 'dots' },
+                              { name: 'Classy', id: 'classy' },
+                              { name: 'Classic', id: 'square' }
+                            ].map((d) => (
+                              <button
+                                key={d.id}
+                                onClick={() => setDotsStyle(d.id as any)}
+                                className={`py-1.5 px-2 rounded-lg text-[10px] font-semibold text-center border transition-all ${
+                                  dotsStyle === d.id
+                                    ? 'bg-[#1F1F3D] border-indigo-500 text-white font-extrabold'
+                                    : 'bg-[#07070D] border-[#1A1A2E] text-slate-400 hover:text-white'
+                                }`}
+                              >
+                                {d.name}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Corner Squares design */}
+                        <div className="space-y-2">
+                          <label className="text-[11px] text-slate-300 font-semibold">Corner Eye Style</label>
+                          <div className="grid grid-cols-2 gap-2">
+                            {[
+                              { name: 'Smooth', id: 'extra-rounded' },
+                              { name: 'Bespoke', id: 'dot' },
+                              { name: 'Standard', id: 'square' }
+                            ].map((c) => (
+                              <button
+                                key={c.id}
+                                onClick={() => setCornersStyle(c.id as any)}
+                                className={`py-1.5 px-2 rounded-lg text-[10px] font-semibold text-center border transition-all ${
+                                  cornersStyle === c.id
+                                    ? 'bg-[#1F1F3D] border-indigo-500 text-white font-extrabold'
+                                    : 'bg-[#07070D] border-[#1A1A2E] text-slate-400 hover:text-white'
+                                }`}
+                              >
+                                {c.name}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Colors selectors */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <div className="space-y-2">
+                          <label className="text-[11px] text-slate-300 font-semibold block">Foreground Color</label>
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="color"
+                              value={fgColor}
+                              onChange={(e) => setFgColor(e.target.value)}
+                              className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border border-slate-700 overflow-hidden"
+                            />
+                            <div className="flex flex-wrap gap-1">
+                              {['#4F46E5', '#EC4899', '#10B981', '#F59E0B', '#000000'].map((hex) => (
+                                <button
+                                  key={hex}
+                                  onClick={() => setFgColor(hex)}
+                                  className="w-5 h-5 rounded-full border border-white/10 transition-transform hover:scale-110 shadow-xs"
+                                  style={{ backgroundColor: hex }}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <label className="text-[11px] text-slate-300 font-semibold block">Background Color</label>
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="color"
+                              value={bgColor}
+                              onChange={(e) => setBgColor(e.target.value)}
+                              className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border border-slate-700 overflow-hidden"
+                            />
+                            <div className="flex flex-wrap gap-1">
+                              {['#FFFFFF', '#F8FAFC', '#0F172A', '#080812'].map((hex) => (
+                                <button
+                                  key={hex}
+                                  onClick={() => setBgColor(hex)}
+                                  className="w-5 h-5 rounded-full border border-white/10 transition-transform hover:scale-110 shadow-xs"
+                                  style={{ backgroundColor: hex }}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Workspace Action Button */}
+                  <div className="pt-4 border-t border-[#1C1C2F] flex flex-col sm:flex-row gap-3 items-center">
+                    <button
+                      onClick={() => {
+                        setIsUniversalModalOpen(false);
+                        onEnter(); // redirects to advanced designer studio
+                      }}
+                      className="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white rounded-xl text-xs font-bold shadow-lg shadow-purple-900/20 transition-all hover:scale-[1.01] flex items-center justify-center gap-1.5 animate-pulse"
+                    >
+                      <Sparkles className="w-3.5 h-3.5" /> Open in Designer Studio
+                    </button>
+                    <p className="text-[10px] text-slate-500 text-center sm:text-left leading-tight">
+                      Edit further with professional luxury frames, dynamic analytics tracking, and print templates!
+                    </p>
+                  </div>
+                </div>
+
+                {/* Right Column: Live Mockup Stand / Premium Preview Frame */}
+                <div className="lg:col-span-5 flex items-center justify-center">
+                  <div className="w-full max-w-[340px] bg-gradient-to-b from-[#1C1C2F] to-[#0D0D19] border border-[#2D2D49] rounded-2xl p-5 shadow-2xl flex flex-col justify-between items-center text-center relative group">
+                    
+                    {/* Visual Glass Accent */}
+                    <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-t-2xl"></div>
+                    
+                    {/* Scanning Device Border Backdrop */}
+                    <div className="w-full mb-4 pt-3">
+                      <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#131322] border border-[#2A2A42] text-[9px] text-indigo-400 font-bold uppercase tracking-widest mb-3">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Live Scan Safe
+                      </div>
+                      
+                      {/* Real Live QR Code Container */}
+                      <div className="bg-white rounded-xl p-3 shadow-2xl inline-block border border-[#2A2A42]">
+                        <div ref={qrRef} className="mx-auto flex items-center justify-center overflow-hidden rounded-lg min-h-[180px] min-w-[180px]" />
+                      </div>
+                    </div>
+
+                    {/* Info & Download CTAs */}
+                    <div className="space-y-3 w-full">
+                      <div className="text-center">
+                        <h4 className="font-syne font-extrabold text-white text-sm">
+                          {selectedType === 'url' && 'Universal Link QR'}
+                          {selectedType === 'wifi' && `${wifiSsid || 'WiFi'} Hotspot`}
+                          {selectedType === 'upi' && `UPI Request`}
+                        </h4>
+                        <p className="text-[10px] text-slate-400 mt-1 truncate max-w-[240px] mx-auto font-mono">
+                          {getLiveQRString()}
+                        </p>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <button
+                          onClick={downloadLiveQR}
+                          className="flex-1 py-2.5 bg-[#131322] hover:bg-slate-900 border border-[#2C2C47] hover:border-slate-700 text-white text-[11px] font-bold rounded-lg transition-all flex items-center justify-center gap-1.5"
+                        >
+                          <Download className="w-3.5 h-3.5" /> Export PNG
+                        </button>
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(getLiveQRString());
+                            alert('QR payload copied!');
+                          }}
+                          className="px-3 py-2.5 bg-[#131322] hover:bg-slate-900 border border-[#2C2C47] hover:border-slate-700 text-white rounded-lg transition-all flex items-center justify-center"
+                          title="Copy QR Payload String"
+                        >
+                          <Copy className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
