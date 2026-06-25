@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { QrCode, Shield, Zap, Globe, Link, Wifi, CreditCard, MessageCircle, FileText, Phone, CheckCircle2, ChevronDown, ChevronUp, BookOpen, Sparkles, HelpCircle } from 'lucide-react';
+import { QrCode, Shield, Zap, Globe, Link, Wifi, CreditCard, MessageCircle, FileText, Phone, CheckCircle2, ChevronDown, ChevronUp, BookOpen, Sparkles, HelpCircle, Box, LayoutGrid, ArrowLeft } from 'lucide-react';
 import { QR_TOOLS, QRTool } from './data/tools';
 import QRCodeGenerator from './components/QRCodeGenerator';
 import SaaSPaymentModal from './components/SaaSPaymentModal';
+import AssetLibraryViewer from './components/AssetLibraryViewer';
+import PremiumTemplates from './components/PremiumTemplates';
+import LandingPage from './components/LandingPage';
 import { authService, UserStats } from './lib/firebase';
 
 import { TOOL_CONTENT_DATABASE } from './data/toolContent';
@@ -100,6 +103,9 @@ const getRelatedToolsItems = (toolId: string, allTools: QRTool[]) => {
 };
 
 export default function App() {
+  const [showLanding, setShowLanding] = useState(true);
+  const [showAssetLibrary, setShowAssetLibrary] = useState(false);
+  const [showTemplateGallery, setShowTemplateGallery] = useState(false);
   const [activeTool, setActiveTool] = useState<QRTool>(QR_TOOLS[0]);
   const [showAllTools, setShowAllTools] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string>('All');
@@ -134,6 +140,66 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
+  const handleEnterFromLanding = (toolId?: string, searchStr?: string, categoryName?: string) => {
+    setShowLanding(false);
+
+    if (toolId) {
+      const match = QR_TOOLS.find(t => t.id === toolId || t.slug === toolId);
+      if (match) {
+        setActiveTool(match);
+        setActiveCategory('All');
+        setTimeout(() => {
+          document.getElementById('generator-section')?.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+        return;
+      }
+    }
+
+    if (searchStr) {
+      const query = searchStr.toLowerCase();
+      const match = QR_TOOLS.find(t => 
+        t.name.toLowerCase().includes(query) || 
+        t.description.toLowerCase().includes(query) ||
+        t.keywords.some(k => k.toLowerCase().includes(query)) ||
+        t.category.toLowerCase().includes(query)
+      );
+      if (match) {
+        setActiveTool(match);
+        setActiveCategory('All');
+        setTimeout(() => {
+          document.getElementById('generator-section')?.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+        return;
+      }
+    }
+
+    if (categoryName) {
+      const foundCategory = UI_CATEGORIES.find(c => c.label.toLowerCase().includes(categoryName.toLowerCase()));
+      if (foundCategory) {
+        setActiveCategory(foundCategory.label);
+        const firstTool = QR_TOOLS.find(t => foundCategory.filter(t));
+        if (firstTool) {
+          setActiveTool(firstTool);
+        }
+        setTimeout(() => {
+          document.getElementById('generator-section')?.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+      }
+    }
+  };
+
+  if (showLanding) {
+    return <LandingPage onEnter={handleEnterFromLanding} />;
+  }
+
+  if (showAssetLibrary) {
+    return <AssetLibraryViewer onBack={() => setShowAssetLibrary(false)} />;
+  }
+
+  if (showTemplateGallery) {
+    return <PremiumTemplates onBack={() => setShowTemplateGallery(false)} />;
+  }
+
   return (
     <div className="min-h-screen bg-[#040408] text-[#F2F2FF] font-sans flex flex-col selection:bg-indigo-500/30 selection:text-indigo-200">
       <style>{`
@@ -153,17 +219,41 @@ export default function App() {
       {/* Top Navbar */}
       <nav className="sticky top-0 z-50 bg-[#040408]/90 backdrop-blur-xl border-b border-[#1C1C2E]">
         <div className="max-w-[1100px] mx-auto px-5 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => window.scrollTo(0, 0)}>
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#7C6EFA] to-[#C084FC] flex items-center justify-center text-white">
-              <QrCode className="w-5 h-5" />
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => setShowLanding(true)}>
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#7C6EFA] to-[#C084FC] flex items-center justify-center text-white">
+                <QrCode className="w-5 h-5" />
+              </div>
+              <span className="font-syne font-extrabold text-[19px] tracking-tight">
+                A2Z<em className="font-normal not-italic text-[#A89EFF]">QR</em>
+              </span>
             </div>
-            <span className="font-syne font-extrabold text-[19px] tracking-tight">
-              A2Z<em className="font-normal not-italic text-[#A89EFF]">QR</em>
-            </span>
+            
+            <button 
+              onClick={() => setShowLanding(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#12121E] border border-[#28283E] text-[11px] font-bold text-[#A89EFF] hover:text-white rounded-lg hover:bg-[#1C1C2E] transition-all shadow-sm"
+              title="Return to Landing Page"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" /> Back to Home
+            </button>
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="hidden sm:flex items-center gap-1.5 mr-2">
+            <button 
+              onClick={() => setShowTemplateGallery(true)}
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-[#7C6EFA] to-[#C084FC] text-xs font-bold text-white rounded-lg hover:opacity-90 transition-opacity shadow-lg"
+            >
+              <LayoutGrid className="w-4 h-4" />
+              Templates
+            </button>
+            <button 
+              onClick={() => setShowAssetLibrary(true)}
+              className="mr-2 px-3 py-1.5 bg-[#12121E] border border-[#28283E] text-xs font-bold text-[#A89EFF] rounded-lg hover:bg-[#1C1C2E] transition-colors"
+            >
+              <Box className="w-4 h-4 inline-block mr-1.5" />
+              Asset Library
+            </button>
+            <div className="hidden md:flex items-center gap-1.5 mr-2">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></div>
               <span className="text-xs font-bold text-[#8080A0] tracking-widest uppercase">
                 {scans.toLocaleString()} Created

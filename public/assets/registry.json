@@ -1,0 +1,31 @@
+{
+  "categories": [
+    { "id": "backgrounds", "label": "Backgrounds" },
+    { "id": "patterns", "label": "Patterns" },
+    { "id": "borders", "label": "Borders" },
+    { "id": "corners", "label": "Corners" },
+    { "id": "ribbons", "label": "Ribbons" },
+    { "id": "stickers", "label": "Stickers" },
+    { "id": "badges", "label": "Badges" },
+    { "id": "icons_business", "label": "Icons - Business" },
+    { "id": "icons_restaurant", "label": "Icons - Restaurant" }
+  ],
+  "assets": {
+    "borders": [
+      { "id": "border_001", "name": "Basic Border", "path": "/assets/borders/basic-border.svg" },
+      { "id": "border_002", "name": "Elegant Frame", "path": "/assets/borders/elegant-frame.svg" }
+    ],
+    "shapes": [
+      { "id": "shape_001", "name": "Star Badge", "path": "/assets/shapes/star-badge.svg" }
+    ],
+    "stickers": [
+      { "id": "sticker_001", "name": "Scan Me Badge", "path": "/assets/stickers/scan-me.svg" }
+    ],
+    "patterns": [
+      { "id": "pattern_001", "name": "Dotted Grid", "path": "/assets/patterns/dots.svg" }
+    ],
+    "corners": [
+      { "id": "corner_001", "name": "Classic Corner", "path": "/assets/corners/classic-corner.svg" }
+    ]
+  }
+}

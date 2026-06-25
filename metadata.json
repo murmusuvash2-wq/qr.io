@@ -1,6 +1,6 @@
 {
   "name": "ezqr-io",
-  "description": "Unified premium platform featuring 100+ specialized QR tools of 4-level design types for Business, Restaurant, Events, and Art on EZQR.IO.",
+  "description": "A2ZQR: Premium All-in-One QR Experience Platform featuring 100+ tools, creative shapes, posters, templates, stickers, and dynamic analytics.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
