@@ -3617,6 +3617,47 @@ export const FORMS_DATABASE: Record<string, FormConfig> = {
         "placeholder": "e.g. clara@example.com"
       }
     ]
+  },
+  "google-review-business-booster-qr": {
+    "id": "google-review-business-booster-qr",
+    "title": "Google Review",
+    "fields": [
+      {
+        "id": "in-review-business",
+        "label": "Business Name",
+        "type": "text",
+        "required": true,
+        "placeholder": "e.g. Blue Ginger Restaurant"
+      },
+      {
+        "id": "in-review-url",
+        "label": "Google Review URL",
+        "type": "url",
+        "required": true,
+        "placeholder": "https://search.google.com/local/writereview?placeid=...",
+        "validation": "url"
+      }
+    ]
+  },
+  "whatsapp-direct-chat-click-to-message": {
+    "id": "whatsapp-direct-chat-click-to-message",
+    "title": "WhatsApp Direct Chat",
+    "fields": [
+      {
+        "id": "in-whatsapp-phone",
+        "label": "Phone Number (with Country Code)",
+        "type": "tel",
+        "required": true,
+        "placeholder": "e.g. 919876543210"
+      },
+      {
+        "id": "in-whatsapp-msg",
+        "label": "Prefilled Message (Optional)",
+        "type": "textarea",
+        "required": false,
+        "placeholder": "e.g. Hello! I'm interested in your services."
+      }
+    ]
   }
 };
 
@@ -3631,19 +3672,62 @@ export function generateQRStringForTool(tool: any, formValues: Record<string, st
     return 'https://ezqr.io';
   }
 
+  // Check if it's WhatsApp Direct Chat
+  if (tool.id === 'whatsapp-direct-chat-click-to-message' || fields.some(f => f.id.includes('whatsapp') || f.id === 'in-whatsapp-phone')) {
+    const phoneRaw = formValues['in-whatsapp-phone'] || '';
+    const phone = phoneRaw.replace(/[\s\-\(\)\+]/g, '').trim();
+    const msg = formValues['in-whatsapp-msg'] || '';
+    return phone ? `https://wa.me/${phone}?text=${encodeURIComponent(msg)}` : 'https://wa.me/';
+  }
+
+  // Check if it's Google Review URL
+  if (tool.id === 'google-review-business-booster-qr' || fields.some(f => f.id === 'in-review-url')) {
+    const reviewUrl = formValues['in-review-url']?.trim();
+    if (reviewUrl) return reviewUrl;
+  }
+
+  // Check if it's Google Maps
+  if (tool.id === 'street-address-maps-qr-code-home-delivery' || fields.some(f => f.id === 'map-url')) {
+    const mapUrl = formValues['map-url']?.trim();
+    if (mapUrl) return mapUrl;
+  }
+
+  // Check if it's Airbnb Guide
+  if (tool.id === 'airbnb-guide-qr-code-vacation-rentals' || fields.some(f => f.id === 'guide-url')) {
+    const guideUrl = formValues['guide-url']?.trim();
+    if (guideUrl) return guideUrl;
+  }
+
+  // Check if it's PDF Menu
+  if (tool.id === 'free-pdf-menu-qr-code-generator-for-restaurants' || fields.some(f => f.id === 'pdf-url')) {
+    const pdfUrl = formValues['pdf-url']?.trim();
+    if (pdfUrl) return pdfUrl;
+  }
+
+  // Check if it's Event Ticket
+  if (tool.id === 'event-ticket-registration-qr-code-admissions' || fields.some(f => f.id === 'registration-url')) {
+    const regUrl = formValues['registration-url']?.trim();
+    if (regUrl) return regUrl;
+  }
+
   // Check if it's WiFi
   if (fields.some(f => f.validation === 'wifi' || f.id.includes('wifi') || f.id.includes('ssid'))) {
     const ssid = formValues['in-wifi-ssid'] || '';
     const pass = formValues['in-wifi-pass'] || '';
-    return `WIFI:S:${ssid};P:${pass};;`;
+    const sec = formValues['in-wifi-sec'] || 'WPA';
+    const hidden = formValues['in-wifi-hidden'] === 'true' || formValues['in-wifi-hidden'] === 'Yes';
+    return `WIFI:S:${ssid};T:${sec};P:${pass};H:${hidden ? 'true' : ''};;`;
   }
 
   // Check if it's Contact (vCard)
-  if (fields.some(f => f.validation === 'contact' || f.id.includes('contact') || f.id.includes('name'))) {
-    const name = formValues['in-contact-name'] || '';
-    const phone = formValues['in-contact-phone'] || '';
-    const email = formValues['in-contact-email'] || '';
-    return `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nTEL:${phone}\nEMAIL:${email}\nEND:VCARD`;
+  if (fields.some(f => f.validation === 'contact' || f.id.includes('contact') || f.id.includes('name') || f.id.includes('vcard'))) {
+    const name = formValues['in-contact-name'] || formValues['name'] || '';
+    const phone = formValues['in-contact-phone'] || formValues['phone'] || '';
+    const email = formValues['in-contact-email'] || formValues['email'] || '';
+    const comp = formValues['company'] || '';
+    const title = formValues['title'] || '';
+    const web = formValues['website'] || '';
+    return `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nORG:${comp}\nTITLE:${title}\nTEL:${phone}\nEMAIL:${email}\nURL:${web}\nEND:VCARD`;
   }
 
   // Check if it's Crypto
@@ -3653,7 +3737,7 @@ export function generateQRStringForTool(tool: any, formValues: Record<string, st
     return amt ? `${addr}?amount=${amt}` : addr;
   }
 
-  // Check if it's Map / GPS
+  // Check if it's Map / GPS Coordinate geo
   if (fields.some(f => f.validation === 'map' || f.id.includes('map') || f.id.includes('lat'))) {
     const lat = formValues['in-map-lat'] || '';
     const lng = formValues['in-map-lng'] || '';

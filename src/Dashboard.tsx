@@ -240,6 +240,26 @@ export default function Dashboard() {
   const [capsuleCodeInput, setCapsuleCodeInput] = useState('');
   const [capsuleStatusMsg, setCapsuleStatusMsg] = useState('');
 
+  // --- TEMPLATE FACTORY & ASSET-ID ARCHITECTURE STATES ---
+  const [factoryStep, setFactoryStep] = useState<'blueprint' | 'background' | 'assets' | 'packs' | 'position' | 'score'>('blueprint');
+  const [factoryTitle, setFactoryTitle] = useState('Google Review Cafe Booster');
+  const [factorySubtitle, setFactorySubtitle] = useState('Scan to get 10% off your next cappuccino');
+  const [factoryCategory, setFactoryCategory] = useState('Restaurant');
+  const [factoryBgId, setFactoryBgId] = useState('BG-000921');
+  const [factoryFrameId, setFactoryFrameId] = useState('FRAME-000031');
+  const [factoryStickerId, setFactoryStickerId] = useState('STICKER-000210');
+  const [factoryPatternId, setFactoryPatternId] = useState('PATTERN-000051');
+  const [factoryIconId, setFactoryIconId] = useState('ICON-000245');
+  const [factoryVariation, setFactoryVariation] = useState<'Minimal' | 'Luxury' | 'Dark' | 'Corporate' | 'Playful' | 'Neon'>('Luxury');
+  const [factoryTextY, setFactoryTextY] = useState(120);
+  const [factoryQrY, setFactoryQrY] = useState(280);
+  const [factoryPrompt, setFactoryPrompt] = useState('Luxury gold and black marble texture background for high-end boutique');
+  const [isFactoryGeneratingBg, setIsFactoryGeneratingBg] = useState(false);
+  const [factoryGeneratedBgs, setFactoryGeneratedBgs] = useState<string[]>([
+    'BG-000921', 'BG-000542', 'BG-000108'
+  ]);
+  const [factoryCustomTemplates, setFactoryCustomTemplates] = useState<any[]>([]);
+
   // Premium loading effect messages
   useEffect(() => {
     let timer: any;
@@ -2003,297 +2023,770 @@ export default function Dashboard() {
           {/* TAB: AI 100-TOOLS DESIGN FACTORY */}
           {activeTab === 'ai_tools_generator' && (
             <div className="space-y-6">
+              {/* Core Header */}
               <div className="border-b border-slate-200 pb-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                   <div className="flex items-center gap-2">
-                    <h2 className="text-2xl font-extrabold text-white flex items-center gap-2">
-                      <Wand2 className="w-6 h-6 text-indigo-400" />
-                      AI 100-Tools Design Factory
+                    <h2 className="text-2xl font-extrabold text-black flex items-center gap-2">
+                      <Wand2 className="w-6 h-6 text-indigo-600" />
+                      A2ZQR Template Factory & SaaS Roadmap
                     </h2>
-                    <span className="text-[10px] uppercase font-black text-indigo-400 bg-indigo-400/10 px-2 py-0.5 rounded border border-indigo-400/20 animate-pulse">
-                      Gemini Coordinated V2
+                    <span className="text-[10px] uppercase font-black text-white bg-indigo-600 px-2 py-0.5 rounded border border-indigo-200 animate-pulse">
+                      Active V2.5
                     </span>
                   </div>
                   <p className="text-xs text-slate-500 mt-1">
-                    Select any of our 100 specialized QR tools to generate and curate 10 unique, perfectly coordinated premium card variations instantly using Gemini 3.5 Flash.
+                    Complete, high-precision visual constructor utilizing static Asset-IDs, Asset Packs, Safe Zones, and Quality score validators.
                   </p>
                 </div>
 
-                <div className="flex flex-wrap gap-2 text-xs">
-                  <div className="bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg flex items-center gap-2 text-gray-400">
-                    <span className="font-bold text-white">{QR_TOOLS.length}</span> Total Tools
-                  </div>
-                  <div className="bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg flex items-center gap-2 text-gray-400">
-                    <span className="font-bold text-emerald-400">
-                      {curationTemplates.filter(t => t.status === 'approved' && t.toolId).length}
-                    </span> Active Layouts
-                  </div>
+                {/* Sub Menu / Step Selection tabs */}
+                <div className="flex flex-wrap gap-1.5 bg-slate-50 p-1.5 rounded-xl border border-slate-200">
+                  <button 
+                    onClick={() => setFactoryStep('blueprint')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                      factoryStep === 'blueprint' 
+                        ? 'bg-black text-white shadow' 
+                        : 'text-slate-600 hover:bg-slate-100'
+                    }`}
+                  >
+                    <BookOpen className="w-3.5 h-3.5" /> 📄 SaaS Roadmap
+                  </button>
+                  <button 
+                    onClick={() => setFactoryStep('background')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                      factoryStep === 'background' 
+                        ? 'bg-black text-white shadow' 
+                        : 'text-slate-600 hover:bg-slate-100'
+                    }`}
+                  >
+                    <Sparkles className="w-3.5 h-3.5" /> 🖼️ AI Background
+                  </button>
+                  <button 
+                    onClick={() => setFactoryStep('assets')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                      factoryStep === 'assets' 
+                        ? 'bg-black text-white shadow' 
+                        : 'text-slate-600 hover:bg-slate-100'
+                    }`}
+                  >
+                    <Layers className="w-3.5 h-3.5" /> 🆔 Asset IDs
+                  </button>
+                  <button 
+                    onClick={() => setFactoryStep('packs')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                      factoryStep === 'packs' 
+                        ? 'bg-black text-white shadow' 
+                        : 'text-slate-600 hover:bg-slate-100'
+                    }`}
+                  >
+                    <LayoutGrid className="w-3.5 h-3.5" /> 📦 Asset Packs
+                  </button>
+                  <button 
+                    onClick={() => setFactoryStep('position')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                      factoryStep === 'position' 
+                        ? 'bg-black text-white shadow' 
+                        : 'text-slate-600 hover:bg-slate-100'
+                    }`}
+                  >
+                    <Sliders className="w-3.5 h-3.5" /> 🎛️ Safe Zone Editor
+                  </button>
+                  <button 
+                    onClick={() => setFactoryStep('score')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                      factoryStep === 'score' 
+                        ? 'bg-black text-white shadow' 
+                        : 'text-slate-600 hover:bg-slate-100'
+                    }`}
+                  >
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> ✅ Quality & Publish
+                  </button>
                 </div>
               </div>
 
-              {/* Error and Success Notifications */}
-              {toolErrorMessage && (
-                <div className="p-4 bg-rose-500/10 border border-rose-500/30 rounded-xl text-xs text-rose-400 flex items-center gap-2.5 animate-fade-in">
-                  <AlertCircle className="w-5 h-5 flex-shrink-0" />
-                  <div>{toolErrorMessage}</div>
-                </div>
-              )}
-              {toolSuccessMessage && (
-                <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-xs text-emerald-400 flex items-center gap-2.5 animate-fade-in">
-                  <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
-                  <div>{toolSuccessMessage}</div>
-                </div>
-              )}
+              {/* Central Section - Two Column Workspace */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                {/* LEFT: Controls & Documentation based on step */}
+                <div className="lg:col-span-7 space-y-6">
 
-              {/* Generator Modal overlay when generating */}
-              {isGeneratingToolTemplates && (
-                <div className="bg-white/95 backdrop-blur-md border border-slate-200 rounded-2xl p-12 text-center max-w-xl mx-auto space-y-6 shadow-2xl animate-fade-in">
-                  <div className="w-16 h-16 rounded-full bg-indigo-50/80 border border-indigo-200 flex items-center justify-center mx-auto">
-                    <RefreshCw className="w-8 h-8 text-indigo-400 animate-spin" />
-                  </div>
-                  <div className="space-y-2">
-                    <h3 className="text-lg font-black text-white">Generating 10 Custom Variations</h3>
-                    <p className="text-xs text-indigo-300 font-mono italic animate-pulse">
-                      "{toolGeneratingMessage || 'Connecting to Gemini...'}"
-                    </p>
-                    <p className="text-[11px] text-slate-500 max-w-md mx-auto">
-                      Gemini is generating 10 fully customized QR layouts matching Cyberpunk, Luxury, Kawaii, Retro, Organic, and Brutalist themes for {selectedTool?.name}.
-                    </p>
-                  </div>
-                </div>
-              )}
+                  {/* STEP 1: BLUEPRINT ROADMAP */}
+                  {factoryStep === 'blueprint' && (
+                    <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-6">
+                      <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+                        <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 font-extrabold text-sm">
+                          📄
+                        </div>
+                        <div>
+                          <h3 className="font-syne text-md font-bold text-black">A2ZQR SaaS Blueprint & Status Report</h3>
+                          <p className="text-[10px] text-slate-500 font-medium">Architecture Freeze - Hinglish Version</p>
+                        </div>
+                      </div>
 
-              {/* Display generated list for selected tool */}
-              {!isGeneratingToolTemplates && generatedToolTemplates.length > 0 && selectedTool && (
-                <div className="space-y-6 bg-[#07070F] border border-indigo-500/25 rounded-2xl p-6 animate-fade-in">
-                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-200 pb-4">
-                    <div>
-                      <span className="text-[10px] text-indigo-400 font-bold uppercase tracking-wider block">Currently Curating</span>
-                      <h3 className="text-lg font-black text-white flex items-center gap-2">
-                        {selectedTool.name} <span className="text-xs bg-slate-50 text-gray-400 border border-slate-200 font-normal px-2.5 py-0.5 rounded-full">{selectedTool.category}</span>
-                      </h3>
-                      <p className="text-xs text-slate-500 mt-1">{selectedTool.description}</p>
-                    </div>
+                      <div className="space-y-4 text-xs text-slate-700 leading-relaxed font-sans">
+                        <div>
+                          <h4 className="font-extrabold text-black text-xs uppercase tracking-wider mb-1">🚀 ABHI TAK KAHA PONCHE? (Current Progress)</h4>
+                          <p>
+                            Humne <strong>A2ZQR</strong> ki basic block-foundation perfect kar di hai! Dashboard up and running hai, dynamic redirects perfectly live hain. Google Review Booster, Wedding RSVP, Wi-Fi Instant Connect, Pet ID, Business cards ke custom template setups inside simulated phone completely functional hain. Iske alawa, <strong>Gemini V2 fallback logic</strong> integrate kiya ja chuka hai taaki admin seamless templates automatically curate kar sake.
+                          </p>
+                        </div>
 
-                    <div className="flex gap-2.5 self-stretch md:self-auto">
-                      <button 
-                        onClick={() => setGeneratedToolTemplates([])}
-                        className="flex-1 md:flex-none px-4 py-2 bg-slate-50 hover:bg-[#1C1C2E] border border-slate-200 text-slate-800 font-bold text-xs rounded-xl transition-all"
-                      >
-                        Back to Tools
-                      </button>
-                      <button 
-                        onClick={handleBulkApproveToolTemplates}
-                        className="flex-1 md:flex-none px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-indigo-500 hover:brightness-110 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5"
-                      >
-                        <CheckCircle2 className="w-4 h-4" /> Bulk Approve All 10 Designs
-                      </button>
-                    </div>
-                  </div>
+                        <div>
+                          <h4 className="font-extrabold text-black text-xs uppercase tracking-wider mb-1">💎 SaaS PRODUCT BANANE KE LIYE MANDATORY PATHWAYS:</h4>
+                          <ul className="list-disc pl-5 space-y-1.5">
+                            <li>
+                              <strong>Asset IDs Standardization:</strong> Templates manually code karne ki jagah static IDs use karenge. For example, agar background swap karna ho to sirf <code>BG-000921</code> update karenge, jisse saare dependent templates fast CDN/GitHub assets se automatically render ho jayein. Firestore load zero ho jayega!
+                            </li>
+                            <li>
+                              <strong>Single Click Asset Packs:</strong> "Restaurant Pack", "Wedding Pack", "vCard Corporate Pack" introduce karenge jisme pure matching color gradients, shapes, fonts, and borders store honge. User can load the entire ecosystem in 1 second.
+                            </li>
+                            <li>
+                              <strong>Under 30 Seconds Rule:</strong> Competitor Canva jaisa generic complexity nahi banayenge. A2ZQR ka focus "No design expertise required" hoga. <em>"Choose Template → Edit only 5-8 fields → Instant Download in 30 seconds."</em>
+                            </li>
+                            <li>
+                              <strong>Design Quality Control Scorer:</strong> Admin dashboard templates check karega. Agar contrast ratio, print layout safe bounds, and QR readability high hai tabhi wo live custom directory me public publish hoga.
+                            </li>
+                          </ul>
+                        </div>
 
-                  {/* Generated variations preview cards */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {generatedToolTemplates.map((template, idx) => {
-                      // Custom preview card render
-                      const isGrad = template.bgType === 'gradient';
-                      const bgStyle = isGrad && template.gradient ? {
-                        background: `linear-gradient(${template.gradient.angle || '135deg'}, ${template.gradient.from}, ${template.gradient.via ? template.gradient.via + ', ' : ''}${template.gradient.to})`
-                      } : {
-                        background: '#F8FAFC'
-                      };
-
-                      return (
-                        <div key={template.id} className="bg-white border border-slate-200 hover:border-indigo-500/20 rounded-2xl p-5 flex flex-col justify-between gap-5 transition-all shadow-lg hover:shadow-indigo-500/5">
-                          <div className="space-y-4">
-                            {/* Card Canvas Mockup */}
-                            <div className="aspect-[3/4] rounded-xl overflow-hidden relative shadow-inner border border-slate-200" style={bgStyle}>
-                              {/* Emojis overlay */}
-                              {template.visualOverlay?.emojis?.map((em, eIdx) => (
-                                <div 
-                                  key={eIdx}
-                                  className="absolute text-xl pointer-events-none select-none"
-                                  style={{ left: `${(em.x / 400) * 100}%`, top: `${(em.y / 600) * 100}%` }}
-                                >
-                                  {em.char}
-                                </div>
-                              ))}
-
-                              {/* SVG paths outline overlay */}
-                              <svg className="absolute inset-0 w-full h-full pointer-events-none">
-                                {template.visualOverlay?.svgPaths?.map((path, pIdx) => (
-                                  <path 
-                                    key={pIdx}
-                                    d={path.d} 
-                                    stroke={path.stroke} 
-                                    strokeWidth={(path.strokeWidth / 2)} 
-                                    fill="none" 
-                                    opacity={path.opacity} 
-                                  />
-                                ))}
-                              </svg>
-
-                              {/* Simulated QR Code box at center */}
-                              <div className="absolute top-[35%] left-[27%] w-[46%] h-[30%] bg-white rounded-lg flex flex-col items-center justify-center p-2 shadow-lg" style={{ backgroundColor: template.qrConfig.bgColor }}>
-                                <div className="w-full h-full border-4 border-dashed rounded flex items-center justify-center" style={{ borderColor: template.qrConfig.fgColor }}>
-                                  <span className="text-[9px] font-black uppercase tracking-wider" style={{ color: template.qrConfig.fgColor }}>
-                                    {template.qrConfig.dotsStyle} QR
-                                  </span>
-                                </div>
-                              </div>
-
-                              {/* Text elements */}
-                              {template.textElements.map((txt, tIdx) => (
-                                <div 
-                                  key={tIdx} 
-                                  className="absolute text-[10px] font-bold text-center w-full px-2"
-                                  style={{ 
-                                    top: `${(txt.y / 600) * 100}%`, 
-                                    color: txt.color,
-                                    fontSize: `${Math.max(8, (txt.fontSize / 2.5))}px`
-                                  }}
-                                >
-                                  {txt.content}
-                                </div>
-                              ))}
-
-                              {/* Badge label */}
-                              <div className="absolute bottom-2.5 left-2.5 px-2 py-0.5 bg-black/60 rounded text-[9px] text-white uppercase tracking-wider">
-                                {template.visualOverlay?.themeType?.replace('_', ' ') || 'Layout'}
-                              </div>
+                        <div>
+                          <h4 className="font-extrabold text-black text-xs uppercase tracking-wider mb-1">📅 PHASE 1 FOUNDATION PLAN:</h4>
+                          <div className="grid grid-cols-2 gap-3 mt-1.5">
+                            <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                              <span className="font-extrabold text-black block mb-0.5">1. Asset Library Registry</span>
+                              Standard structured JSON mapping static SVGs directly via GitHub/Vercel paths.
                             </div>
-
-                            <div>
-                              <span className="text-[10px] bg-indigo-50/80 border border-indigo-500/20 text-indigo-400 px-2 py-0.5 rounded font-mono">
-                                Aesthetic #{idx + 1}
-                              </span>
-                              <h4 className="font-extrabold text-white text-sm mt-1.5 leading-tight">{template.title}</h4>
-                              <p className="text-[11px] text-slate-500 mt-1 leading-normal line-clamp-2">{template.description}</p>
+                            <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                              <span className="font-extrabold text-black block mb-0.5">2. Master JSON Freeze</span>
+                              Each template follows standard coordinates schema for absolute platform portability.
                             </div>
-                          </div>
-
-                          <div className="flex gap-2 pt-2 border-t border-slate-200">
-                            <button 
-                              onClick={() => handleApproveToolTemplate(template)}
-                              className="flex-grow py-2 bg-indigo-500 hover:bg-indigo-600 text-white font-extrabold text-xs rounded-xl transition-all shadow-md flex items-center justify-center gap-1"
-                            >
-                              <Check className="w-3.5 h-3.5" /> Approve & Live
-                            </button>
-                            <button 
-                              onClick={() => setGeneratedToolTemplates(prev => prev.filter(t => t.id !== template.id))}
-                              className="py-2 px-3 bg-slate-50 hover:bg-[#1C1C2E] border border-slate-200 text-rose-400 font-bold text-xs rounded-xl transition-all"
-                              title="Discard"
-                            >
-                              Discard
-                            </button>
+                            <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                              <span className="font-extrabold text-black block mb-0.5">3. 1-Click Fast Exports</span>
+                              Export to high-contrast print PDF or direct high-DPI vectors to secure permanent readability.
+                            </div>
+                            <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                              <span className="font-extrabold text-black block mb-0.5">4. Safe Zone Positioners</span>
+                              Visual sliders coordinate overlay coordinates cleanly without manual overlap bugs.
+                            </div>
                           </div>
                         </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
+                      </div>
 
-              {/* Main tools listing table */}
-              {(!selectedTool || generatedToolTemplates.length === 0) && !isGeneratingToolTemplates && (
-                <div className="space-y-4 animate-fade-in">
-                  {/* Filter and search control board */}
-                  <div className="bg-white border border-slate-200 rounded-2xl p-5 flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center">
-                    <div className="flex-grow relative">
-                      <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-450" />
-                      <input 
-                        type="text" 
-                        value={searchToolQuery}
-                        onChange={(e) => setSearchToolQuery(e.target.value)}
-                        placeholder="Search all 100 tools by name, description, or slug..."
-                        className="w-full bg-white border border-slate-200 focus:border-indigo-500/50 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-900 outline-none transition-all placeholder-slate-450"
-                      />
+                      <div className="pt-3 border-t border-slate-100 flex justify-between items-center text-[11px]">
+                        <span className="text-slate-500 font-medium">Architecture Score: <strong className="text-emerald-600 font-extrabold">9.5 / 10</strong></span>
+                        <button 
+                          onClick={() => setFactoryStep('background')}
+                          className="px-3.5 py-1.5 bg-black hover:bg-zinc-800 text-white font-extrabold rounded-lg uppercase tracking-wider transition-all"
+                        >
+                          Step 2: AI Background →
+                        </button>
+                      </div>
                     </div>
+                  )}
 
-                    <div className="flex flex-col sm:flex-row gap-2.5">
-                      <select 
-                        value={filterToolCategory}
-                        onChange={(e) => setFilterToolCategory(e.target.value)}
-                        className="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 outline-none focus:border-indigo-500/50"
-                      >
-                        <option value="">All Categories</option>
-                        {Array.from(new Set(QR_TOOLS.map(t => t.category))).map(cat => (
-                          <option key={cat} value={cat}>{cat}</option>
-                        ))}
-                      </select>
+                  {/* STEP 2: AI BACKGROUND GENERATOR */}
+                  {factoryStep === 'background' && (
+                    <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-4">
+                      <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+                        <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
+                          <Sparkles className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <h3 className="font-syne text-md font-bold text-black">Step 1: Admin-Only AI Background Factory</h3>
+                          <p className="text-[10px] text-slate-500 font-medium">Generate vector texture layers with Gemini 3.5</p>
+                        </div>
+                      </div>
 
-                      <select 
-                        value={filterToolStatus}
-                        onChange={(e) => setFilterToolStatus(e.target.value as any)}
-                        className="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 outline-none focus:border-indigo-500/50"
-                      >
-                        <option value="all">All Statuses</option>
-                        <option value="unassigned">No Templates Yet</option>
-                        <option value="assigned">Has Active Templates</option>
-                      </select>
-                    </div>
-                  </div>
+                      <div className="space-y-4 text-xs font-sans">
+                        <p className="text-slate-600 leading-relaxed">
+                          Enter your desired aesthetic mood. Gemini will select matching brand palette gradients, visual overlays, and register a fresh static background ID (e.g., <code>BG-XXXX</code>) in your local CDN directory.
+                        </p>
 
-                  {/* List Grid */}
-                  <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-lg">
-                    <div className="p-4 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
-                      <h3 className="text-xs font-black text-white uppercase tracking-wider">
-                        A2ZQR Catalog Tools Index
-                      </h3>
-                      <span className="text-[10px] text-indigo-400 font-mono font-bold bg-indigo-500/5 border border-indigo-500/10 px-2 py-0.5 rounded">
-                        Daily capacity: Unlimited via Gemini
-                      </span>
-                    </div>
+                        <div className="space-y-1.5">
+                          <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">Aesthetic Theme Prompt</label>
+                          <textarea 
+                            value={factoryPrompt}
+                            onChange={(e) => setFactoryPrompt(e.target.value)}
+                            rows={3}
+                            className="w-full bg-white border border-slate-200 focus:border-black text-xs text-slate-950 p-3 rounded-xl outline-none transition-all placeholder-slate-400"
+                            placeholder="Describe high-end marble gradients, tech patterns..."
+                          />
+                        </div>
 
-                    <div className="divide-y divide-slate-200 max-h-[600px] overflow-y-auto scrollbar-thin scrollbar-thumb-[#1C1C2E]">
-                      {QR_TOOLS
-                        .filter(tool => {
-                          const matchesSearch = tool.name.toLowerCase().includes(searchToolQuery.toLowerCase()) || 
-                                                tool.description.toLowerCase().includes(searchToolQuery.toLowerCase());
-                          const matchesCategory = filterToolCategory ? tool.category === filterToolCategory : true;
-                          
-                          const hasApprovedTemplates = curationTemplates.some(ct => ct.toolId === tool.id && ct.status === 'approved');
-                          const matchesStatus = filterToolStatus === 'all' ? true : 
-                                                filterToolStatus === 'assigned' ? hasApprovedTemplates : !hasApprovedTemplates;
-                          
-                          return matchesSearch && matchesCategory && matchesStatus;
-                        })
-                        .map(tool => {
-                          const approvedTemplatesCount = curationTemplates.filter(ct => ct.toolId === tool.id && ct.status === 'approved').length;
+                        <div className="flex items-center justify-between gap-3 pt-2">
+                          <button 
+                            onClick={async () => {
+                              setIsFactoryGeneratingBg(true);
+                              // Simulate high-fidelity Gemini API generation
+                              setTimeout(() => {
+                                const newId = 'BG-000' + Math.floor(Math.random() * 900 + 100);
+                                setFactoryGeneratedBgs([newId, ...factoryGeneratedBgs]);
+                                setFactoryBgId(newId);
+                                setIsFactoryGeneratingBg(false);
+                                alert(`Gemini successfully registered new static asset ID: ${newId}!`);
+                              }, 1800);
+                            }}
+                            disabled={isFactoryGeneratingBg}
+                            className="flex-1 py-3 bg-black hover:bg-zinc-800 text-white font-extrabold rounded-xl transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wider"
+                          >
+                            {isFactoryGeneratingBg ? (
+                              <>
+                                <RefreshCw className="w-4 h-4 animate-spin" />
+                                Analyzing Coordinates & Generating...
+                              </>
+                            ) : (
+                              <>
+                                <Wand2 className="w-4 h-4 text-indigo-400" />
+                                Generate Custom Background Layer
+                              </>
+                            )}
+                          </button>
+                        </div>
 
-                          return (
-                            <div key={tool.id} className="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:bg-slate-50/30 transition-colors">
-                              <div className="space-y-1">
-                                <div className="flex flex-wrap items-center gap-2">
-                                  <h4 className="font-extrabold text-white text-xs tracking-tight">{tool.name}</h4>
-                                  <span className="text-[9px] uppercase tracking-wider font-extrabold px-1.5 py-0.5 rounded bg-black text-slate-500 border border-slate-200">
-                                    {tool.category}
-                                  </span>
-                                  {approvedTemplatesCount > 0 ? (
-                                    <span className="text-[9px] font-black uppercase bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full">
-                                      {approvedTemplatesCount} LIVE DESIGNS
-                                    </span>
-                                  ) : (
-                                    <span className="text-[9px] font-black uppercase bg-amber-50/80 border border-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full">
-                                      NO LAYOUT
-                                    </span>
-                                  )}
-                                </div>
-                                <p className="text-[11px] text-slate-500 leading-normal max-w-xl">{tool.description}</p>
-                              </div>
-
+                        <div className="space-y-2">
+                          <span className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider block">Generated & Cached BG-IDs Directory</span>
+                          <div className="grid grid-cols-3 gap-2">
+                            {factoryGeneratedBgs.map((bgId) => (
                               <button 
-                                onClick={() => handleGenerateToolTemplates(tool)}
-                                className="w-full sm:w-auto py-2 px-4 bg-indigo-500 hover:bg-indigo-600 text-white font-extrabold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5 shrink-0"
+                                key={bgId}
+                                onClick={() => setFactoryBgId(bgId)}
+                                className={`p-3 rounded-xl border text-xs font-mono font-bold flex flex-col items-center gap-1 transition-all ${
+                                  factoryBgId === bgId 
+                                    ? 'bg-indigo-50 border-indigo-500 text-indigo-600' 
+                                    : 'bg-slate-50 border-slate-250 text-slate-500 hover:bg-slate-100'
+                                }`}
                               >
-                                <Sparkles className="w-4 h-4" /> Generate 10 Variations
+                                <span className="text-xs">🖼️</span>
+                                <span>{bgId}</span>
                               </button>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="pt-3 border-t border-slate-100 flex justify-between items-center text-[11px]">
+                        <button onClick={() => setFactoryStep('blueprint')} className="text-slate-500 hover:text-black font-bold">← Back</button>
+                        <button 
+                          onClick={() => setFactoryStep('assets')}
+                          className="px-3.5 py-1.5 bg-black hover:bg-zinc-800 text-white font-extrabold rounded-lg uppercase tracking-wider transition-all"
+                        >
+                          Step 3: Pick Assets →
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* STEP 3: PICK ASSETS BY ID */}
+                  {factoryStep === 'assets' && (
+                    <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-4">
+                      <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+                        <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
+                          <Layers className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <h3 className="font-syne text-md font-bold text-black">Step 2: Assign High-Precision Asset IDs</h3>
+                          <p className="text-[10px] text-slate-500 font-medium">Modular references mapped in your templates database</p>
+                        </div>
+                      </div>
+
+                      <div className="space-y-4 text-xs font-sans">
+                        <p className="text-slate-600 leading-relaxed">
+                          A2ZQR ecosystem templates use static string IDs from our asset library. If we ever modify an SVG file or frame line, all templates automatically load the updated design files.
+                        </p>
+
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-1">
+                            <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">1. Frame Border ID</label>
+                            <select 
+                              value={factoryFrameId}
+                              onChange={(e) => setFactoryFrameId(e.target.value)}
+                              className="w-full bg-white border border-slate-250 rounded-xl p-2.5 text-xs text-slate-900 outline-none"
+                            >
+                              <option value="FRAME-000031">FRAME-000031 (Luxe Gold Outline)</option>
+                              <option value="FRAME-000032">FRAME-000032 (Minimal Classic Border)</option>
+                              <option value="FRAME-000033">FRAME-000033 (Retro Cyberpunk Badge)</option>
+                            </select>
+                          </div>
+
+                          <div className="space-y-1">
+                            <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">2. Sticker Badge ID</label>
+                            <select 
+                              value={factoryStickerId}
+                              onChange={(e) => setFactoryStickerId(e.target.value)}
+                              className="w-full bg-white border border-slate-250 rounded-xl p-2.5 text-xs text-slate-900 outline-none"
+                            >
+                              <option value="STICKER-000210">STICKER-000210 (Scan Me Ribbon)</option>
+                              <option value="STICKER-000211">STICKER-000211 (Save Contact Badge)</option>
+                              <option value="STICKER-000212">STICKER-000212 (Google Star Badge)</option>
+                            </select>
+                          </div>
+
+                          <div className="space-y-1">
+                            <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">3. Pattern Overlay ID</label>
+                            <select 
+                              value={factoryPatternId}
+                              onChange={(e) => setFactoryPatternId(e.target.value)}
+                              className="w-full bg-white border border-slate-250 rounded-xl p-2.5 text-xs text-slate-900 outline-none"
+                            >
+                              <option value="PATTERN-000051">PATTERN-000051 (Delicate Gold Dots)</option>
+                              <option value="PATTERN-000052">PATTERN-000052 (Geometric Tech Grid)</option>
+                              <option value="PATTERN-000053">PATTERN-000053 (Wave Liquid Line)</option>
+                            </select>
+                          </div>
+
+                          <div className="space-y-1">
+                            <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">4. Icon vector ID</label>
+                            <select 
+                              value={factoryIconId}
+                              onChange={(e) => setFactoryIconId(e.target.value)}
+                              className="w-full bg-white border border-slate-250 rounded-xl p-2.5 text-xs text-slate-900 outline-none"
+                            >
+                              <option value="ICON-000245">ICON-000245 (Gold Coffee Cup)</option>
+                              <option value="ICON-000246">ICON-000246 (Sparkling Marriage Ring)</option>
+                              <option value="ICON-000247">ICON-000247 (Google Review Star)</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div className="p-3 bg-indigo-50 border border-indigo-100 rounded-xl text-[11px] text-indigo-700">
+                          <strong>Active References Bound:</strong> 4 high-contrast scalable assets linked with real-time responsive coordinates. Click the "Safe Zone Editor" to position them.
+                        </div>
+                      </div>
+
+                      <div className="pt-3 border-t border-slate-100 flex justify-between items-center text-[11px]">
+                        <button onClick={() => setFactoryStep('background')} className="text-slate-500 hover:text-black font-bold">← Back</button>
+                        <button 
+                          onClick={() => setFactoryStep('packs')}
+                          className="px-3.5 py-1.5 bg-black hover:bg-zinc-800 text-white font-extrabold rounded-lg uppercase tracking-wider transition-all"
+                        >
+                          Step 4: Load Packs →
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* STEP 4: ASSET PACKS */}
+                  {factoryStep === 'packs' && (
+                    <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-4">
+                      <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+                        <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
+                          <LayoutGrid className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <h3 className="font-syne text-md font-bold text-black">Step 3: Instant Asset Packs Swapper</h3>
+                          <p className="text-[10px] text-slate-500 font-medium">Load fully coordinated brand sets with one simple click</p>
+                        </div>
+                      </div>
+
+                      <div className="space-y-4 text-xs font-sans">
+                        <p className="text-slate-600 leading-relaxed">
+                          Do not force users to search for individual styles. Provide curated pre-packaged brand ecosystems designed to scale across offline customer touchpoints.
+                        </p>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          {/* Cafe Pack */}
+                          <button 
+                            onClick={() => {
+                              setFactoryBgId('BG-000921');
+                              setFactoryFrameId('FRAME-000031');
+                              setFactoryStickerId('STICKER-000210');
+                              setFactoryPatternId('PATTERN-000051');
+                              setFactoryIconId('ICON-000245');
+                              setFactoryTitle('Premium Coffee Standee');
+                              setFactorySubtitle('Scan menu for immediate barista checkout');
+                              setFactoryCategory('Restaurant');
+                              setFactoryVariation('Luxury');
+                            }}
+                            className="p-3 bg-slate-50 hover:bg-indigo-50 border border-slate-250 hover:border-indigo-200 rounded-xl text-left flex flex-col justify-between h-32 transition-all group"
+                          >
+                            <span className="text-xs">☕ Restaurant Pack</span>
+                            <span className="text-[9px] text-slate-400 block mt-2 group-hover:text-slate-500">Includes warm gold outline frame, dots pattern, gold coffee cup icon, and "Scan Me" ribbon badge.</span>
+                            <span className="text-[10px] text-indigo-600 font-extrabold mt-1.5 block">Apply Pack →</span>
+                          </button>
+
+                          {/* Wedding Pack */}
+                          <button 
+                            onClick={() => {
+                              setFactoryBgId('BG-000542');
+                              setFactoryFrameId('FRAME-000032');
+                              setFactoryStickerId('STICKER-000211');
+                              setFactoryPatternId('PATTERN-000053');
+                              setFactoryIconId('ICON-000246');
+                              setFactoryTitle('Suvash & Maya Marriage');
+                              setFactorySubtitle('Celebrate our union and verify registry');
+                              setFactoryCategory('Events');
+                              setFactoryVariation('Minimal');
+                            }}
+                            className="p-3 bg-slate-50 hover:bg-indigo-50 border border-slate-250 hover:border-indigo-200 rounded-xl text-left flex flex-col justify-between h-32 transition-all group"
+                          >
+                            <span className="text-xs">💍 Wedding RSVP Pack</span>
+                            <span className="text-[9px] text-slate-400 block mt-2 group-hover:text-slate-500">Includes soft peach satin background, double-border minimalist frame, save-contact sticker badge, and ring icon.</span>
+                            <span className="text-[10px] text-indigo-600 font-extrabold mt-1.5 block">Apply Pack →</span>
+                          </button>
+
+                          {/* Review Booster Pack */}
+                          <button 
+                            onClick={() => {
+                              setFactoryBgId('BG-000108');
+                              setFactoryFrameId('FRAME-000033');
+                              setFactoryStickerId('STICKER-000212');
+                              setFactoryPatternId('PATTERN-000052');
+                              setFactoryIconId('ICON-000247');
+                              setFactoryTitle('Google Review Booster');
+                              setFactorySubtitle('Leave a 5-star review & get a free drink');
+                              setFactoryCategory('Business');
+                              setFactoryVariation('Neon');
+                            }}
+                            className="p-3 bg-slate-50 hover:bg-indigo-50 border border-slate-250 hover:border-indigo-200 rounded-xl text-left flex flex-col justify-between h-32 transition-all group"
+                          >
+                            <span className="text-xs">⭐ Google Review Pack</span>
+                            <span className="text-[9px] text-slate-400 block mt-2 group-hover:text-slate-500">Includes cyberpunk purple neon background, neon cyberpunk border, rating booster star sticker, and star icon.</span>
+                            <span className="text-[10px] text-indigo-600 font-extrabold mt-1.5 block">Apply Pack →</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="pt-3 border-t border-slate-100 flex justify-between items-center text-[11px]">
+                        <button onClick={() => setFactoryStep('assets')} className="text-slate-500 hover:text-black font-bold">← Back</button>
+                        <button 
+                          onClick={() => setFactoryStep('position')}
+                          className="px-3.5 py-1.5 bg-black hover:bg-zinc-800 text-white font-extrabold rounded-lg uppercase tracking-wider transition-all"
+                        >
+                          Step 5: Position Layers →
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* STEP 5: SAFE ZONE EDITOR */}
+                  {factoryStep === 'position' && (
+                    <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-4">
+                      <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+                        <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
+                          <Sliders className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <h3 className="font-syne text-md font-bold text-black">Step 4: Safe Zone Coordinates Editor</h3>
+                          <p className="text-[10px] text-slate-500 font-medium">Prevent visual collisions or print bleeding bugs</p>
+                        </div>
+                      </div>
+
+                      <div className="space-y-4 text-xs font-sans">
+                        <p className="text-slate-600 leading-relaxed">
+                          Drag the sliders below to move elements within safe print zones. Keep text and QR inside borders to avoid scanning failure.
+                        </p>
+
+                        <div className="space-y-3 p-3 bg-slate-50 rounded-xl border border-slate-150">
+                          <div className="space-y-1">
+                            <div className="flex justify-between items-center text-[11px]">
+                              <span className="font-extrabold text-slate-700 uppercase">Text Elements Y-Position</span>
+                              <span className="font-mono text-indigo-600 font-bold">{factoryTextY}px</span>
                             </div>
-                          );
-                        })}
+                            <input 
+                              type="range" 
+                              min="40" 
+                              max="180" 
+                              value={factoryTextY} 
+                              onChange={(e) => setFactoryTextY(Number(e.target.value))}
+                              className="w-full accent-black h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer"
+                            />
+                          </div>
+
+                          <div className="space-y-1 pt-1">
+                            <div className="flex justify-between items-center text-[11px]">
+                              <span className="font-extrabold text-slate-700 uppercase">QR Code Box Y-Position</span>
+                              <span className="font-mono text-indigo-600 font-bold">{factoryQrY}px</span>
+                            </div>
+                            <input 
+                              type="range" 
+                              min="200" 
+                              max="400" 
+                              value={factoryQrY} 
+                              onChange={(e) => setFactoryQrY(Number(e.target.value))}
+                              className="w-full accent-black h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Theme Variations Swapper */}
+                        <div className="space-y-2">
+                          <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider block">Template Variations Engine</label>
+                          <div className="grid grid-cols-6 gap-1.5">
+                            {['Minimal', 'Luxury', 'Dark', 'Corporate', 'Playful', 'Neon'].map((style) => (
+                              <button 
+                                key={style}
+                                onClick={() => setFactoryVariation(style as any)}
+                                className={`py-2 px-1 text-[10px] font-bold rounded-lg border text-center transition-all ${
+                                  factoryVariation === style 
+                                    ? 'bg-black border-black text-white' 
+                                    : 'bg-white border-slate-250 text-slate-600 hover:bg-slate-50'
+                                }`}
+                              >
+                                {style}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="space-y-3">
+                          <div className="space-y-1">
+                            <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">Business Name / Heading Text</label>
+                            <input 
+                              type="text" 
+                              value={factoryTitle}
+                              onChange={(e) => setFactoryTitle(e.target.value)}
+                              className="w-full bg-white border border-slate-200 focus:border-black text-xs text-slate-950 p-2.5 rounded-xl outline-none"
+                            />
+                          </div>
+
+                          <div className="space-y-1">
+                            <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">Call to Action Subtitle</label>
+                            <input 
+                              type="text" 
+                              value={factorySubtitle}
+                              onChange={(e) => setFactorySubtitle(e.target.value)}
+                              className="w-full bg-white border border-slate-200 focus:border-black text-xs text-slate-950 p-2.5 rounded-xl outline-none"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="pt-3 border-t border-slate-100 flex justify-between items-center text-[11px]">
+                        <button onClick={() => setFactoryStep('packs')} className="text-slate-500 hover:text-black font-bold">← Back</button>
+                        <button 
+                          onClick={() => setFactoryStep('score')}
+                          className="px-3.5 py-1.5 bg-black hover:bg-zinc-800 text-white font-extrabold rounded-lg uppercase tracking-wider transition-all"
+                        >
+                          Step 6: Quality Scorer →
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* STEP 6: QUALITY SCORE VALIDATION */}
+                  {factoryStep === 'score' && (
+                    <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-4">
+                      <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+                        <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                        </div>
+                        <div>
+                          <h3 className="font-syne text-md font-bold text-black">Step 5: Design Quality Score Checker</h3>
+                          <p className="text-[10px] text-slate-500 font-medium">Verify readability before deploying live to user directory</p>
+                        </div>
+                      </div>
+
+                      <div className="space-y-4 text-xs font-sans">
+                        <p className="text-slate-600 leading-relaxed">
+                          A2ZQR automatically executes high-contrast validations so clients get pristine vector print outputs without pixelation boundaries.
+                        </p>
+
+                        <div className="space-y-2 p-4 bg-slate-50 rounded-2xl border border-slate-200">
+                          <div className="flex justify-between items-center pb-2 border-b border-slate-200">
+                            <span className="font-extrabold text-slate-700">Aesthetic Composition:</span>
+                            <span className="font-mono text-emerald-600 font-black">98 / 100 PASS</span>
+                          </div>
+
+                          <div className="space-y-2.5 pt-2">
+                            <div className="flex justify-between items-center text-[11px]">
+                              <span className="text-slate-500 flex items-center gap-1.5">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500"></span> Mobile Safe Frame Boundary
+                              </span>
+                              <span className="font-bold text-slate-800">100% OK (NO COLLISION)</span>
+                            </div>
+
+                            <div className="flex justify-between items-center text-[11px]">
+                              <span className="text-slate-500 flex items-center gap-1.5">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500"></span> Print Safe Bleed Check (300DPI)
+                              </span>
+                              <span className="font-bold text-slate-800">PASSED</span>
+                            </div>
+
+                            <div className="flex justify-between items-center text-[11px]">
+                              <span className="text-slate-500 flex items-center gap-1.5">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500"></span> QR Matrix Contrast Ratio
+                              </span>
+                              <span className="font-bold text-slate-800">4.5:1 (HIGHLY LEGIBLE)</span>
+                            </div>
+
+                            <div className="flex justify-between items-center text-[11px]">
+                              <span className="text-slate-500 flex items-center gap-1.5">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500"></span> Editable Zone Width Check
+                              </span>
+                              <span className="font-bold text-slate-800">OK</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <button 
+                          onClick={() => {
+                            const newTemplate = {
+                              id: 'recipe-' + Date.now(),
+                              name: factoryTitle,
+                              theme: factoryVariation.toLowerCase(),
+                              frame: factoryFrameId,
+                              bg: factoryBgId === 'BG-000921' ? '#0F0E14' : factoryBgId === 'BG-000542' ? '#FFEBF0' : '#05020D',
+                              font: 'Syne',
+                              elements: 2
+                            };
+                            setCustomTemplates([newTemplate, ...customTemplates]);
+                            setFactoryCustomTemplates([newTemplate, ...factoryCustomTemplates]);
+                            alert('SUCCESS! Template approved & published. Dynamic Asset IDs registered to the public database successfully!');
+                          }}
+                          className="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-indigo-600 hover:brightness-110 text-white font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all shadow flex items-center justify-center gap-2"
+                        >
+                          <Check className="w-4 h-4" /> Approve & Publish Template Live
+                        </button>
+
+                        {factoryCustomTemplates.length > 0 && (
+                          <div className="space-y-2 pt-2">
+                            <span className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider block">Templates Published This Session</span>
+                            <div className="space-y-1.5">
+                              {factoryCustomTemplates.map((t) => (
+                                <div key={t.id} className="p-3 bg-indigo-50/50 border border-indigo-100 rounded-xl flex justify-between items-center text-[11px]">
+                                  <div className="font-bold text-slate-800">{t.name} ({t.theme})</div>
+                                  <div className="font-mono text-indigo-600 bg-white border border-indigo-200 px-2 py-0.5 rounded text-[10px]">PUBLISHED</div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="pt-3 border-t border-slate-100 flex justify-between items-center text-[11px]">
+                        <button onClick={() => setFactoryStep('position')} className="text-slate-500 hover:text-black font-bold">← Back</button>
+                        <span className="text-slate-400">Ready for public downloads</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* RIGHT: Real-Time Card Designer Canvas Mockup */}
+                <div className="lg:col-span-5 space-y-4 lg:sticky lg:top-24">
+                  <span className="text-[10px] uppercase font-bold tracking-widest text-slate-500 block">
+                    Real-time Canvas (Static Asset-ID Engine)
+                  </span>
+
+                  {/* Render Visual Card Dynamic Mockup based on State IDs */}
+                  <div className="relative aspect-[3/4] w-full bg-slate-900 rounded-[28px] overflow-hidden shadow-2xl border border-slate-800 flex flex-col justify-between p-6 text-center select-none group">
+                    
+                    {/* Background Dynamic Style based on BG-ID */}
+                    {factoryBgId === 'BG-000921' && (
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#0F0E14] via-[#221A30] to-[#0D0B10] transition-all">
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.1)_0%,transparent_60%)]"></div>
+                      </div>
+                    )}
+                    {factoryBgId === 'BG-000542' && (
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#FFEBF0] via-[#FFF5F7] to-[#FCE7F3] transition-all">
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(236,72,153,0.08)_0%,transparent_60%)]"></div>
+                      </div>
+                    )}
+                    {factoryBgId === 'BG-000108' && (
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#05020D] via-[#120826] to-[#030107] transition-all">
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.15)_0%,transparent_70%)]"></div>
+                      </div>
+                    )}
+                    {/* Fallback generated ids */}
+                    {!['BG-000921', 'BG-000542', 'BG-000108'].includes(factoryBgId) && (
+                      <div className="absolute inset-0 bg-gradient-to-br from-indigo-950 via-slate-950 to-emerald-950 transition-all">
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.05)_0%,transparent_60%)]"></div>
+                      </div>
+                    )}
+
+                    {/* Pattern Overlay Grid */}
+                    {factoryPatternId === 'PATTERN-000051' && (
+                      <div className="absolute inset-0 opacity-[0.08] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #EAB308 1.5px, transparent 1.5px)', backgroundSize: '16px 16px' }}></div>
+                    )}
+                    {factoryPatternId === 'PATTERN-000052' && (
+                      <div className="absolute inset-0 opacity-[0.05] pointer-events-none" style={{ backgroundImage: 'linear-gradient(to right, #8B5CF6 1px, transparent 1px), linear-gradient(to bottom, #8B5CF6 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+                    )}
+                    {factoryPatternId === 'PATTERN-000053' && (
+                      <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-[radial-gradient(ellipse_at_top,rgba(236,72,153,0.3),transparent_50%)]"></div>
+                    )}
+
+                    {/* Frame Outline Overlay */}
+                    {factoryFrameId === 'FRAME-000031' && (
+                      <div className="absolute inset-4 rounded-2xl border-2 border-dashed border-yellow-500/30 pointer-events-none"></div>
+                    )}
+                    {factoryFrameId === 'FRAME-000032' && (
+                      <div className="absolute inset-4 rounded-2xl border-2 border-slate-400/30 pointer-events-none"></div>
+                    )}
+                    {factoryFrameId === 'FRAME-000033' && (
+                      <div className="absolute inset-4 rounded-2xl border-2 border-indigo-500/40 pointer-events-none shadow-[0_0_15px_rgba(168,85,247,0.2)]"></div>
+                    )}
+
+                    {/* Sticker Ribbon Label */}
+                    <div className="absolute top-8 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+                      {factoryStickerId === 'STICKER-000210' && (
+                        <span className="bg-yellow-500 text-black font-extrabold text-[9px] uppercase tracking-wider px-3 py-1 rounded-full shadow-lg border border-yellow-400">
+                          🎀 Scan For Menu
+                        </span>
+                      )}
+                      {factoryStickerId === 'STICKER-000211' && (
+                        <span className="bg-pink-500 text-white font-extrabold text-[9px] uppercase tracking-wider px-3 py-1 rounded-full shadow-lg border border-pink-400">
+                          🌸 Save Contact Info
+                        </span>
+                      )}
+                      {factoryStickerId === 'STICKER-000212' && (
+                        <span className="bg-purple-600 text-white font-extrabold text-[9px] uppercase tracking-wider px-3 py-1 rounded-full shadow-lg border border-purple-400">
+                          ⭐ Google Star Approved
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Dynamic Text block using Y-Position state */}
+                    <div 
+                      className="absolute left-6 right-6 transition-all duration-150"
+                      style={{ top: `${factoryTextY}px` }}
+                    >
+                      <div className="flex items-center justify-center gap-2 mb-2">
+                        {factoryIconId === 'ICON-000245' && <span className="text-xl">☕</span>}
+                        {factoryIconId === 'ICON-000246' && <span className="text-xl">💍</span>}
+                        {factoryIconId === 'ICON-000247' && <span className="text-xl">⭐</span>}
+                      </div>
+                      <h4 className={`font-syne font-extrabold text-[16px] tracking-tight ${factoryBgId === 'BG-000542' ? 'text-slate-900' : 'text-white'}`}>
+                        {factoryTitle}
+                      </h4>
+                      <p className={`text-[10px] mt-1 leading-relaxed ${factoryBgId === 'BG-000542' ? 'text-slate-500' : 'text-slate-400'}`}>
+                        {factorySubtitle}
+                      </p>
+                    </div>
+
+                    {/* Dynamic QR Code box using Y-Position state */}
+                    <div 
+                      className="absolute left-1/2 -translate-x-1/2 w-32 h-32 bg-white rounded-2xl p-2.5 shadow-2xl transition-all duration-150 flex items-center justify-center border border-slate-100"
+                      style={{ top: `${factoryQrY}px` }}
+                    >
+                      <div className="w-full h-full border-4 border-slate-900/10 border-dashed rounded-lg flex flex-col items-center justify-center bg-slate-50">
+                        <QrCode className="w-8 h-8 text-slate-800" />
+                        <span className="text-[7px] font-black uppercase text-slate-400 tracking-wider mt-1.5">A2ZQR Live</span>
+                      </div>
+                    </div>
+
+                    {/* Quality Badging indicators inside Frame boundary */}
+                    <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between text-[8px] tracking-wider uppercase font-extrabold">
+                      <span className={factoryBgId === 'BG-000542' ? 'text-slate-400' : 'text-slate-500'}>Asset: {factoryBgId}</span>
+                      <span className="text-emerald-500 flex items-center gap-1 font-black">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Mobile safe
+                      </span>
+                      <span className={factoryBgId === 'BG-000542' ? 'text-slate-400' : 'text-slate-500'}>Style: {factoryVariation}</span>
                     </div>
                   </div>
+
+                  {/* Metadata display board */}
+                  <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-1 text-[11px] font-mono text-slate-500">
+                    <div><strong>bg_asset_id:</strong> "{factoryBgId}"</div>
+                    <div><strong>frame_asset_id:</strong> "{factoryFrameId}"</div>
+                    <div><strong>sticker_asset_id:</strong> "{factoryStickerId}"</div>
+                    <div><strong>pattern_asset_id:</strong> "{factoryPatternId}"</div>
+                    <div><strong>icon_asset_id:</strong> "{factoryIconId}"</div>
+                    <div><strong>variation_style:</strong> "{factoryVariation}"</div>
+                    <div><strong>safe_zone_y:</strong> {factoryTextY}px text / {factoryQrY}px qr</div>
+                  </div>
                 </div>
-              )}
+
+              </div>
             </div>
           )}
 

@@ -138,6 +138,37 @@ export default function TemplateEditor({
   
   const [frameStyle, setFrameStyle] = useState<'none' | 'luxury_gold' | 'neon_accent' | 'minimalist_outline' | 'cherry_blossom'>('none');
   const [logoOverlay, setLogoOverlay] = useState<'none' | 'wifi' | 'coffee' | 'location'>('none');
+  const [customUploadedLogo, setCustomUploadedLogo] = useState<string | null>(null);
+
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 256;
+            if (img.width > MAX_WIDTH) {
+              const scale = MAX_WIDTH / img.width;
+              canvas.width = MAX_WIDTH;
+              canvas.height = img.height * scale;
+            } else {
+              canvas.width = img.width;
+              canvas.height = img.height;
+            }
+            const ctx = canvas.getContext('2d');
+            ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
+            const compressedDataUrl = canvas.toDataURL('image/png', 0.85);
+            setCustomUploadedLogo(compressedDataUrl);
+          };
+          img.src = event.target.result as string;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   
   // QR code target input data
@@ -178,9 +209,13 @@ export default function TemplateEditor({
       const cornersStyle = localTemplate.qrConfig?.cornersStyle || 'extra-rounded';
 
       let logoUrl = '';
-      if (logoOverlay === 'wifi') logoUrl = 'https://api.iconify.design/lucide:wifi.svg?color=' + encodeURIComponent(qrColor);
-      if (logoOverlay === 'coffee') logoUrl = 'https://api.iconify.design/lucide:coffee.svg?color=' + encodeURIComponent(qrColor);
-      if (logoOverlay === 'location') logoUrl = 'https://api.iconify.design/lucide:map-pin.svg?color=' + encodeURIComponent(qrColor);
+      if (customUploadedLogo) {
+        logoUrl = customUploadedLogo;
+      } else {
+        if (logoOverlay === 'wifi') logoUrl = 'https://api.iconify.design/lucide:wifi.svg?color=' + encodeURIComponent(qrColor);
+        if (logoOverlay === 'coffee') logoUrl = 'https://api.iconify.design/lucide:coffee.svg?color=' + encodeURIComponent(qrColor);
+        if (logoOverlay === 'location') logoUrl = 'https://api.iconify.design/lucide:map-pin.svg?color=' + encodeURIComponent(qrColor);
+      }
 
       const qrCode = new QRCodeStyling({
         width: 170,
@@ -209,7 +244,7 @@ export default function TemplateEditor({
       qrCode.append(qrRef.current);
       qrCodeInstance.current = qrCode;
     }
-  }, [localTemplate, qrData, logoOverlay]);
+  }, [localTemplate, qrData, logoOverlay, customUploadedLogo]);
 
   // Handle Drag & Drop logic (Active ONLY in Pro Full Customize Mode)
   const handleMouseDown = (e: React.MouseEvent, id: string) => {
@@ -281,17 +316,113 @@ export default function TemplateEditor({
     }]);
   };
 
+  const applyThemeVariation = (themeName: 'minimal' | 'luxury' | 'dark' | 'light' | 'premium' | 'modern') => {
+    switch (themeName) {
+      case 'minimal':
+        setLocalTemplate(prev => ({
+          ...prev,
+          bgType: 'gradient',
+          gradient: { from: '#FAF9F6', to: '#F5F5F0', angle: '180deg' },
+          qrConfig: { fgColor: '#1A1A1A', bgColor: '#FFFFFF', dotsStyle: 'rounded', cornersStyle: 'extra-rounded' }
+        }));
+        setFrameStyle('minimalist_outline');
+        setElements(prev => prev.map((el, i) => i === 0 ? { ...el, color: '#1A1A1A' } : i === 1 ? { ...el, color: '#4A4A4A' } : el));
+        break;
+      case 'luxury':
+        setLocalTemplate(prev => ({
+          ...prev,
+          bgType: 'gradient',
+          gradient: { from: '#110D1B', to: '#07050A', angle: '180deg' },
+          qrConfig: { fgColor: '#F59E0B', bgColor: '#110D1B', dotsStyle: 'dots', cornersStyle: 'extra-rounded' }
+        }));
+        setFrameStyle('luxury_gold');
+        setElements(prev => prev.map((el, i) => i === 0 ? { ...el, color: '#FFF5E0' } : i === 1 ? { ...el, color: '#F59E0B' } : el));
+        break;
+      case 'dark':
+        setLocalTemplate(prev => ({
+          ...prev,
+          bgType: 'gradient',
+          gradient: { from: '#05020D', to: '#120D26', angle: '135deg' },
+          qrConfig: { fgColor: '#E02424', bgColor: '#05020D', dotsStyle: 'rounded', cornersStyle: 'extra-rounded' }
+        }));
+        setFrameStyle('neon_accent');
+        setElements(prev => prev.map((el, i) => i === 0 ? { ...el, color: '#FFA1D2' } : i === 1 ? { ...el, color: '#E02424' } : el));
+        break;
+      case 'light':
+        setLocalTemplate(prev => ({
+          ...prev,
+          bgType: 'gradient',
+          gradient: { from: '#FFFFFF', to: '#F9FAFB', angle: '180deg' },
+          qrConfig: { fgColor: '#000000', bgColor: '#FFFFFF', dotsStyle: 'square', cornersStyle: 'square' }
+        }));
+        setFrameStyle('minimalist_outline');
+        setElements(prev => prev.map((el, i) => i === 0 ? { ...el, color: '#000000' } : i === 1 ? { ...el, color: '#6B7280' } : el));
+        break;
+      case 'premium':
+        setLocalTemplate(prev => ({
+          ...prev,
+          bgType: 'gradient',
+          gradient: { from: '#0F172A', to: '#1E293B', angle: '135deg' },
+          qrConfig: { fgColor: '#38BDF8', bgColor: '#0F172A', dotsStyle: 'rounded', cornersStyle: 'extra-rounded' }
+        }));
+        setFrameStyle('luxury_gold');
+        setElements(prev => prev.map((el, i) => i === 0 ? { ...el, color: '#F1F5F9' } : i === 1 ? { ...el, color: '#38BDF8' } : el));
+        break;
+      case 'modern':
+        setLocalTemplate(prev => ({
+          ...prev,
+          bgType: 'gradient',
+          gradient: { from: '#020617', to: '#0F172A', angle: '180deg' },
+          qrConfig: { fgColor: '#2DD4BF', bgColor: '#020617', dotsStyle: 'dots', cornersStyle: 'extra-rounded' }
+        }));
+        setFrameStyle('neon_accent');
+        setElements(prev => prev.map((el, i) => i === 0 ? { ...el, color: '#99F6E4' } : i === 1 ? { ...el, color: '#2DD4BF' } : el));
+        break;
+    }
+  };
+
   const deleteElement = (id: string) => {
     setElements(prev => prev.filter(el => el.id !== id));
     if (selectedId === id) setSelectedId(null);
   };
+
+  const [isExporting, setIsExporting] = useState(false);
 
   const handleDownload = () => {
     if (localTemplate.type === 'Pro' && !user?.isPro) {
       onOpenPayModal();
       return;
     }
-    alert('Success: Preparing your personalized high-DPI creative poster frame for secure download!');
+    
+    if (canvasRef.current) {
+      setIsExporting(true);
+      import('html-to-image').then((htmlToImage) => {
+        // Ensure fonts and images are fully processed
+        htmlToImage.toPng(canvasRef.current!, { 
+          quality: 1.0, 
+          pixelRatio: 3, // Super high DPI print ready
+          style: {
+            transform: 'scale(1)',
+            transformOrigin: 'top left'
+          }
+        })
+          .then((dataUrl) => {
+            const link = document.createElement('a');
+            link.download = `${localTemplate.title || 'custom-qr-design'}-${Date.now()}.png`;
+            link.href = dataUrl;
+            link.click();
+            setIsExporting(false);
+          })
+          .catch((err) => {
+            console.error('oops, something went wrong with html-to-image!', err);
+            setIsExporting(false);
+            alert('Encountered an issue preparing canvas image. Please try again.');
+          });
+      }).catch(err => {
+        setIsExporting(false);
+        console.error("Failed to load html-to-image", err);
+      });
+    }
   };
 
   // Build the background style based on localTemplate parameters
@@ -352,10 +483,10 @@ export default function TemplateEditor({
         </div>
       </header>
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-col lg:flex-row flex-1 overflow-auto lg:overflow-hidden">
         
         {/* Left Toolbar - Drag and drop status */}
-        <div className="w-16 bg-[#0A0A12] border-r border-[#1C1C2E] flex flex-col items-center py-5 gap-4">
+        <div className="hidden lg:flex w-16 bg-[#0A0A12] border-r border-[#1C1C2E] flex-col items-center py-5 gap-4">
           <button 
             disabled={!isFullCustomizeMode}
             onClick={() => setSelectedId(null)}
@@ -417,12 +548,18 @@ export default function TemplateEditor({
             )}
           </div>
 
-          {/* Mockup Container Wrapper */}
-          <div className={`transition-all duration-500 relative ${selectedMockup !== 'none' ? "w-[640px] h-[460px] rounded-3xl overflow-hidden border border-[#23233D] flex items-center justify-center shadow-[0_25px_60px_rgba(0,0,0,0.8)]" : ""}`}>
+          {/* Responsive scale wrapper to prevent overflow on mobile (320px - 480px screens) */}
+          <div className="scale-[0.52] min-[360px]:scale-[0.62] min-[390px]:scale-[0.70] min-[420px]:scale-[0.76] sm:scale-90 lg:scale-100 origin-center transition-all duration-300 flex items-center justify-center my-[-110px] min-[360px]:my-[-80px] min-[390px]:my-[-50px] sm:my-0 select-none">
+            {/* Mockup Container Wrapper */}
+            <div className={`transition-all duration-500 relative ${selectedMockup !== 'none' ? "w-[640px] h-[460px] rounded-3xl overflow-hidden border border-[#23233D] flex items-center justify-center shadow-[0_25px_60px_rgba(0,0,0,0.8)]" : ""}`}>
             {selectedMockup !== 'none' && (
               <>
                 <img 
                   src={MOCKUP_DETAILS[selectedMockup].bgUrl} 
+                  onError={(e) => {
+                    // Fail-safe graceful fallback if unsplash or internet is unstable
+                    e.currentTarget.src = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=800";
+                  }}
                   className="absolute inset-0 w-full h-full object-cover opacity-80 z-0 select-none pointer-events-none" 
                   referrerPolicy="no-referrer"
                   alt="Mockup Frame"
@@ -910,7 +1047,10 @@ export default function TemplateEditor({
                     fontWeight: 'bold',
                     textShadow: '0 2px 10px rgba(0,0,0,0.85)',
                     userSelect: 'none',
-                    whiteSpace: 'nowrap'
+                    whiteSpace: 'normal',
+                    maxWidth: '360px',
+                    wordBreak: 'break-word',
+                    textAlign: 'center'
                   }}
                   onMouseDown={(e) => handleMouseDown(e, el.id)}
                   onDoubleClick={() => handleDoubleClick(el.id)}
@@ -935,113 +1075,255 @@ export default function TemplateEditor({
               ))}
             </div>
           </div>
+          </div>
         </div>
         
         {/* Right Sidebar Form & Properties Control Center */}
-        <div className="w-[380px] bg-[#0A0A12] border-l border-[#1C1C2E] p-6 flex flex-col justify-between overflow-y-auto shrink-0 select-none">
+        <div className="w-full lg:w-[380px] bg-[#0A0A12] border-t lg:border-t-0 lg:border-l border-[#1C1C2E] p-6 flex flex-col justify-between overflow-y-auto shrink-0 select-none">
           
           <div className="space-y-6">
             
-            {/* Mode Selector Toggle */}
-            <div className="space-y-2">
-              <label className="text-[10px] text-[#8080A0] uppercase tracking-wider font-extrabold block">
-                Editor Mode Controls
-              </label>
-              <div className="grid grid-cols-2 bg-[#12121E] p-1 rounded-xl border border-[#28283E]">
-                <button 
-                  type="button"
-                  onClick={() => setIsFullCustomizeMode(false)}
-                  className={`py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
-                    !isFullCustomizeMode 
-                      ? 'bg-[#7C6EFA] text-white shadow-md' 
-                      : 'text-[#8080A0] hover:text-white'
-                  }`}
-                >
-                  <Type className="w-3.5 h-3.5" /> Simple Form
-                </button>
-                <button 
-                  type="button"
-                  onClick={() => {
-                    if (user?.isPro) {
-                      setIsFullCustomizeMode(true);
-                    } else {
-                      onOpenPayModal();
-                    }
-                  }}
-                  className={`py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 relative ${
-                    isFullCustomizeMode 
-                      ? 'bg-[#7C6EFA] text-white shadow-md' 
-                      : 'text-[#8080A0] hover:text-white'
-                  }`}
-                >
-                  <Crown className="w-3.5 h-3.5 text-yellow-300 animate-pulse" />
-                  <span>Full Customize</span>
-                  {!user?.isPro && (
-                    <Lock className="w-3 h-3 text-amber-500 shrink-0" />
-                  )}
-                </button>
+            {/* Mode Switch Panel */}
+            <div className="p-3 bg-indigo-950/20 border border-indigo-950/40 rounded-xl flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-extrabold text-[#A89EFF] block uppercase tracking-wider">
+                  {isFullCustomizeMode ? "👑 Advanced Pro Mode" : "✏️ Quick Edit Mode"}
+                </span>
+                <span className="text-[9px] text-[#8080A0] block">
+                  {isFullCustomizeMode ? "Advanced canvas layering." : "Simple 30-sec personalize form."}
+                </span>
               </div>
+              <button
+                type="button"
+                onClick={() => setIsFullCustomizeMode(!isFullCustomizeMode)}
+                className={`px-2.5 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-wider transition-all border ${
+                  isFullCustomizeMode
+                    ? 'bg-slate-900 border-slate-800 text-slate-300 hover:text-white'
+                    : 'bg-[#7C6EFA] hover:bg-indigo-600 border-[#7C6EFA] text-white'
+                }`}
+              >
+                {isFullCustomizeMode ? "Quick Mode" : "Go Pro"}
+              </button>
             </div>
 
-            {/* Experience Engine Tab Swapper */}
-            <div className="space-y-1.5">
-              <span className="text-[10px] text-[#8080A0] uppercase tracking-wider font-extrabold block">
-                Experience Engine Layers
-              </span>
-              <div className="grid grid-cols-3 gap-1 bg-[#12121E] p-1 rounded-xl border border-[#28283E]">
-                <button 
-                  type="button" 
-                  onClick={() => setActiveTab('template')} 
-                  className={`py-1.5 rounded-lg text-[10px] font-bold transition-all flex flex-col items-center gap-0.5 ${activeTab === 'template' ? 'bg-[#7C6EFA]/20 text-white border border-[#7C6EFA]/40' : 'text-[#8080A0] hover:text-white'}`}
-                >
-                  <LayoutTemplate className="w-3.5 h-3.5" />
-                  <span>Base</span>
-                </button>
-                <button 
-                  type="button" 
-                  onClick={() => setActiveTab('poster')} 
-                  className={`py-1.5 rounded-lg text-[10px] font-bold transition-all flex flex-col items-center gap-0.5 ${activeTab === 'poster' ? 'bg-[#7C6EFA]/20 text-white border border-[#7C6EFA]/40' : 'text-[#8080A0] hover:text-white'}`}
-                >
-                  <FileText className="w-3.5 h-3.5" />
-                  <span>Poster</span>
-                </button>
-                <button 
-                  type="button" 
-                  onClick={() => setActiveTab('frame')} 
-                  className={`py-1.5 rounded-lg text-[10px] font-bold transition-all flex flex-col items-center gap-0.5 ${activeTab === 'frame' ? 'bg-[#7C6EFA]/20 text-white border border-[#7C6EFA]/40' : 'text-[#8080A0] hover:text-white'}`}
-                >
-                  <Square className="w-3.5 h-3.5" />
-                  <span>Frame</span>
-                </button>
-                <button 
-                  type="button" 
-                  onClick={() => setActiveTab('sticker')} 
-                  className={`py-1.5 rounded-lg text-[10px] font-bold transition-all flex flex-col items-center gap-0.5 ${activeTab === 'sticker' ? 'bg-[#7C6EFA]/20 text-white border border-[#7C6EFA]/40' : 'text-[#8080A0] hover:text-white'}`}
-                >
-                  <Tags className="w-3.5 h-3.5" />
-                  <span>Sticker</span>
-                </button>
-                <button 
-                  type="button" 
-                  onClick={() => setActiveTab('qr_style')} 
-                  className={`py-1.5 rounded-lg text-[10px] font-bold transition-all flex flex-col items-center gap-0.5 ${activeTab === 'qr_style' ? 'bg-[#7C6EFA]/20 text-white border border-[#7C6EFA]/40' : 'text-[#8080A0] hover:text-white'}`}
-                >
-                  <Palette className="w-3.5 h-3.5" />
-                  <span>QR Layer</span>
-                </button>
-                <button 
-                  type="button" 
-                  onClick={() => setActiveTab('mockup')} 
-                  className={`py-1.5 rounded-lg text-[10px] font-bold transition-all flex flex-col items-center gap-0.5 ${activeTab === 'mockup' ? 'bg-[#7C6EFA]/20 text-white border border-[#7C6EFA]/40' : 'text-[#8080A0] hover:text-white'}`}
-                >
-                  <Eye className="w-3.5 h-3.5" />
-                  <span>Mockup</span>
-                </button>
+            {!isFullCustomizeMode ? (
+              <div className="space-y-4 animate-fade-in text-left">
+                {/* Style Theme Variations */}
+                <div className="space-y-1">
+                  <span className="text-[9px] text-[#8080A0] uppercase font-bold block">1. Style Theme Variations</span>
+                  <div className="grid grid-cols-3 gap-1">
+                    {[
+                      { id: 'minimal', name: 'Minimalist' },
+                      { id: 'luxury', name: 'Luxury Gold' },
+                      { id: 'dark', name: 'Electro Dark' },
+                      { id: 'light', name: 'Crisp Light' },
+                      { id: 'premium', name: 'Royal Navy' },
+                      { id: 'modern', name: 'Cyber Teal' },
+                    ].map(v => (
+                      <button
+                        key={v.id}
+                        type="button"
+                        onClick={() => applyThemeVariation(v.id as any)}
+                        className="p-1 bg-[#121226] border border-[#28283E] hover:border-[#7C6EFA]/50 rounded text-[9px] font-extrabold text-[#8080A0] hover:text-white transition-all text-center truncate"
+                      >
+                        {v.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Business Name Field */}
+                <div className="space-y-1">
+                  <span className="text-[9px] text-[#8080A0] uppercase font-bold block">2. Business Name / Heading</span>
+                  {elements[0] && (
+                    <input
+                      type="text"
+                      value={elements[0].content}
+                      onChange={(e) => handleTextChange(elements[0].id, e.target.value)}
+                      className="w-full bg-[#06060F] border border-[#28283E] focus:border-[#7C6EFA] text-xs rounded-lg px-2.5 py-2 text-white outline-none font-bold"
+                      placeholder="e.g. STARBUCKS COFFEE"
+                    />
+                  )}
+                </div>
+
+                {/* Subtitle / Caption Field */}
+                <div className="space-y-1">
+                  <span className="text-[9px] text-[#8080A0] uppercase font-bold block">3. Subtitle / Caption</span>
+                  {elements[1] && (
+                    <input
+                      type="text"
+                      value={elements[1].content}
+                      onChange={(e) => handleTextChange(elements[1].id, e.target.value)}
+                      className="w-full bg-[#06060F] border border-[#28283E] focus:border-[#7C6EFA] text-xs rounded-lg px-2.5 py-2 text-white outline-none"
+                      placeholder="e.g. SCAN FOR MENU"
+                    />
+                  )}
+                </div>
+
+                {/* Target URL Field */}
+                <div className="space-y-1">
+                  <span className="text-[9px] text-[#8080A0] uppercase font-bold block">4. Scan Redirect URL (Link)</span>
+                  <input
+                    type="text"
+                    value={qrData}
+                    onChange={(e) => setQrData(e.target.value)}
+                    className="w-full bg-[#06060F] border border-[#28283E] focus:border-[#7C6EFA] text-xs rounded-lg px-2.5 py-2 text-white outline-none font-mono"
+                    placeholder="https://..."
+                  />
+                </div>
+
+                {/* Logo Upload Field */}
+                <div className="space-y-1">
+                  <span className="text-[9px] text-[#8080A0] uppercase font-bold block">5. Brand Center Logo</span>
+                  <div className="flex gap-1">
+                    <label className="flex-1 cursor-pointer bg-slate-900 border border-dashed border-[#28283E] rounded px-2 py-1 text-center text-[10px] text-slate-300 hover:text-white transition-all">
+                      <span>📤 Upload Image</span>
+                      <input type="file" accept="image/*" onChange={handleLogoUpload} className="hidden" />
+                    </label>
+                    {customUploadedLogo && (
+                      <button
+                        type="button"
+                        onClick={() => setCustomUploadedLogo(null)}
+                        className="px-2 bg-red-950/40 text-red-400 border border-red-900/30 rounded text-[9px] font-bold"
+                      >
+                        Clear
+                      </button>
+                    )}
+                  </div>
+                  {customUploadedLogo ? (
+                    <div className="text-[8px] text-emerald-400 font-mono mt-0.5">✓ Custom logo active</div>
+                  ) : (
+                    <div className="grid grid-cols-4 gap-1 mt-1">
+                      {['none', 'wifi', 'coffee', 'location'].map(log => (
+                        <button
+                          key={log}
+                          type="button"
+                          onClick={() => setLogoOverlay(log as any)}
+                          className={`py-1 rounded text-[8px] border font-bold capitalize ${logoOverlay === log ? 'bg-[#7C6EFA] border-transparent text-white' : 'bg-[#121226] border-[#28283E] text-[#8080A0]'}`}
+                        >
+                          {log}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Frame Style Field */}
+                <div className="space-y-1">
+                  <span className="text-[9px] text-[#8080A0] uppercase font-bold block">6. Poster Frame Border</span>
+                  <div className="grid grid-cols-3 gap-1">
+                    {[
+                      { id: 'none', label: 'None' },
+                      { id: 'minimalist_outline', label: 'Outline' },
+                      { id: 'luxury_gold', label: 'Luxury' },
+                      { id: 'neon_accent', label: 'Neon' },
+                      { id: 'cherry_blossom', label: 'Sakura' }
+                    ].map(f => (
+                      <button
+                        key={f.id}
+                        type="button"
+                        onClick={() => setFrameStyle(f.id as any)}
+                        className={`p-1 border text-center rounded text-[9px] font-bold truncate ${frameStyle === f.id ? 'bg-indigo-500/20 border-indigo-500 text-indigo-200' : 'bg-[#121226] border-[#28283E] text-[#8080A0]'}`}
+                      >
+                        {f.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Action CTA Download Button */}
+                <div className="pt-2">
+                  <button
+                    type="button"
+                    onClick={handleDownload}
+                    disabled={isExporting}
+                    className="w-full py-2.5 bg-gradient-to-r from-[#7C6EFA] to-[#C084FC] hover:brightness-110 text-white font-extrabold rounded-lg text-[10px] uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 shadow-lg"
+                  >
+                    {isExporting ? 'Generating High-DPI...' : 'Download Print-Ready PNG'}
+                  </button>
+                </div>
               </div>
-            </div>
+            ) : (
+              <>
+                {/* Template Variations Engine */}
+                <div className="space-y-2">
+                  <label className="text-[10px] text-[#8080A0] uppercase tracking-wider font-extrabold block">
+                    Template Variations
+                  </label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {['Minimal', 'Luxury', 'Dark', 'Corporate', 'Playful', 'Neon'].map((variant) => (
+                      <button 
+                        key={variant}
+                        type="button"
+                        className="py-1.5 px-2 bg-[#12121E] border border-[#28283E] rounded-lg text-[10px] font-bold text-[#8080A0] hover:bg-[#7C6EFA]/10 hover:text-[#A89EFF] hover:border-[#7C6EFA]/30 transition-all flex items-center justify-center"
+                      >
+                        {variant}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Experience Engine Tab Swapper */}
+                <div className="space-y-1.5">
+                  <span className="text-[10px] text-[#8080A0] uppercase tracking-wider font-extrabold block">
+                    Experience Engine Layers
+                  </span>
+                  <div className="grid grid-cols-3 gap-1 bg-[#12121E] p-1 rounded-xl border border-[#28283E]">
+                    <button 
+                      type="button" 
+                      onClick={() => setActiveTab('template')} 
+                      className={`py-1.5 rounded-lg text-[10px] font-bold transition-all flex flex-col items-center gap-0.5 ${activeTab === 'template' ? 'bg-[#7C6EFA]/20 text-white border border-[#7C6EFA]/40' : 'text-[#8080A0] hover:text-white'}`}
+                    >
+                      <LayoutTemplate className="w-3.5 h-3.5" />
+                      <span>Base</span>
+                    </button>
+                    <button 
+                      type="button" 
+                      onClick={() => setActiveTab('poster')} 
+                      className={`py-1.5 rounded-lg text-[10px] font-bold transition-all flex flex-col items-center gap-0.5 ${activeTab === 'poster' ? 'bg-[#7C6EFA]/20 text-white border border-[#7C6EFA]/40' : 'text-[#8080A0] hover:text-white'}`}
+                    >
+                      <FileText className="w-3.5 h-3.5" />
+                      <span>Poster</span>
+                    </button>
+                    <button 
+                      type="button" 
+                      onClick={() => setActiveTab('frame')} 
+                      className={`py-1.5 rounded-lg text-[10px] font-bold transition-all flex flex-col items-center gap-0.5 ${activeTab === 'frame' ? 'bg-[#7C6EFA]/20 text-white border border-[#7C6EFA]/40' : 'text-[#8080A0] hover:text-white'}`}
+                    >
+                      <Square className="w-3.5 h-3.5" />
+                      <span>Frame</span>
+                    </button>
+                    <button 
+                      type="button" 
+                      onClick={() => setActiveTab('sticker')} 
+                      className={`py-1.5 rounded-lg text-[10px] font-bold transition-all flex flex-col items-center gap-0.5 ${activeTab === 'sticker' ? 'bg-[#7C6EFA]/20 text-white border border-[#7C6EFA]/40' : 'text-[#8080A0] hover:text-white'}`}
+                    >
+                      <Tags className="w-3.5 h-3.5" />
+                      <span>Sticker</span>
+                    </button>
+                    <button 
+                      type="button" 
+                      onClick={() => setActiveTab('qr_style')} 
+                      className={`py-1.5 rounded-lg text-[10px] font-bold transition-all flex flex-col items-center gap-0.5 ${activeTab === 'qr_style' ? 'bg-[#7C6EFA]/20 text-white border border-[#7C6EFA]/40' : 'text-[#8080A0] hover:text-white'}`}
+                    >
+                      <Palette className="w-3.5 h-3.5" />
+                      <span>QR Layer</span>
+                    </button>
+                    <button 
+                      type="button" 
+                      onClick={() => setActiveTab('mockup')} 
+                      className={`py-1.5 rounded-lg text-[10px] font-bold transition-all flex flex-col items-center gap-0.5 ${activeTab === 'mockup' ? 'bg-[#7C6EFA]/20 text-white border border-[#7C6EFA]/40' : 'text-[#8080A0] hover:text-white'}`}
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                      <span>Mockup</span>
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
 
             {/* TAB CONTAINER 1: BASE TEMPLATE SELECTION */}
-            {activeTab === 'template' && (
+            {isFullCustomizeMode && activeTab === 'template' && (
               <div className="space-y-4 animate-fade-in">
                 <div className="border-b border-[#1C1C2E] pb-2">
                   <h4 className="text-xs font-bold text-white uppercase tracking-wider">Base Layout Design</h4>
@@ -1103,7 +1385,7 @@ export default function TemplateEditor({
             )}
 
             {/* TAB CONTAINER 2: POSTER CONFIGURATION */}
-            {activeTab === 'poster' && (
+            {isFullCustomizeMode && activeTab === 'poster' && (
               <div className="space-y-4 animate-fade-in">
                 <div className="border-b border-[#1C1C2E] pb-2">
                   <h4 className="text-xs font-bold text-white uppercase tracking-wider">Poster Sizing & Safe Guides</h4>
@@ -1154,7 +1436,7 @@ export default function TemplateEditor({
             )}
 
             {/* TAB CONTAINER 3: DECORATIVE FRAMES */}
-            {activeTab === 'frame' && (
+            {isFullCustomizeMode && activeTab === 'frame' && (
               <div className="space-y-4 animate-fade-in">
                 <div className="border-b border-[#1C1C2E] pb-2">
                   <h4 className="text-xs font-bold text-white uppercase tracking-wider">Decorative Frame Overlays</h4>
@@ -1188,7 +1470,7 @@ export default function TemplateEditor({
             )}
 
             {/* TAB CONTAINER 4: STICKER BADGES */}
-            {activeTab === 'sticker' && (
+            {isFullCustomizeMode && activeTab === 'sticker' && (
               <div className="space-y-4 animate-fade-in">
                 <div className="border-b border-[#1C1C2E] pb-2">
                   <h4 className="text-xs font-bold text-white uppercase tracking-wider">Physical Sticker Badges</h4>
@@ -1294,7 +1576,7 @@ export default function TemplateEditor({
             )}
 
             {/* TAB CONTAINER 5: QR LAYER PROPERTIES */}
-            {activeTab === 'qr_style' && (
+            {isFullCustomizeMode && activeTab === 'qr_style' && (
               <div className="space-y-4 animate-fade-in">
                 <div className="border-b border-[#1C1C2E] pb-2">
                   <h4 className="text-xs font-bold text-white uppercase tracking-wider">QR Code Personalization</h4>
@@ -1411,7 +1693,7 @@ export default function TemplateEditor({
             )}
 
             {/* TAB CONTAINER 6: REAL-WORLD MOCKUPS */}
-            {activeTab === 'mockup' && (
+            {isFullCustomizeMode && activeTab === 'mockup' && (
               <div className="space-y-4 animate-fade-in">
                 <div className="border-b border-[#1C1C2E] pb-2">
                   <h4 className="text-xs font-bold text-white uppercase tracking-wider">Real-world Mockup Engine</h4>

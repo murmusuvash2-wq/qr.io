@@ -1,31 +1,42 @@
 {
   "categories": [
     { "id": "backgrounds", "label": "Backgrounds" },
-    { "id": "patterns", "label": "Patterns" },
-    { "id": "borders", "label": "Borders" },
-    { "id": "corners", "label": "Corners" },
-    { "id": "ribbons", "label": "Ribbons" },
-    { "id": "stickers", "label": "Stickers" },
-    { "id": "badges", "label": "Badges" },
-    { "id": "icons_business", "label": "Icons - Business" },
-    { "id": "icons_restaurant", "label": "Icons - Restaurant" }
+    { "id": "borders", "label": "Borders & Frames" },
+    { "id": "patterns", "label": "Patterns & Overlays" },
+    { "id": "stickers", "label": "Stickers & Badges" },
+    { "id": "icons", "label": "Brand Icons" }
   ],
   "assets": {
+    "backgrounds": [
+      { "id": "BG-000001", "name": "Obsidian Luxury Dark", "path": "#0F0E14", "tags": ["luxury", "dark", "premium", "modern"], "category": "backgrounds" },
+      { "id": "BG-000002", "name": "Soft Satin Rose", "path": "#FFEBF0", "tags": ["minimal", "wedding", "light", "pastel"], "category": "backgrounds" },
+      { "id": "BG-000003", "name": "Golden Marble Crest", "path": "#FFFBF2", "tags": ["luxury", "light", "premium", "gold"], "category": "backgrounds" },
+      { "id": "BG-000004", "name": "Cyberpunk Neon Electro", "path": "#05020D", "tags": ["dark", "neon", "modern", "tech"], "category": "backgrounds" },
+      { "id": "BG-000005", "name": "Minimalist Snow Alabaster", "path": "#F9FAFB", "tags": ["minimal", "light", "corporate"], "category": "backgrounds" },
+      { "id": "BG-000006", "name": "Mint Organic Wellness", "path": "#F0FDF4", "tags": ["minimal", "light", "eco", "pastel"], "category": "backgrounds" }
+    ],
     "borders": [
-      { "id": "border_001", "name": "Basic Border", "path": "/assets/borders/basic-border.svg" },
-      { "id": "border_002", "name": "Elegant Frame", "path": "/assets/borders/elegant-frame.svg" }
-    ],
-    "shapes": [
-      { "id": "shape_001", "name": "Star Badge", "path": "/assets/shapes/star-badge.svg" }
-    ],
-    "stickers": [
-      { "id": "sticker_001", "name": "Scan Me Badge", "path": "/assets/stickers/scan-me.svg" }
+      { "id": "FRAME-000001", "name": "Filigree Luxury Gold", "path": "/assets/borders/elegant-frame.svg", "tags": ["luxury", "gold", "premium"], "category": "borders" },
+      { "id": "FRAME-000002", "name": "Minimalist Slate Hairline", "path": "/assets/borders/basic-border.svg", "tags": ["minimal", "corporate", "light"], "category": "borders" },
+      { "id": "FRAME-000003", "name": "Retro Cyber Grid", "path": "/assets/borders/cyber-grid.svg", "tags": ["tech", "neon", "modern"], "category": "borders" },
+      { "id": "FRAME-000004", "name": "Cherry Blossom Floral", "path": "/assets/borders/sakura.svg", "tags": ["wedding", "pastel", "minimal"], "category": "borders" }
     ],
     "patterns": [
-      { "id": "pattern_001", "name": "Dotted Grid", "path": "/assets/patterns/dots.svg" }
+      { "id": "PATTERN-000001", "name": "Delicate Gold Dust", "path": "/assets/patterns/dots.svg", "tags": ["luxury", "gold", "premium"], "category": "patterns" },
+      { "id": "PATTERN-000002", "name": "Geometric Wireframe Grid", "path": "/assets/patterns/grid.svg", "tags": ["tech", "corporate", "modern"], "category": "patterns" },
+      { "id": "PATTERN-000003", "name": "Liquid Flow Lines", "path": "/assets/patterns/waves.svg", "tags": ["minimal", "modern", "pastel"], "category": "patterns" }
     ],
-    "corners": [
-      { "id": "corner_001", "name": "Classic Corner", "path": "/assets/corners/classic-corner.svg" }
+    "stickers": [
+      { "id": "STICKER-000001", "name": "🎀 Scan Me Ribbon", "path": "/assets/stickers/scan-me.svg", "tags": ["restaurant", "ribbon", "modern"], "category": "stickers" },
+      { "id": "STICKER-000002", "name": "🌸 Save Contact Badge", "path": "/assets/stickers/save-contact.svg", "tags": ["minimal", "wedding", "personal"], "category": "stickers" },
+      { "id": "STICKER-000003", "name": "⭐ Google Review 5-Star", "path": "/assets/stickers/google-star.svg", "tags": ["business", "badge", "premium"], "category": "stickers" },
+      { "id": "STICKER-000004", "name": "📅 Reserve Seat Badge", "path": "/assets/stickers/reserve.svg", "tags": ["events", "badge", "corporate"], "category": "stickers" }
+    ],
+    "icons": [
+      { "id": "ICON-000001", "name": "Barista Coffee Cup", "path": "☕", "tags": ["restaurant", "cafe"], "category": "icons" },
+      { "id": "ICON-000002", "name": "Celebration Marriage Rings", "path": "💍", "tags": ["wedding", "events", "personal"], "category": "icons" },
+      { "id": "ICON-000003", "name": "Google Premium Star", "path": "⭐", "tags": ["business", "premium"], "category": "icons" },
+      { "id": "ICON-000004", "name": "Wi-Fi Access Wave", "path": "📶", "tags": ["tech", "cafe", "corporate"], "category": "icons" }
     ]
   }
 }

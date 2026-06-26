@@ -2,6 +2,7 @@ import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc, updateDoc, increment, collection, getDocs, deleteDoc } from 'firebase/firestore';
 import firebaseConfig from '../../firebase-applet-config.json'; // Make sure the path is correct depending on where the config is generated
+import { generateTemplatesForTool, FLAGSHIP_TOOLS, registerEventLoggerCallback, TemplateTrackingEvent } from './templates-generator';
 
 const isFirebaseConfigured = !!firebaseConfig && !!firebaseConfig.projectId;
 
@@ -302,34 +303,52 @@ export interface TemplateDesign {
   approvedAt?: string;
   toolId?: string;
   toolName?: string;
+  version?: string;
+  seoTitle?: string;
+  metaDescription?: string;
+  urlSlug?: string;
+  keywords?: string;
+  jsonLdSchema?: string;
 }
 
 const LOCAL_TEMPLATES_KEY = 'ezqr_templates_v1';
 
 export const templateService = {
   async getTemplates(): Promise<TemplateDesign[]> {
+    let list: TemplateDesign[] = [];
     if (isFirebaseConfigured && db) {
       try {
         const colRef = collection(db, 'templates');
         const snap = await getDocs(colRef);
-        const list: TemplateDesign[] = [];
         snap.forEach((docSnap) => {
           list.push(docSnap.data() as TemplateDesign);
         });
-        return list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       } catch (err) {
         console.warn("Failed to fetch templates from Firestore, using local fallback:", err);
       }
     }
 
-    const local = localStorage.getItem(LOCAL_TEMPLATES_KEY);
-    if (local) {
-      try {
-        const parsed = JSON.parse(local) as TemplateDesign[];
-        return parsed.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-      } catch {}
+    if (list.length === 0) {
+      const local = localStorage.getItem(LOCAL_TEMPLATES_KEY);
+      if (local) {
+        try {
+          list = JSON.parse(local) as TemplateDesign[];
+        } catch {}
+      }
     }
-    return [];
+
+    // Merge high-quality programmatic factory templates for all 10 flagship tools
+    FLAGSHIP_TOOLS.forEach((toolId) => {
+      const dynamicPack = generateTemplatesForTool(toolId);
+      dynamicPack.forEach((tpl) => {
+        // Only append if it doesn't already exist to prevent overwriting user edits
+        if (!list.some(existing => existing.id === tpl.id)) {
+          list.push(tpl);
+        }
+      });
+    });
+
+    return list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   },
 
   async saveTemplate(template: TemplateDesign): Promise<void> {
@@ -399,3 +418,21 @@ export const templateService = {
     localStorage.setItem(LOCAL_TEMPLATES_KEY, JSON.stringify(filtered));
   }
 };
+
+// Continuous Telemetry Syncer with Firestore
+if (isFirebaseConfigured && db) {
+  try {
+    registerEventLoggerCallback(async (event: TemplateTrackingEvent) => {
+      try {
+        const eventRef = doc(db!, 'template_events', event.id);
+        await setDoc(eventRef, event);
+        console.log(`[Durable Telemetry] Event ${event.id} (${event.eventType}) successfully written to Firestore.`);
+      } catch (err) {
+        console.warn("Could not sync telemetry log to Firestore, fallback cache remains active:", err);
+      }
+    });
+  } catch (err) {
+    console.warn("Failed to subscribe persistent telemetry channel:", err);
+  }
+}
+

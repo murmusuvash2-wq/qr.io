@@ -263,6 +263,14 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-2">
+            <button 
+              onClick={() => setShowAssetLibrary(true)}
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-[#12121E] border border-[#28283E] text-xs font-bold text-[#A89EFF] rounded-lg hover:text-white hover:border-[#7C6EFA] transition-all"
+            >
+              <Box className="w-4 h-4" />
+              Asset Library
+            </button>
+
             <a 
               href="/dashboard.html"
               className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-[#12121E] border border-[#28283E] text-xs font-bold text-[#A89EFF] rounded-lg hover:text-white hover:border-[#7C6EFA] transition-all"

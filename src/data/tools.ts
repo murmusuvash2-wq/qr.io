@@ -28,6 +28,30 @@ export const CATEGORIES = [
 
 export const QR_TOOLS: QRTool[] = [
   {
+    "id": "google-review-business-booster-qr",
+    "name": "Google Review Booster",
+    "slug": "google-review-business-booster-qr",
+    "category": "B2B & Compliance",
+    "isHighTraffic": true,
+    "keywords": ["google review", "business rating", "local seo", "review qr", "gmb reviews"],
+    "description": "Increase 5-star Google Reviews instantly. Perfect for restaurant tables, reception desks, and physical cards.",
+    "hindiTitle": "गूगल रिव्यू क्यूआर कोड",
+    "hindiDesc": "ग्राहकों से तुरंत 5-स्टार गूगल रिव्यू प्राप्त करने के लिए क्यूआर कोड बनाएं।",
+    "type": "url"
+  },
+  {
+    "id": "whatsapp-direct-chat-click-to-message",
+    "name": "WhatsApp Direct Chat",
+    "slug": "whatsapp-direct-chat-click-to-message",
+    "category": "Utilities & Daily Life",
+    "isHighTraffic": true,
+    "keywords": ["whatsapp qr", "direct message", "click to chat", "contactless messaging", "whatsapp link"],
+    "description": "Let customers scan to start a WhatsApp chat with you instantly with a prefilled custom message.",
+    "hindiTitle": "व्हाट्सएप डायरेक्ट चैट क्यूआर",
+    "hindiDesc": "बिना नंबर सेव किए ग्राहकों को आपसे व्हाट्सएप पर सीधे चैट करने दें।",
+    "type": "whatsapp"
+  },
+  {
     "id": "how-to-create-mathematical-fibonacci-spiral-qr-code",
     "name": "Mathematical Fibonacci Spiral",
     "slug": "how-to-create-mathematical-fibonacci-spiral-qr-code",

@@ -283,7 +283,26 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal, onSelectTe
       }
       const reader = new FileReader();
       reader.onload = (event) => {
-        if (event.target?.result) setLogoFile(event.target.result as string);
+        if (event.target?.result) {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 256;
+            if (img.width > MAX_WIDTH) {
+              const scale = MAX_WIDTH / img.width;
+              canvas.width = MAX_WIDTH;
+              canvas.height = img.height * scale;
+            } else {
+              canvas.width = img.width;
+              canvas.height = img.height;
+            }
+            const ctx = canvas.getContext('2d');
+            ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
+            const compressedDataUrl = canvas.toDataURL('image/png', 0.85);
+            setLogoFile(compressedDataUrl);
+          };
+          img.src = event.target.result as string;
+        }
       };
       reader.readAsDataURL(e.target.files[0]);
     }

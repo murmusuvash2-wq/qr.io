@@ -76,14 +76,16 @@ const FEATURED_EXPERIENCES = [
 ];
 
 const POPULAR_TOOLS = [
-  { name: 'WiFi Connect', icon: Wifi, desc: 'Instant WiFi Access', color: 'text-emerald-600 bg-emerald-50', toolId: 'secure-wifi-share-auto-expiry-network-access' },
-  { name: 'UPI Payment', icon: CreditCard, desc: 'Scan. Pay. Done.', color: 'text-indigo-600 bg-indigo-50', toolId: 'free-upi-qr-code-styled-generator-with-amount' },
-  { name: 'Menu QR', icon: LayoutGrid, desc: 'Digital Menu', color: 'text-amber-600 bg-amber-50', toolId: 'digital-online-menu-qr-code-contactless-dining' },
-  { name: 'PDF to QR', icon: FileText, desc: 'Share PDF Files', color: 'text-rose-600 bg-rose-50', toolId: 'free-pdf-menu-qr-code-generator-for-restaurants' },
-  { name: 'Google Maps', icon: MapPin, desc: 'Location QR', color: 'text-blue-600 bg-blue-50', toolId: 'street-address-maps-qr-code-home-delivery' },
-  { name: 'Business Card', icon: CreditCard, desc: 'Share Contact', color: 'text-purple-600 bg-purple-50', toolId: 'real-estate-agent-contact-qr-code-vcard' },
-  { name: 'Event Ticket', icon: Tag, desc: 'Digital Ticket', color: 'text-fuchsia-600 bg-fuchsia-50', toolId: 'event-ticket-registration-qr-code-admissions' },
-  { name: 'InstantCard', icon: Smartphone, desc: 'Smart Contact', color: 'text-teal-600 bg-teal-50', toolId: 'instantcard-free-contact-sharing-qr-code' }
+  { name: 'WiFi Connect', icon: Wifi, desc: 'Instant WiFi Access', color: 'text-emerald-400 bg-emerald-500/10', toolId: 'secure-wifi-share-auto-expiry-network-access' },
+  { name: 'UPI Payment', icon: CreditCard, desc: 'Scan. Pay. Done.', color: 'text-indigo-400 bg-indigo-500/10', toolId: 'free-upi-qr-code-styled-generator-with-amount' },
+  { name: 'Google Review', icon: Star, desc: 'Get 5-Star Reviews', color: 'text-yellow-400 bg-yellow-500/10', toolId: 'google-review-business-booster-qr' },
+  { name: 'Google Maps', icon: MapPin, desc: 'Direct Location QR', color: 'text-blue-400 bg-blue-500/10', toolId: 'street-address-maps-qr-code-home-delivery' },
+  { name: 'WhatsApp Chat', icon: MessageSquare, desc: 'Click to WhatsApp Chat', color: 'text-teal-400 bg-teal-500/10', toolId: 'whatsapp-direct-chat-click-to-message' },
+  { name: 'Business Card', icon: Smartphone, desc: 'vCard Contact Card', color: 'text-purple-400 bg-purple-500/10', toolId: 'real-estate-agent-contact-qr-code-vcard' },
+  { name: 'Menu QR', icon: LayoutGrid, desc: 'Restaurant Menu URL', color: 'text-amber-400 bg-amber-500/10', toolId: 'free-pdf-menu-qr-code-generator-for-restaurants' },
+  { name: 'Airbnb Guide', icon: Globe, desc: 'Airbnb Host Welcome', color: 'text-rose-400 bg-rose-500/10', toolId: 'airbnb-guide-qr-code-vacation-rentals' },
+  { name: 'Event Ticket', icon: Tag, desc: 'Digital Admission Pass', color: 'text-fuchsia-400 bg-fuchsia-50/10', toolId: 'event-ticket-registration-qr-code-admissions' },
+  { name: 'Pet ID Tag', icon: Activity, desc: 'Lost Dog Collar Tag', color: 'text-cyan-400 bg-cyan-500/10', toolId: 'pet-id-collar-tag-qr-code-lost-dog-locator' }
 ];
 
 const PREMIUM_SHAPES = [
