@@ -55,11 +55,10 @@ const DAILY_THEMES = [
   }
 ];
 
-async function startServer() {
-  const app = express();
-  const PORT = 3000;
+const app = express();
+app.use(express.json());
 
-  app.use(express.json());
+const PORT = 3000;
 
   // API Route for automatic daily template cache generation
   const SCHEDULE_FILE = path.join(process.cwd(), "daily-templates-schedule.json");
@@ -235,69 +234,71 @@ Adhere strictly to the response schema. Ensure that your output contains exactly
   }
 
   // Automatic scheduler background check (Runs every minute)
-  setInterval(async () => {
-    try {
-      const config = getScheduleConfig();
-      if (!config.enabled) return;
+  if (!process.env.VERCEL) {
+    setInterval(async () => {
+      try {
+        const config = getScheduleConfig();
+        if (!config.enabled) return;
 
-      const now = new Date();
-      const todayDate = now.toISOString().split("T")[0]; // "YYYY-MM-DD"
-      
-      // Format current time as "HH:MM"
-      const currentHHMM = now.toTimeString().split(' ')[0].substring(0, 5); // "09:00"
-
-      if (config.time === currentHHMM && config.lastRunDate !== todayDate) {
-        console.log(`[Scheduler Triggered] Scheduled time ${config.time} reached! Running automatic generation for ${todayDate}...`);
+        const now = new Date();
+        const todayDate = now.toISOString().split("T")[0]; // "YYYY-MM-DD"
         
-        const dayOfWeek = now.getDay();
-        const themeObj = DAILY_THEMES[dayOfWeek];
-        const customChallenge = config.dailyChallenge || themeObj.prompt;
-        const themeTitle = config.dailyChallenge ? `Daily Challenge: ${config.dailyChallenge}` : themeObj.title;
+        // Format current time as "HH:MM"
+        const currentHHMM = now.toTimeString().split(' ')[0].substring(0, 5); // "09:00"
 
-        try {
-          const parsedData = await generateTemplatesForTheme(customChallenge, themeTitle, themeObj.category);
-          parsedData.date = todayDate;
+        if (config.time === currentHHMM && config.lastRunDate !== todayDate) {
+          console.log(`[Scheduler Triggered] Scheduled time ${config.time} reached! Running automatic generation for ${todayDate}...`);
           
-          // Save to cache file
-          fs.writeFileSync(CACHE_FILE, JSON.stringify(parsedData, null, 2), "utf-8");
-          console.log(`[Scheduler Success] Saved daily templates for ${todayDate}`);
+          const dayOfWeek = now.getDay();
+          const themeObj = DAILY_THEMES[dayOfWeek];
+          const customChallenge = config.dailyChallenge || themeObj.prompt;
+          const themeTitle = config.dailyChallenge ? `Daily Challenge: ${config.dailyChallenge}` : themeObj.title;
 
-          // Update config last run
-          config.lastRunDate = todayDate;
-          if (!config.history) config.history = [];
-          config.history.unshift({
-            date: todayDate,
-            time: currentHHMM,
-            themeTitle,
-            status: "success",
-            timestamp: new Date().toISOString()
-          });
-          if (config.history.length > 10) {
-            config.history = config.history.slice(0, 10);
+          try {
+            const parsedData = await generateTemplatesForTheme(customChallenge, themeTitle, themeObj.category);
+            parsedData.date = todayDate;
+            
+            // Save to cache file
+            fs.writeFileSync(CACHE_FILE, JSON.stringify(parsedData, null, 2), "utf-8");
+            console.log(`[Scheduler Success] Saved daily templates for ${todayDate}`);
+
+            // Update config last run
+            config.lastRunDate = todayDate;
+            if (!config.history) config.history = [];
+            config.history.unshift({
+              date: todayDate,
+              time: currentHHMM,
+              themeTitle,
+              status: "success",
+              timestamp: new Date().toISOString()
+            });
+            if (config.history.length > 10) {
+              config.history = config.history.slice(0, 10);
+            }
+            saveScheduleConfig(config);
+          } catch (genErr: any) {
+            console.error(`[Scheduler Error] Failed auto generation:`, genErr);
+            config.lastRunDate = todayDate; // Avoid spamming if it keeps failing
+            if (!config.history) config.history = [];
+            config.history.unshift({
+              date: todayDate,
+              time: currentHHMM,
+              themeTitle,
+              status: "error",
+              error: genErr.message || "Unknown error",
+              timestamp: new Date().toISOString()
+            });
+            if (config.history.length > 10) {
+              config.history = config.history.slice(0, 10);
+            }
+            saveScheduleConfig(config);
           }
-          saveScheduleConfig(config);
-        } catch (genErr: any) {
-          console.error(`[Scheduler Error] Failed auto generation:`, genErr);
-          config.lastRunDate = todayDate; // Avoid spamming if it keeps failing
-          if (!config.history) config.history = [];
-          config.history.unshift({
-            date: todayDate,
-            time: currentHHMM,
-            themeTitle,
-            status: "error",
-            error: genErr.message || "Unknown error",
-            timestamp: new Date().toISOString()
-          });
-          if (config.history.length > 10) {
-            config.history = config.history.slice(0, 10);
-          }
-          saveScheduleConfig(config);
         }
+      } catch (schedErr) {
+        console.error("[Scheduler Error] General failure:", schedErr);
       }
-    } catch (schedErr) {
-      console.error("[Scheduler Error] General failure:", schedErr);
-    }
-  }, 60000);
+    }, 60000);
+  }
 
   app.get("/api/daily-templates", async (req: express.Request, res: express.Response) => {
     try {
@@ -720,23 +721,28 @@ Adhere strictly to the response schema. Ensure that your output contains exactly
   });
 
   // Serve static assets or use Vite dev server
-  if (process.env.NODE_ENV !== "production") {
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: "spa",
-    });
-    app.use(vite.middlewares);
-  } else {
-    const distPath = path.join(process.cwd(), 'dist');
-    app.use(express.static(distPath));
-    app.get('*', (req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
+  async function runDevOrProdServer() {
+    if (process.env.NODE_ENV !== "production") {
+      const vite = await createViteServer({
+        server: { middlewareMode: true },
+        appType: "spa",
+      });
+      app.use(vite.middlewares);
+    } else {
+      const distPath = path.join(process.cwd(), 'dist');
+      app.use(express.static(distPath));
+      app.get('*', (req, res) => {
+        res.sendFile(path.join(distPath, 'index.html'));
+      });
+    }
+
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server running on http://localhost:${PORT}`);
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
-}
+  if (!process.env.VERCEL) {
+    runDevOrProdServer();
+  }
 
-startServer();
+export default app;

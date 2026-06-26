@@ -3,8 +3,16 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/api/(.*)",
+      "destination": "/api/index.ts"
+    },
+    {
       "source": "/dashboard",
       "destination": "/dashboard.html"
+    },
+    {
+      "source": "/tools/:slug",
+      "destination": "/tools/:slug/index.html"
     }
   ]
 }
