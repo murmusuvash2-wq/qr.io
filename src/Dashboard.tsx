@@ -702,44 +702,44 @@ export default function Dashboard() {
   // Login UI
   if (!isLoggedIn) {
     return (
-      <div id="dashboard-root" className="min-h-screen bg-[#040408] flex items-center justify-center p-4 selection:bg-indigo-500/30 selection:text-indigo-200">
+      <div id="dashboard-root" className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4 selection:bg-indigo-500/20 selection:text-indigo-900">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-[20%] left-[15%] w-96 h-96 bg-[#7C6EFA]/10 rounded-full blur-3xl"></div>
+          <div className="absolute top-[20%] left-[15%] w-96 h-96 bg-[#7C6EFA]/5 rounded-full blur-3xl"></div>
           <div className="absolute bottom-[20%] right-[15%] w-96 h-96 bg-[#C084FC]/5 rounded-full blur-3xl"></div>
         </div>
 
-        <div className="w-full max-w-md bg-[#0A0A12] border border-[#1C1C2E] rounded-[24px] p-8 relative z-10 shadow-[0_32px_80px_rgba(0,0,0,0.8)]">
+        <div className="w-full max-w-md bg-white border border-slate-200 rounded-[24px] p-8 relative z-10 shadow-[0_20px_50px_rgba(0,0,0,0.05)]">
           <div className="text-center mb-8">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#7C6EFA] to-[#C084FC] flex items-center justify-center text-white mx-auto mb-4 shadow-lg shadow-indigo-500/25">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#7C6EFA] to-[#C084FC] flex items-center justify-center text-white mx-auto mb-4 shadow-lg shadow-indigo-500/10">
               <LayoutDashboard className="w-6 h-6" />
             </div>
-            <h1 className="font-syne text-2xl font-extrabold text-white tracking-tight">
+            <h1 className="font-syne text-2xl font-extrabold text-slate-900 tracking-tight">
               A2ZQR Control Center
             </h1>
-            <p className="text-xs text-[#8080A0] mt-1.5 leading-relaxed">
+            <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
               Login to access the unified template factory, dynamic redirection routing, and SEO indexers.
             </p>
           </div>
 
           {loginError && (
-            <div className="mb-6 p-4 bg-red-950/40 border border-red-500/20 text-red-200 text-xs rounded-xl flex items-start gap-2 animate-fade-in">
-              <AlertCircle className="w-4 h-4 shrink-0 text-red-400 mt-0.5" />
+            <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-700 text-xs rounded-xl flex items-start gap-2 animate-fade-in">
+              <AlertCircle className="w-4 h-4 shrink-0 text-red-500 mt-0.5" />
               <span>{loginError}</span>
             </div>
           )}
 
           <form onSubmit={handleLoginSubmit} className="space-y-4">
             <div>
-              <label className="text-[10px] text-[#8080A0] uppercase font-extrabold tracking-wider block mb-1.5">
+              <label className="text-[10px] text-slate-500 uppercase font-extrabold tracking-wider block mb-1.5">
                 Workspace Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-[#4E4E6E]" />
+                <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" />
                 <input 
                   type="email" 
                   value={emailInput}
                   onChange={(e) => setEmailInput(e.target.value)}
-                  className="w-full bg-[#06060F] border border-[#1C1C2E] focus:border-[#7C6EFA] text-xs text-white rounded-xl pl-11 pr-4 py-3.5 outline-none transition-all placeholder-[#4E4E6E]"
+                  className="w-full bg-white border border-slate-200 focus:border-indigo-500 text-xs text-slate-900 rounded-xl pl-11 pr-4 py-3.5 outline-none transition-all placeholder-slate-400"
                   placeholder="admin@a2zqr.com"
                   required
                 />
@@ -747,16 +747,16 @@ export default function Dashboard() {
             </div>
 
             <div>
-              <label className="text-[10px] text-[#8080A0] uppercase font-extrabold tracking-wider block mb-1.5">
+              <label className="text-[10px] text-slate-500 uppercase font-extrabold tracking-wider block mb-1.5">
                 Dashboard Pin / Password
               </label>
               <div className="relative">
-                <Key className="absolute left-3.5 top-3.5 w-4 h-4 text-[#4E4E6E]" />
+                <Key className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" />
                 <input 
                   type="password" 
                   value={passwordInput}
                   onChange={(e) => setPasswordInput(e.target.value)}
-                  className="w-full bg-[#06060F] border border-[#1C1C2E] focus:border-[#7C6EFA] text-xs text-white rounded-xl pl-11 pr-4 py-3.5 outline-none transition-all placeholder-[#4E4E6E]"
+                  className="w-full bg-white border border-slate-200 focus:border-indigo-500 text-xs text-slate-900 rounded-xl pl-11 pr-4 py-3.5 outline-none transition-all placeholder-slate-400"
                   placeholder="••••••••"
                   required
                 />
@@ -764,10 +764,10 @@ export default function Dashboard() {
             </div>
 
             <div className="flex items-center justify-between pt-1">
-              <label className="flex items-center gap-2 cursor-pointer select-none text-[11px] text-[#8080A0]">
+              <label className="flex items-center gap-2 cursor-pointer select-none text-[11px] text-slate-600">
                 <input 
                   type="checkbox" 
-                  className="rounded border-[#28283E] bg-[#06060F] text-indigo-500 focus:ring-0 w-3.5 h-3.5"
+                  className="rounded border-slate-300 bg-white text-indigo-600 focus:ring-0 w-3.5 h-3.5"
                   defaultChecked
                 />
                 <span>Remember console credentials</span>
@@ -785,19 +785,19 @@ export default function Dashboard() {
           </form>
 
           {/* Quick Demo Credentials Swapper */}
-          <div className="mt-8 pt-6 border-t border-[#1C1C2E] text-center">
-            <span className="text-[10px] text-[#8080A0] uppercase tracking-wider font-extrabold block mb-2.5">
+          <div className="mt-8 pt-6 border-t border-slate-100 text-center">
+            <span className="text-[10px] text-slate-400 uppercase tracking-wider font-extrabold block mb-2.5">
               Testing credentials (quick demo)
             </span>
-            <div className="p-3 bg-[#12121E] border border-[#1C1C2E] rounded-xl flex items-center justify-between">
+            <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
               <div className="text-left text-[11px]">
-                <div className="text-white font-mono"><span className="text-[#8080A0]">ID:</span> admin@a2zqr.com</div>
-                <div className="text-white font-mono mt-0.5"><span className="text-[#8080A0]">Pass:</span> admin</div>
+                <div className="text-slate-700 font-mono"><span className="text-slate-400">ID:</span> admin@a2zqr.com</div>
+                <div className="text-slate-700 font-mono mt-0.5"><span className="text-slate-400">Pass:</span> admin</div>
               </div>
               <button 
                 type="button"
                 onClick={handleAutofillAdmin}
-                className="px-3 py-1.5 bg-[#7C6EFA]/10 hover:bg-[#7C6EFA]/20 border border-[#7C6EFA]/30 text-xs font-bold text-[#A89EFF] rounded-lg transition-colors"
+                className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-xs font-bold text-indigo-600 rounded-lg transition-colors"
               >
                 Autofill Credentials
               </button>
