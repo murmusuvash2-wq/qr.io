@@ -20,6 +20,25 @@
         "timestamp": "string",
         "toolSlug": "string"
       }
+    },
+    "templates": {
+      "templateId": {
+        "id": "string",
+        "title": "string",
+        "category": "string",
+        "type": "string",
+        "description": "string",
+        "bgType": "string",
+        "gradient": "map",
+        "imageSearchTerm": "string",
+        "qrConfig": "map",
+        "layoutType": "string",
+        "visualOverlay": "map",
+        "textElements": "array",
+        "status": "string",
+        "createdAt": "string",
+        "approvedAt": "string"
+      }
     }
   }
 }

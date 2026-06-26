@@ -1,13 +1,13 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc, updateDoc, increment } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, getDoc, updateDoc, increment, collection, getDocs, deleteDoc } from 'firebase/firestore';
 import firebaseConfig from '../../firebase-applet-config.json'; // Make sure the path is correct depending on where the config is generated
 
 const isFirebaseConfigured = !!firebaseConfig && !!firebaseConfig.projectId;
 
 let app;
 let auth: ReturnType<typeof getAuth> | null = null;
-let db: ReturnType<typeof getFirestore> | null = null;
+export let db: ReturnType<typeof getFirestore> | null = null;
 
 if (isFirebaseConfigured) {
   try {
@@ -258,5 +258,144 @@ export const authService = {
       }
       throw new Error("Could not find user profile data.");
     }
+  }
+};
+
+export interface TemplateDesign {
+  id: string;
+  title: string;
+  category: string;
+  type: 'Pro' | 'Free';
+  description: string;
+  bgType: 'gradient' | 'image';
+  gradient?: {
+    from: string;
+    to: string;
+    via?: string;
+    angle: string;
+  };
+  imageSearchTerm?: string;
+  imgUrl?: string;
+  qrConfig: {
+    fgColor: string;
+    bgColor: string;
+    dotsStyle: string;
+    cornersStyle: string;
+  };
+  layoutType?: string;
+  visualOverlay?: {
+    themeType: string;
+    texture: boolean;
+    borderStyle: string;
+    emojis?: Array<{ char: string; x: number; y: number; size: number }>;
+    svgPaths?: Array<{ d: string; stroke: string; strokeWidth: number; fill: string; opacity: number }>;
+  };
+  textElements: Array<{
+    content: string;
+    x: number;
+    y: number;
+    color: string;
+    fontSize: number;
+  }>;
+  status: 'pending' | 'approved' | 'rejected';
+  createdAt: string;
+  approvedAt?: string;
+  toolId?: string;
+  toolName?: string;
+}
+
+const LOCAL_TEMPLATES_KEY = 'ezqr_templates_v1';
+
+export const templateService = {
+  async getTemplates(): Promise<TemplateDesign[]> {
+    if (isFirebaseConfigured && db) {
+      try {
+        const colRef = collection(db, 'templates');
+        const snap = await getDocs(colRef);
+        const list: TemplateDesign[] = [];
+        snap.forEach((docSnap) => {
+          list.push(docSnap.data() as TemplateDesign);
+        });
+        return list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      } catch (err) {
+        console.warn("Failed to fetch templates from Firestore, using local fallback:", err);
+      }
+    }
+
+    const local = localStorage.getItem(LOCAL_TEMPLATES_KEY);
+    if (local) {
+      try {
+        const parsed = JSON.parse(local) as TemplateDesign[];
+        return parsed.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      } catch {}
+    }
+    return [];
+  },
+
+  async saveTemplate(template: TemplateDesign): Promise<void> {
+    if (isFirebaseConfigured && db) {
+      try {
+        await setDoc(doc(db, 'templates', template.id), template);
+        return;
+      } catch (err) {
+        console.warn("Failed to save template to Firestore, saving locally:", err);
+      }
+    }
+
+    const list = await this.getTemplates();
+    const existingIdx = list.findIndex(t => t.id === template.id);
+    if (existingIdx >= 0) {
+      list[existingIdx] = template;
+    } else {
+      list.push(template);
+    }
+    localStorage.setItem(LOCAL_TEMPLATES_KEY, JSON.stringify(list));
+  },
+
+  async saveTemplatesBatch(templates: TemplateDesign[]): Promise<void> {
+    for (const t of templates) {
+      await this.saveTemplate(t);
+    }
+  },
+
+  async approveTemplate(templateId: string): Promise<void> {
+    const list = await this.getTemplates();
+    const found = list.find(t => t.id === templateId);
+    if (found) {
+      found.status = 'approved';
+      found.approvedAt = new Date().toISOString();
+      await this.saveTemplate(found);
+    }
+  },
+
+  async rejectTemplate(templateId: string): Promise<void> {
+    const list = await this.getTemplates();
+    const found = list.find(t => t.id === templateId);
+    if (found) {
+      found.status = 'rejected';
+      await this.saveTemplate(found);
+    }
+  },
+
+  async updateTemplateCategory(templateId: string, category: string): Promise<void> {
+    const list = await this.getTemplates();
+    const found = list.find(t => t.id === templateId);
+    if (found) {
+      found.category = category;
+      await this.saveTemplate(found);
+    }
+  },
+
+  async deleteTemplate(templateId: string): Promise<void> {
+    if (isFirebaseConfigured && db) {
+      try {
+        await deleteDoc(doc(db, 'templates', templateId));
+      } catch (err) {
+        console.warn("Failed to delete template from Firestore:", err);
+      }
+    }
+    const list = await this.getTemplates();
+    const filtered = list.filter(t => t.id !== templateId);
+    localStorage.setItem(LOCAL_TEMPLATES_KEY, JSON.stringify(filtered));
   }
 };

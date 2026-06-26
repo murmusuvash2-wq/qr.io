@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { templateService, TemplateDesign } from './lib/firebase';
+import { QR_TOOLS, QRTool } from './data/tools';
 import { 
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, 
   BarChart, Bar, PieChart, Pie, Cell, Legend
@@ -9,22 +11,23 @@ import {
   Sparkles, Eye, Layers, UploadCloud, Tag, Search, BookOpen, Settings,
   CreditCard, ArrowLeft, Lock, Mail, Key, CheckCircle2, Trash2, Plus,
   Download, RefreshCw, Sliders, Globe, Laptop, ChevronRight, TrendingUp,
-  UserCheck, Compass, HelpCircle, AlertCircle, Sparkle, Settings2, FileCode, Check
+  UserCheck, Compass, HelpCircle, AlertCircle, Sparkle, Settings2, FileCode, Check,
+  Wand2, Clock
 } from 'lucide-react';
 
-// Custom theme colors matching our elite dark space workspace
+// Custom theme colors matching our high-visibility light workspace
 const COLORS = {
-  primary: '#7C6EFA',
-  primaryLight: '#A89EFF',
-  secondary: '#C084FC',
+  primary: '#4F46E5', // Premium Indigo
+  primaryLight: '#6366F1',
+  secondary: '#8B5CF6',
   accent: '#10B981',
   warning: '#F59E0B',
   danger: '#EF4444',
-  text: '#F2F2FF',
-  textMuted: '#8080A0',
-  grid: '#1C1C2E',
-  bg: '#0A0A12',
-  cardBg: '#12121E'
+  text: '#0F172A', // Slate 900 for high visibility
+  textMuted: '#475569', // Slate 600
+  grid: '#E2E8F0', // Slate 200 grid
+  bg: '#F8FAFC', // Slate 50 background
+  cardBg: '#FFFFFF' // Pure White card background
 };
 
 // Fixed Admin credentials
@@ -129,6 +132,271 @@ export default function Dashboard() {
 
   // Simulated live counter updates
   const [liveScanCount, setLiveScanCount] = useState(24592);
+
+  // Curation States
+  const [curationTemplates, setCurationTemplates] = useState<TemplateDesign[]>([]);
+  const [loadingCuration, setLoadingCuration] = useState(false);
+  const [triggeringDaily, setTriggeringDaily] = useState(false);
+  const [curationError, setCurationError] = useState<string | null>(null);
+  const [curationSuccess, setCurationSuccess] = useState<string | null>(null);
+
+  // Scheduler configuration state
+  const [scheduleConfig, setScheduleConfig] = useState<{
+    enabled: boolean;
+    time: string;
+    dailyChallenge: string;
+    lastRunDate: string;
+    history: any[];
+  } | null>(null);
+  const [updatingSchedule, setUpdatingSchedule] = useState(false);
+
+  // AI 100-Tools Design Factory States
+  const [selectedTool, setSelectedTool] = useState<QRTool | null>(null);
+  const [searchToolQuery, setSearchToolQuery] = useState('');
+  const [filterToolCategory, setFilterToolCategory] = useState('');
+  const [filterToolStatus, setFilterToolStatus] = useState<'all' | 'unassigned' | 'assigned'>('all');
+  const [isGeneratingToolTemplates, setIsGeneratingToolTemplates] = useState(false);
+  const [generatedToolTemplates, setGeneratedToolTemplates] = useState<TemplateDesign[]>([]);
+  const [toolGeneratingMessage, setToolGeneratingMessage] = useState('');
+  const [toolSuccessMessage, setToolSuccessMessage] = useState<string | null>(null);
+  const [toolErrorMessage, setToolErrorMessage] = useState<string | null>(null);
+
+  // Premium loading effect messages
+  useEffect(() => {
+    let timer: any;
+    if (isGeneratingToolTemplates) {
+      const messages = [
+        "Analyzing tool branding specifications...",
+        "Engineering 10 distinct, customized visual concepts...",
+        "Configuring premium matching gradients & Unsplash overlays...",
+        "Calculating high-precision text and layout coordinates...",
+        "Drafting custom vector SVG background line curves...",
+        "Selecting perfectly matching QR corner & dot pattern structures...",
+        "Beautifying floating vector emojis for extra visual depth...",
+        "Assembling the 10 premium layout variants into JSON schemas...",
+        "Optimizing high-contrast text layers for maximum readability...",
+        "Finalizing coordination parameters with Gemini..."
+      ];
+      let idx = 0;
+      setToolGeneratingMessage(messages[0]);
+      timer = setInterval(() => {
+        idx = (idx + 1) % messages.length;
+        setToolGeneratingMessage(messages[idx]);
+      }, 3000);
+    }
+    return () => clearInterval(timer);
+  }, [isGeneratingToolTemplates]);
+
+  const handleGenerateToolTemplates = async (tool: QRTool) => {
+    setSelectedTool(tool);
+    setIsGeneratingToolTemplates(true);
+    setToolErrorMessage(null);
+    setToolSuccessMessage(null);
+    setGeneratedToolTemplates([]);
+
+    try {
+      const response = await fetch('/api/generate-tool-templates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          toolId: tool.id,
+          toolName: tool.name,
+          toolDescription: tool.description,
+          toolCategory: tool.category
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to generate templates from backend');
+      }
+
+      const data = await response.json();
+      if (data.templates && Array.isArray(data.templates)) {
+        setGeneratedToolTemplates(data.templates);
+        setToolSuccessMessage(`Successfully generated 10 premium design variations tailored specifically for "${tool.name}"!`);
+      } else {
+        throw new Error('Invalid response structure received from Gemini');
+      }
+    } catch (err: any) {
+      console.error(err);
+      setToolErrorMessage(err.message || 'Network failure during Gemini generation.');
+    } finally {
+      setIsGeneratingToolTemplates(false);
+    }
+  };
+
+  const handleApproveToolTemplate = async (template: TemplateDesign) => {
+    try {
+      const approvedT: TemplateDesign = {
+        ...template,
+        status: 'approved',
+        approvedAt: new Date().toISOString()
+      };
+      await templateService.saveTemplate(approvedT);
+      
+      // Update local state in curationTemplates as well so it stays synced
+      setCurationTemplates(prev => {
+        const idx = prev.findIndex(t => t.id === template.id);
+        if (idx >= 0) {
+          const clone = [...prev];
+          clone[idx] = approvedT;
+          return clone;
+        } else {
+          return [approvedT, ...prev];
+        }
+      });
+
+      // Update in our temporary generated collection to set approved state or remove it
+      setGeneratedToolTemplates(prev => prev.filter(t => t.id !== template.id));
+      setToolSuccessMessage(`"${template.title}" has been approved and published live!`);
+    } catch (err: any) {
+      setToolErrorMessage(err.message || 'Failed to approve variation');
+    }
+  };
+
+  const handleBulkApproveToolTemplates = async () => {
+    if (generatedToolTemplates.length === 0) return;
+    try {
+      const batch = generatedToolTemplates.map(t => ({
+        ...t,
+        status: 'approved' as const,
+        approvedAt: new Date().toISOString()
+      }));
+
+      await templateService.saveTemplatesBatch(batch);
+      
+      // Update state
+      setCurationTemplates(prev => [...batch, ...prev]);
+      setGeneratedToolTemplates([]);
+      setToolSuccessMessage(`All 10 premium variations approved and published live to the platform registry successfully!`);
+    } catch (err: any) {
+      setToolErrorMessage(err.message || 'Failed to bulk approve variations.');
+    }
+  };
+
+  const fetchSchedule = async () => {
+    try {
+      const res = await fetch('/api/schedule');
+      if (res.ok) {
+        const data = await res.json();
+        setScheduleConfig(data);
+      }
+    } catch (e) {
+      console.warn("Failed to fetch scheduler config", e);
+    }
+  };
+
+  const updateSchedule = async (newConfig: { enabled?: boolean; time?: string; dailyChallenge?: string }) => {
+    setUpdatingSchedule(true);
+    try {
+      const res = await fetch('/api/schedule', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newConfig)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setScheduleConfig(data.config);
+        setCurationSuccess("Gemini Automatic Scheduler settings saved successfully!");
+      }
+    } catch (e: any) {
+      setCurationError(e.message || "Failed to update scheduler settings");
+    } finally {
+      setUpdatingSchedule(false);
+    }
+  };
+
+  // Load curation templates on mount or tab change
+  const loadCurationTemplates = async () => {
+    setLoadingCuration(true);
+    setCurationError(null);
+    try {
+      const list = await templateService.getTemplates();
+      setCurationTemplates(list);
+    } catch (err: any) {
+      setCurationError(err.message || "Failed to load curation templates.");
+    } finally {
+      setLoadingCuration(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'ai_curation') {
+      loadCurationTemplates();
+      fetchSchedule();
+    }
+  }, [activeTab]);
+
+  const handleTriggerDailyGeneration = async () => {
+    setTriggeringDaily(true);
+    setCurationError(null);
+    setCurationSuccess(null);
+    try {
+      const response = await fetch('/api/daily-templates?force=true');
+      if (!response.ok) {
+        throw new Error('Server returned an error generating daily templates');
+      }
+      const data = await response.json();
+      
+      // Save these 10 templates as "pending" in the Firestore DB
+      const freshTemplates: TemplateDesign[] = (data.templates || []).map((t: any) => ({
+        ...t,
+        status: 'pending',
+        createdAt: new Date().toISOString()
+      }));
+
+      await templateService.saveTemplatesBatch(freshTemplates);
+      await loadCurationTemplates();
+      setCurationSuccess(`Successfully generated 10 daily templates for the theme: "${data.themeTitle}"!`);
+    } catch (err: any) {
+      setCurationError(err.message || 'Generation failed.');
+    } finally {
+      setTriggeringDaily(false);
+    }
+  };
+
+  const handleApproveTemplate = async (templateId: string) => {
+    try {
+      await templateService.approveTemplate(templateId);
+      setCurationSuccess("Template approved and published live successfully!");
+      // Update local state immediately
+      setCurationTemplates(prev => prev.map(t => t.id === templateId ? { ...t, status: 'approved', approvedAt: new Date().toISOString() } : t));
+    } catch (err: any) {
+      setCurationError(err.message || "Approval failed.");
+    }
+  };
+
+  const handleRejectTemplate = async (templateId: string) => {
+    try {
+      await templateService.rejectTemplate(templateId);
+      setCurationSuccess("Template rejected.");
+      // Update local state immediately
+      setCurationTemplates(prev => prev.map(t => t.id === templateId ? { ...t, status: 'rejected' } : t));
+    } catch (err: any) {
+      setCurationError(err.message || "Rejection failed.");
+    }
+  };
+
+  const handleUpdateCurationCategory = async (templateId: string, category: string) => {
+    try {
+      await templateService.updateTemplateCategory(templateId, category);
+      // Update local state immediately
+      setCurationTemplates(prev => prev.map(t => t.id === templateId ? { ...t, category } : t));
+    } catch (err: any) {
+      setCurationError(err.message || "Failed to update category.");
+    }
+  };
+
+  const handleDeleteCurationTemplate = async (templateId: string) => {
+    try {
+      await templateService.deleteTemplate(templateId);
+      setCurationSuccess("Template deleted from queue.");
+      setCurationTemplates(prev => prev.filter(t => t.id !== templateId));
+    } catch (err: any) {
+      setCurationError(err.message || "Delete failed.");
+    }
+  };
 
   useEffect(() => {
     localStorage.setItem('dashboardActiveTab', activeTab);
@@ -384,7 +652,7 @@ export default function Dashboard() {
   // Login UI
   if (!isLoggedIn) {
     return (
-      <div className="min-h-screen bg-[#040408] flex items-center justify-center p-4 selection:bg-indigo-500/30 selection:text-indigo-200">
+      <div id="dashboard-root" className="min-h-screen bg-[#040408] flex items-center justify-center p-4 selection:bg-indigo-500/30 selection:text-indigo-200">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-[20%] left-[15%] w-96 h-96 bg-[#7C6EFA]/10 rounded-full blur-3xl"></div>
           <div className="absolute bottom-[20%] right-[15%] w-96 h-96 bg-[#C084FC]/5 rounded-full blur-3xl"></div>
@@ -492,7 +760,7 @@ export default function Dashboard() {
 
   // Loaded Dashboard UI
   return (
-    <div className="min-h-screen bg-[#040408] text-white flex flex-col md:flex-row font-['Syne',sans-serif]">
+    <div id="dashboard-root" className="min-h-screen bg-[#040408] text-white flex flex-col md:flex-row font-['Syne',sans-serif]">
       {/* 1. LEFT SIDEBAR CONSOLE LAYOUT */}
       <aside className="w-full md:w-[280px] bg-[#0A0A12] border-r border-[#1C1C2E] flex flex-col justify-between shrink-0 select-none">
         <div>
@@ -534,6 +802,8 @@ export default function Dashboard() {
               <SidebarLink id="library" label="SVG Asset Library" icon={<Library />} active={activeTab} onClick={setActiveTab} />
               <SidebarLink id="packs" label="Theme Packs" icon={<Layers />} active={activeTab} onClick={setActiveTab} />
               <SidebarLink id="ai" label="AI Recipe Generator" icon={<Sparkles />} active={activeTab} onClick={setActiveTab} badge="HOT" />
+              <SidebarLink id="ai_curation" label="AI Daily Curation" icon={<Sparkle />} active={activeTab} onClick={setActiveTab} badge="AUTO" />
+              <SidebarLink id="ai_tools_generator" label="AI 100-Tools Design" icon={<Wand2 />} active={activeTab} onClick={setActiveTab} badge="NEW" />
               <SidebarLink id="mockups" label="Mockups Sandbox" icon={<Eye />} active={activeTab} onClick={setActiveTab} />
             </div>
 
@@ -1126,6 +1396,780 @@ export default function Dashboard() {
                       <pre className="text-[10px] font-mono text-[#A89EFF] leading-normal select-all">
                         {JSON.stringify(aiGeneratedRecipe, null, 2)}
                       </pre>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* TAB 9B: AI AUTOMATIC DAILY CURATION & APPROVAL QUEUE */}
+          {activeTab === 'ai_curation' && (
+            <div className="space-y-6">
+              <div className="border-b border-[#1C1C2E] pb-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-2xl font-extrabold text-white">
+                      ✨ AI Automated Curation Hub
+                    </h2>
+                    <span className="text-[10px] uppercase font-black text-rose-400 bg-rose-400/10 px-2 py-0.5 rounded border border-rose-400/20">Automatic Mode</span>
+                  </div>
+                  <p className="text-xs text-[#8080A0]">Command Gemini 3.5 Flash to automatically design daily high-end templates. Approve or reject them to control what goes live on the public website.</p>
+                </div>
+                <div className="flex gap-2.5">
+                  <button 
+                    onClick={loadCurationTemplates}
+                    className="p-2.5 bg-[#12121E] hover:bg-[#1C1C2E] border border-[#28283E] text-[#A89EFF] rounded-xl text-xs font-bold transition-all flex items-center gap-2"
+                  >
+                    <RefreshCw className="w-4 h-4" /> Refresh
+                  </button>
+                  <button 
+                    onClick={handleTriggerDailyGeneration}
+                    disabled={triggeringDaily}
+                    className="py-2.5 px-5 bg-gradient-to-r from-rose-500 to-amber-500 hover:brightness-110 disabled:opacity-50 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg flex items-center gap-2"
+                  >
+                    {triggeringDaily ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 animate-spin" />
+                        Generating Daily Designs...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-4 h-4" />
+                        Generate Daily 10 Designs
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {/* SCHEDULE PLANNER PANEL */}
+              <div className="bg-[#0A0A12] border border-[#1D1D30] rounded-2xl p-6 space-y-6">
+                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 pb-4 border-b border-[#1C1C2E]">
+                  <div>
+                    <h3 className="text-sm font-extrabold text-white uppercase tracking-wider flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-rose-500 animate-pulse" /> Gemini Time-Trigger & Challenge Planner
+                    </h3>
+                    <p className="text-xs text-[#8080A0] mt-1">Configure when Gemini automatically wakes up to design a fresh batch of 10 coordinated templates based on a daily creative challenge.</p>
+                  </div>
+                  {scheduleConfig && (
+                    <div className="flex items-center gap-3 bg-[#12121F] px-4 py-2 rounded-xl border border-[#28283E]">
+                      <span className="text-xs text-[#8080A0]">Scheduler Status:</span>
+                      <button
+                        onClick={() => updateSchedule({ enabled: !scheduleConfig.enabled })}
+                        disabled={updatingSchedule}
+                        className={`text-xs font-black px-3 py-1 rounded-lg uppercase tracking-wider transition-all ${
+                          scheduleConfig.enabled 
+                            ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
+                            : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                        }`}
+                      >
+                        {scheduleConfig.enabled ? '● Active' : '○ Paused'}
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {scheduleConfig ? (
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    {/* Schedule Form Parameters */}
+                    <div className="lg:col-span-7 space-y-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-[10px] text-[#8080A0] uppercase font-black tracking-widest mb-1.5 font-bold">Scheduled Trigger Time (24h)</label>
+                          <input 
+                            type="time" 
+                            defaultValue={scheduleConfig.time}
+                            onBlur={(e) => updateSchedule({ time: e.target.value })}
+                            className="w-full bg-[#12121E] border border-[#1D1D30] focus:border-rose-500 rounded-xl px-4 py-2.5 text-sm font-mono text-white outline-none transition-colors"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] text-[#8080A0] uppercase font-black tracking-widest mb-1.5 font-bold">Last Automatic Execution</label>
+                          <div className="w-full bg-[#12121E]/50 border border-[#1D1D30] rounded-xl px-4 py-2.5 text-sm font-mono text-gray-400">
+                            {scheduleConfig.lastRunDate ? scheduleConfig.lastRunDate : "Never triggered yet"}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] text-[#8080A0] uppercase font-black tracking-widest mb-1.5 font-bold">Gemini Daily Challenge Topic & Theme Guidelines</label>
+                        <div className="flex gap-2">
+                          <input 
+                            type="text" 
+                            id="challenge_input"
+                            defaultValue={scheduleConfig.dailyChallenge}
+                            placeholder="e.g. Futuristic Neon Synthwave, Luxury Obsidian Marble"
+                            className="flex-1 bg-[#12121E] border border-[#1D1D30] focus:border-rose-500 rounded-xl px-4 py-2.5 text-sm text-white outline-none transition-colors"
+                          />
+                          <button
+                            onClick={() => {
+                              const val = (document.getElementById('challenge_input') as HTMLInputElement)?.value;
+                              updateSchedule({ dailyChallenge: val || '' });
+                            }}
+                            className="px-5 bg-[#1C1C30] hover:bg-[#282845] border border-[#2D2D4E] text-white text-xs font-bold rounded-xl transition-all"
+                          >
+                            Save Challenge
+                          </button>
+                        </div>
+                        <p className="text-[10px] text-[#8080A0] mt-1.5">
+                          💡 The daily challenge prompt instructs Gemini to use unique styles, color patterns, custom elements, and coordinates. This ensures that every day has a completely fresh aesthetic signature!
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Trigger Logs Timeline / History */}
+                    <div className="lg:col-span-5 bg-[#05050A] border border-[#151525] p-4 rounded-xl space-y-3">
+                      <span className="text-[10px] text-amber-400 uppercase font-bold tracking-wider block">📅 Scheduler Trigger History & Log Timeline</span>
+                      
+                      <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+                        {!scheduleConfig.history || scheduleConfig.history.length === 0 ? (
+                          <div className="text-center py-6 text-xs text-[#8080A0]">No logs recorded yet. Daily runs will register here automatically.</div>
+                        ) : (
+                          scheduleConfig.history.map((log: any, idx: number) => (
+                            <div key={idx} className="flex justify-between items-start text-[11px] p-2 bg-[#12121E]/70 border border-[#1D1D30] rounded-lg">
+                              <div className="space-y-0.5 max-w-[70%]">
+                                <span className={`font-mono font-bold ${log.status === 'success' ? 'text-emerald-400' : 'text-rose-400'}`}>
+                                  {log.status === 'success' ? '✓ SUCCESS' : '✗ ERROR'}
+                                </span>
+                                <div className="text-white truncate font-medium">{log.themeTitle}</div>
+                                <div className="text-[9px] text-[#8080A0]">{new Date(log.timestamp).toLocaleString()}</div>
+                              </div>
+                              <div className="text-right text-[10px] text-[#8080A0] font-mono">
+                                {log.date} @ {log.time}
+                              </div>
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex justify-center items-center py-12">
+                    <RefreshCw className="w-6 h-6 text-rose-500 animate-spin" />
+                  </div>
+                )}
+              </div>
+
+              {/* Status and Analytics Summary Cards */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="bg-[#0A0A12] border border-[#1C1C2E] p-4 rounded-xl">
+                  <span className="text-[10px] text-[#8080A0] uppercase font-black tracking-wider block">Total Queue Size</span>
+                  <span className="text-2xl font-black text-white font-mono mt-1 block">{curationTemplates.length}</span>
+                </div>
+                <div className="bg-[#0A0A12] border border-amber-500/20 p-4 rounded-xl">
+                  <span className="text-[10px] text-amber-400 uppercase font-black tracking-wider block">Pending Curation</span>
+                  <span className="text-2xl font-black text-amber-400 font-mono mt-1 block">
+                    {curationTemplates.filter(t => t.status === 'pending').length}
+                  </span>
+                </div>
+                <div className="bg-[#0A0A12] border border-emerald-500/20 p-4 rounded-xl">
+                  <span className="text-[10px] text-emerald-400 uppercase font-black tracking-wider block">Approved & Live</span>
+                  <span className="text-2xl font-black text-emerald-400 font-mono mt-1 block">
+                    {curationTemplates.filter(t => t.status === 'approved').length}
+                  </span>
+                </div>
+                <div className="bg-[#0A0A12] border border-rose-500/20 p-4 rounded-xl">
+                  <span className="text-[10px] text-rose-400 uppercase font-black tracking-wider block">Rejected Designs</span>
+                  <span className="text-2xl font-black text-rose-400 font-mono mt-1 block">
+                    {curationTemplates.filter(t => t.status === 'rejected').length}
+                  </span>
+                </div>
+              </div>
+
+              {/* Alert Notifications */}
+              {curationError && (
+                <div className="p-4 bg-rose-500/10 border border-rose-500/30 rounded-xl text-xs text-rose-400 flex items-center gap-2.5 animate-fade-in">
+                  <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                  <div>{curationError}</div>
+                </div>
+              )}
+              {curationSuccess && (
+                <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-xs text-emerald-400 flex items-center gap-2.5 animate-fade-in">
+                  <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
+                  <div>{curationSuccess}</div>
+                </div>
+              )}
+
+              {/* Loader */}
+              {loadingCuration ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {[...Array(3)].map((_, i) => (
+                    <div key={i} className="bg-[#0A0A12] border border-[#1C1C2E] rounded-2xl p-5 space-y-4 animate-pulse">
+                      <div className="aspect-[3/4] bg-[#12121E] rounded-xl flex items-center justify-center">
+                        <RefreshCw className="w-8 h-8 text-[#7C6EFA] animate-spin" />
+                      </div>
+                      <div className="h-4 bg-[#12121E] rounded w-3/4"></div>
+                      <div className="h-3 bg-[#12121E] rounded w-1/2"></div>
+                    </div>
+                  ))}
+                </div>
+              ) : curationTemplates.length === 0 ? (
+                <div className="bg-[#0A0A12] border border-dashed border-[#1D1D30] rounded-2xl p-12 text-center max-w-2xl mx-auto space-y-4">
+                  <div className="text-4xl">🔮</div>
+                  <h3 className="text-base font-bold text-white">No Designs in Curation Database</h3>
+                  <p className="text-xs text-[#8080A0]">The template curation queue is currently empty. Click the button above to trigger the batch-generation of 10 daily coordinated poster templates and asset frames using Gemini 3.5 Flash automatically!</p>
+                  <button 
+                    onClick={handleTriggerDailyGeneration}
+                    className="py-2.5 px-6 bg-gradient-to-r from-rose-500 to-amber-500 hover:brightness-110 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all shadow-md inline-flex items-center gap-2"
+                  >
+                    <Sparkles className="w-4 h-4" /> Generate Daily Templates Now
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-8 animate-fade-in">
+                  {/* PENDING ITEMS SECTION */}
+                  {curationTemplates.some(t => t.status === 'pending') && (
+                    <div className="space-y-4">
+                      <h3 className="text-sm font-extrabold text-amber-400 uppercase tracking-widest flex items-center gap-2 border-b border-[#1C1C2E] pb-2">
+                        <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Pending Review & Approval ({curationTemplates.filter(t => t.status === 'pending').length})
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {curationTemplates.filter(t => t.status === 'pending').map(t => (
+                          <div key={t.id} className="bg-[#0A0A12] border border-[#1C1C2E] rounded-2xl p-5 flex flex-col md:flex-row gap-5 hover:border-amber-500/30 transition-colors shadow-lg">
+                            {/* Canvas Mini-Preview */}
+                            <div 
+                              className="w-full md:w-36 aspect-[3/4] md:h-52 rounded-xl overflow-hidden relative shadow-inner border border-white/5 bg-[#12121E] flex flex-col justify-between p-3 flex-shrink-0"
+                              style={{
+                                background: t.bgType === 'gradient' && t.gradient 
+                                  ? `linear-gradient(${t.gradient.angle || '135deg'}, ${t.gradient.from}, ${t.gradient.via ? t.gradient.via + ', ' : ''}${t.gradient.to})`
+                                  : t.imgUrl ? `url(${t.imgUrl})` : `url(https://images.unsplash.com/featured/400x533/?${encodeURIComponent(t.imageSearchTerm || 'abstract')})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center'
+                              }}
+                            >
+                              <div className="absolute inset-0 bg-black/45 backdrop-blur-[0.5px]"></div>
+                              <div className="relative z-10 w-full h-full flex flex-col justify-between py-1 text-center">
+                                {/* Top Text */}
+                                <div className="space-y-0.5">
+                                  {t.textElements?.filter(te => te.y < 300).slice(0, 2).map((te, idx) => (
+                                    <div key={idx} style={{ color: te.color || '#FFFFFF', fontSize: '7px' }} className="font-bold tracking-tight leading-none uppercase drop-shadow-md truncate">
+                                      {te.content}
+                                    </div>
+                                  ))}
+                                </div>
+                                {/* QR Center box */}
+                                <div className="w-12 h-12 mx-auto my-auto border-2 rounded-lg flex items-center justify-center relative bg-white/90 shadow-md" style={{ borderColor: t.qrConfig?.fgColor || '#7C6EFA' }}>
+                                  <QrCode className="w-9 h-9" style={{ color: t.qrConfig?.fgColor || '#000000' }} />
+                                </div>
+                                {/* Bottom Text */}
+                                <div className="space-y-0.5">
+                                  {t.textElements?.filter(te => te.y >= 300).slice(0, 1).map((te, idx) => (
+                                    <div key={idx} style={{ color: te.color || '#FFFFFF', fontSize: '6px' }} className="font-semibold tracking-wide leading-none uppercase drop-shadow-md truncate">
+                                      {te.content}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Curation details */}
+                            <div className="flex-grow flex flex-col justify-between space-y-3">
+                              <div className="space-y-1.5">
+                                <span className="text-[9px] bg-amber-500/10 text-amber-400 font-extrabold px-2 py-0.5 rounded border border-amber-500/20 uppercase tracking-wide">
+                                  PENDING REVIEW
+                                </span>
+                                <h4 className="font-extrabold text-white text-sm tracking-tight">{t.title}</h4>
+                                <p className="text-[11px] text-[#8080A0] leading-relaxed line-clamp-2">{t.description}</p>
+                              </div>
+
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between gap-2">
+                                  <span className="text-[10px] text-[#8080A0] font-bold">Category</span>
+                                  <select 
+                                    value={t.category} 
+                                    onChange={(e) => handleUpdateCurationCategory(t.id, e.target.value)}
+                                    className="bg-[#06060F] border border-[#28283E] text-white text-[11px] rounded px-2 py-1 outline-none font-semibold focus:border-amber-500"
+                                  >
+                                    <option value="Posters">Posters</option>
+                                    <option value="vCards">vCards</option>
+                                    <option value="Social Media">Social Media</option>
+                                    <option value="Badges">Badges</option>
+                                    <option value="Events">Events</option>
+                                    <option value="Frames">Frames</option>
+                                  </select>
+                                </div>
+                                <div className="flex items-center justify-between gap-2">
+                                  <span className="text-[10px] text-[#8080A0] font-bold">Dot Pattern</span>
+                                  <span className="text-[11px] text-white font-mono uppercase bg-black/40 px-2 py-0.5 rounded border border-white/5">
+                                    {t.qrConfig?.dotsStyle}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* Action buttons */}
+                              <div className="flex gap-2 pt-2 border-t border-[#1C1C2E]">
+                                <button 
+                                  onClick={() => handleApproveTemplate(t.id)}
+                                  className="flex-grow py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:brightness-110 text-white font-bold text-[11px] rounded-lg transition-all shadow-md flex items-center justify-center gap-1"
+                                >
+                                  <Check className="w-3.5 h-3.5" /> Approve & Publish
+                                </button>
+                                <button 
+                                  onClick={() => handleRejectTemplate(t.id)}
+                                  className="py-1.5 px-3 bg-[#12121E] hover:bg-rose-500/10 border border-[#28283E] hover:border-rose-500/30 text-rose-400 font-bold text-[11px] rounded-lg transition-all"
+                                >
+                                  Reject
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* APPROVED & LIVE SECTION */}
+                  {curationTemplates.some(t => t.status === 'approved') && (
+                    <div className="space-y-4 pt-4">
+                      <h3 className="text-sm font-extrabold text-emerald-400 uppercase tracking-widest flex items-center gap-2 border-b border-[#1C1C2E] pb-2">
+                        <span className="w-2 h-2 rounded-full bg-emerald-400"></span> Live Approved Gallery ({curationTemplates.filter(t => t.status === 'approved').length})
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {curationTemplates.filter(t => t.status === 'approved').map(t => (
+                          <div key={t.id} className="bg-[#0A0A12] border border-[#1C1C2E] rounded-2xl p-5 flex flex-col md:flex-row gap-5 hover:border-emerald-500/30 transition-colors shadow-lg">
+                            {/* Canvas Mini-Preview */}
+                            <div 
+                              className="w-full md:w-36 aspect-[3/4] md:h-52 rounded-xl overflow-hidden relative shadow-inner border border-white/5 bg-[#12121E] flex flex-col justify-between p-3 flex-shrink-0"
+                              style={{
+                                background: t.bgType === 'gradient' && t.gradient 
+                                  ? `linear-gradient(${t.gradient.angle || '135deg'}, ${t.gradient.from}, ${t.gradient.via ? t.gradient.via + ', ' : ''}${t.gradient.to})`
+                                  : t.imgUrl ? `url(${t.imgUrl})` : `url(https://images.unsplash.com/featured/400x533/?${encodeURIComponent(t.imageSearchTerm || 'abstract')})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center'
+                              }}
+                            >
+                              <div className="absolute inset-0 bg-black/45 backdrop-blur-[0.5px]"></div>
+                              <div className="relative z-10 w-full h-full flex flex-col justify-between py-1 text-center">
+                                <div className="space-y-0.5">
+                                  {t.textElements?.filter(te => te.y < 300).slice(0, 2).map((te, idx) => (
+                                    <div key={idx} style={{ color: te.color || '#FFFFFF', fontSize: '7px' }} className="font-bold tracking-tight leading-none uppercase drop-shadow-md truncate">
+                                      {te.content}
+                                    </div>
+                                  ))}
+                                </div>
+                                <div className="w-12 h-12 mx-auto my-auto border-2 rounded-lg flex items-center justify-center relative bg-white/90 shadow-md" style={{ borderColor: t.qrConfig?.fgColor || '#7C6EFA' }}>
+                                  <QrCode className="w-9 h-9" style={{ color: t.qrConfig?.fgColor || '#000000' }} />
+                                </div>
+                                <div className="space-y-0.5">
+                                  {t.textElements?.filter(te => te.y >= 300).slice(0, 1).map((te, idx) => (
+                                    <div key={idx} style={{ color: te.color || '#FFFFFF', fontSize: '6px' }} className="font-semibold tracking-wide leading-none uppercase drop-shadow-md truncate">
+                                      {te.content}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Curation details */}
+                            <div className="flex-grow flex flex-col justify-between space-y-3">
+                              <div className="space-y-1.5">
+                                <span className="text-[9px] bg-emerald-500/10 text-emerald-400 font-extrabold px-2 py-0.5 rounded border border-emerald-500/20 uppercase tracking-wide flex items-center gap-1 w-max">
+                                  ✓ LIVE & PUBLISHED
+                                </span>
+                                <h4 className="font-extrabold text-white text-sm tracking-tight">{t.title}</h4>
+                                <p className="text-[11px] text-[#8080A0] leading-relaxed line-clamp-2">{t.description}</p>
+                              </div>
+
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between gap-2">
+                                  <span className="text-[10px] text-[#8080A0] font-bold">Category</span>
+                                  <span className="text-[11px] text-white font-semibold">
+                                    {t.category}
+                                  </span>
+                                </div>
+                                <div className="flex items-center justify-between gap-2">
+                                  <span className="text-[10px] text-[#8080A0] font-bold">Published</span>
+                                  <span className="text-[10px] text-[#8080A0] font-mono">
+                                    {t.approvedAt ? new Date(t.approvedAt).toLocaleDateString() : 'Today'}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* Action buttons */}
+                              <div className="flex gap-2 pt-2 border-t border-[#1C1C2E]">
+                                <button 
+                                  onClick={() => handleRejectTemplate(t.id)}
+                                  className="flex-grow py-1.5 bg-[#12121E] hover:bg-[#1C1C2E] border border-[#28283E] text-[#8080A0] hover:text-white font-bold text-[11px] rounded-lg transition-all flex items-center justify-center gap-1"
+                                >
+                                  Unpublish (Reject)
+                                </button>
+                                <button 
+                                  onClick={() => handleDeleteCurationTemplate(t.id)}
+                                  className="py-1.5 px-3 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400 font-bold text-[11px] rounded-lg transition-all flex items-center justify-center"
+                                  title="Delete Permanent"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* REJECTED SECTION */}
+                  {curationTemplates.some(t => t.status === 'rejected') && (
+                    <div className="space-y-4 pt-4">
+                      <h3 className="text-sm font-extrabold text-rose-500 uppercase tracking-widest flex items-center gap-2 border-b border-[#1C1C2E] pb-2">
+                        Rejected / Removed Archive ({curationTemplates.filter(t => t.status === 'rejected').length})
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-60">
+                        {curationTemplates.filter(t => t.status === 'rejected').map(t => (
+                          <div key={t.id} className="bg-[#0A0A12] border border-[#1C1C2E] rounded-2xl p-5 flex flex-col md:flex-row gap-5">
+                            {/* Canvas Mini-Preview */}
+                            <div 
+                              className="w-full md:w-36 aspect-[3/4] md:h-52 rounded-xl overflow-hidden relative shadow-inner border border-white/5 bg-[#12121E] flex flex-col justify-between p-3 flex-shrink-0 grayscale"
+                              style={{
+                                background: t.bgType === 'gradient' && t.gradient 
+                                  ? `linear-gradient(${t.gradient.angle || '135deg'}, ${t.gradient.from}, ${t.gradient.via ? t.gradient.via + ', ' : ''}${t.gradient.to})`
+                                  : t.imgUrl ? `url(${t.imgUrl})` : `url(https://images.unsplash.com/featured/400x533/?${encodeURIComponent(t.imageSearchTerm || 'abstract')})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center'
+                              }}
+                            >
+                              <div className="absolute inset-0 bg-black/45"></div>
+                              <div className="relative z-10 w-full h-full flex flex-col justify-between py-1 text-center">
+                                <div className="space-y-0.5">
+                                  {t.textElements?.filter(te => te.y < 300).slice(0, 2).map((te, idx) => (
+                                    <div key={idx} style={{ color: te.color || '#FFFFFF', fontSize: '7px' }} className="font-bold tracking-tight leading-none uppercase truncate">
+                                      {te.content}
+                                    </div>
+                                  ))}
+                                </div>
+                                <div className="w-12 h-12 mx-auto my-auto border-2 rounded-lg flex items-center justify-center relative bg-white/90" style={{ borderColor: t.qrConfig?.fgColor || '#7C6EFA' }}>
+                                  <QrCode className="w-9 h-9" style={{ color: t.qrConfig?.fgColor || '#000000' }} />
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Curation details */}
+                            <div className="flex-grow flex flex-col justify-between space-y-3">
+                              <div className="space-y-1.5">
+                                <span className="text-[9px] bg-rose-500/10 text-rose-400 font-extrabold px-2 py-0.5 rounded border border-rose-500/20 uppercase tracking-wide">
+                                  REJECTED / DRAFT
+                                </span>
+                                <h4 className="font-extrabold text-white text-sm tracking-tight">{t.title}</h4>
+                              </div>
+
+                              {/* Action buttons */}
+                              <div className="flex gap-2 pt-2 border-t border-[#1C1C2E]">
+                                <button 
+                                  onClick={() => handleApproveTemplate(t.id)}
+                                  className="flex-grow py-1.5 bg-[#12121E] hover:bg-[#1C1C2E] border border-[#28283E] text-white font-bold text-[11px] rounded-lg transition-all"
+                                >
+                                  Re-Approve & Live
+                                </button>
+                                <button 
+                                  onClick={() => handleDeleteCurationTemplate(t.id)}
+                                  className="py-1.5 px-3 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400 font-bold text-[11px] rounded-lg transition-all"
+                                  title="Delete Permanent"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* TAB: AI 100-TOOLS DESIGN FACTORY */}
+          {activeTab === 'ai_tools_generator' && (
+            <div className="space-y-6">
+              <div className="border-b border-[#1C1C2E] pb-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-2xl font-extrabold text-white flex items-center gap-2">
+                      <Wand2 className="w-6 h-6 text-indigo-400" />
+                      AI 100-Tools Design Factory
+                    </h2>
+                    <span className="text-[10px] uppercase font-black text-indigo-400 bg-indigo-400/10 px-2 py-0.5 rounded border border-indigo-400/20 animate-pulse">
+                      Gemini Coordinated V2
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#8080A0] mt-1">
+                    Select any of our 100 specialized QR tools to generate and curate 10 unique, perfectly coordinated premium card variations instantly using Gemini 3.5 Flash.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap gap-2 text-xs">
+                  <div className="bg-[#12121E] border border-[#1C1C2E] px-3 py-1.5 rounded-lg flex items-center gap-2 text-gray-400">
+                    <span className="font-bold text-white">{QR_TOOLS.length}</span> Total Tools
+                  </div>
+                  <div className="bg-[#12121E] border border-[#1C1C2E] px-3 py-1.5 rounded-lg flex items-center gap-2 text-gray-400">
+                    <span className="font-bold text-emerald-400">
+                      {curationTemplates.filter(t => t.status === 'approved' && t.toolId).length}
+                    </span> Active Layouts
+                  </div>
+                </div>
+              </div>
+
+              {/* Error and Success Notifications */}
+              {toolErrorMessage && (
+                <div className="p-4 bg-rose-500/10 border border-rose-500/30 rounded-xl text-xs text-rose-400 flex items-center gap-2.5 animate-fade-in">
+                  <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                  <div>{toolErrorMessage}</div>
+                </div>
+              )}
+              {toolSuccessMessage && (
+                <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-xs text-emerald-400 flex items-center gap-2.5 animate-fade-in">
+                  <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
+                  <div>{toolSuccessMessage}</div>
+                </div>
+              )}
+
+              {/* Generator Modal overlay when generating */}
+              {isGeneratingToolTemplates && (
+                <div className="bg-black/80 backdrop-blur-md border border-[#28283E] rounded-2xl p-12 text-center max-w-xl mx-auto space-y-6 shadow-2xl animate-fade-in">
+                  <div className="w-16 h-16 rounded-full bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center mx-auto">
+                    <RefreshCw className="w-8 h-8 text-indigo-400 animate-spin" />
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-black text-white">Generating 10 Custom Variations</h3>
+                    <p className="text-xs text-indigo-300 font-mono italic animate-pulse">
+                      "{toolGeneratingMessage || 'Connecting to Gemini...'}"
+                    </p>
+                    <p className="text-[11px] text-[#8080A0] max-w-md mx-auto">
+                      Gemini is generating 10 fully customized QR layouts matching Cyberpunk, Luxury, Kawaii, Retro, Organic, and Brutalist themes for {selectedTool?.name}.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Display generated list for selected tool */}
+              {!isGeneratingToolTemplates && generatedToolTemplates.length > 0 && selectedTool && (
+                <div className="space-y-6 bg-[#07070F] border border-indigo-500/25 rounded-2xl p-6 animate-fade-in">
+                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-[#1C1C2E] pb-4">
+                    <div>
+                      <span className="text-[10px] text-indigo-400 font-bold uppercase tracking-wider block">Currently Curating</span>
+                      <h3 className="text-lg font-black text-white flex items-center gap-2">
+                        {selectedTool.name} <span className="text-xs bg-[#12121E] text-gray-400 border border-[#28283E] font-normal px-2.5 py-0.5 rounded-full">{selectedTool.category}</span>
+                      </h3>
+                      <p className="text-xs text-[#8080A0] mt-1">{selectedTool.description}</p>
+                    </div>
+
+                    <div className="flex gap-2.5 self-stretch md:self-auto">
+                      <button 
+                        onClick={() => setGeneratedToolTemplates([])}
+                        className="flex-1 md:flex-none px-4 py-2 bg-[#12121E] hover:bg-[#1C1C2E] border border-[#28283E] text-white font-bold text-xs rounded-xl transition-all"
+                      >
+                        Back to Tools
+                      </button>
+                      <button 
+                        onClick={handleBulkApproveToolTemplates}
+                        className="flex-1 md:flex-none px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-indigo-500 hover:brightness-110 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5"
+                      >
+                        <CheckCircle2 className="w-4 h-4" /> Bulk Approve All 10 Designs
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Generated variations preview cards */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {generatedToolTemplates.map((template, idx) => {
+                      // Custom preview card render
+                      const isGrad = template.bgType === 'gradient';
+                      const bgStyle = isGrad && template.gradient ? {
+                        background: `linear-gradient(${template.gradient.angle || '135deg'}, ${template.gradient.from}, ${template.gradient.via ? template.gradient.via + ', ' : ''}${template.gradient.to})`
+                      } : {
+                        background: '#12121E'
+                      };
+
+                      return (
+                        <div key={template.id} className="bg-[#0A0A12] border border-[#1C1C2E] hover:border-indigo-500/20 rounded-2xl p-5 flex flex-col justify-between gap-5 transition-all shadow-lg hover:shadow-indigo-500/5">
+                          <div className="space-y-4">
+                            {/* Card Canvas Mockup */}
+                            <div className="aspect-[3/4] rounded-xl overflow-hidden relative shadow-inner border border-white/5" style={bgStyle}>
+                              {/* Emojis overlay */}
+                              {template.visualOverlay?.emojis?.map((em, eIdx) => (
+                                <div 
+                                  key={eIdx}
+                                  className="absolute text-xl pointer-events-none select-none"
+                                  style={{ left: `${(em.x / 400) * 100}%`, top: `${(em.y / 600) * 100}%` }}
+                                >
+                                  {em.char}
+                                </div>
+                              ))}
+
+                              {/* SVG paths outline overlay */}
+                              <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                                {template.visualOverlay?.svgPaths?.map((path, pIdx) => (
+                                  <path 
+                                    key={pIdx}
+                                    d={path.d} 
+                                    stroke={path.stroke} 
+                                    strokeWidth={(path.strokeWidth / 2)} 
+                                    fill="none" 
+                                    opacity={path.opacity} 
+                                  />
+                                ))}
+                              </svg>
+
+                              {/* Simulated QR Code box at center */}
+                              <div className="absolute top-[35%] left-[27%] w-[46%] h-[30%] bg-white rounded-lg flex flex-col items-center justify-center p-2 shadow-lg" style={{ backgroundColor: template.qrConfig.bgColor }}>
+                                <div className="w-full h-full border-4 border-dashed rounded flex items-center justify-center" style={{ borderColor: template.qrConfig.fgColor }}>
+                                  <span className="text-[9px] font-black uppercase tracking-wider" style={{ color: template.qrConfig.fgColor }}>
+                                    {template.qrConfig.dotsStyle} QR
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* Text elements */}
+                              {template.textElements.map((txt, tIdx) => (
+                                <div 
+                                  key={tIdx} 
+                                  className="absolute text-[10px] font-bold text-center w-full px-2"
+                                  style={{ 
+                                    top: `${(txt.y / 600) * 100}%`, 
+                                    color: txt.color,
+                                    fontSize: `${Math.max(8, (txt.fontSize / 2.5))}px`
+                                  }}
+                                >
+                                  {txt.content}
+                                </div>
+                              ))}
+
+                              {/* Badge label */}
+                              <div className="absolute bottom-2.5 left-2.5 px-2 py-0.5 bg-black/60 rounded text-[9px] text-white uppercase tracking-wider">
+                                {template.visualOverlay?.themeType?.replace('_', ' ') || 'Layout'}
+                              </div>
+                            </div>
+
+                            <div>
+                              <span className="text-[10px] bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 px-2 py-0.5 rounded font-mono">
+                                Aesthetic #{idx + 1}
+                              </span>
+                              <h4 className="font-extrabold text-white text-sm mt-1.5 leading-tight">{template.title}</h4>
+                              <p className="text-[11px] text-[#8080A0] mt-1 leading-normal line-clamp-2">{template.description}</p>
+                            </div>
+                          </div>
+
+                          <div className="flex gap-2 pt-2 border-t border-[#1C1C2E]">
+                            <button 
+                              onClick={() => handleApproveToolTemplate(template)}
+                              className="flex-grow py-2 bg-indigo-500 hover:bg-indigo-600 text-white font-extrabold text-xs rounded-xl transition-all shadow-md flex items-center justify-center gap-1"
+                            >
+                              <Check className="w-3.5 h-3.5" /> Approve & Live
+                            </button>
+                            <button 
+                              onClick={() => setGeneratedToolTemplates(prev => prev.filter(t => t.id !== template.id))}
+                              className="py-2 px-3 bg-[#12121E] hover:bg-[#1C1C2E] border border-[#28283E] text-rose-400 font-bold text-xs rounded-xl transition-all"
+                              title="Discard"
+                            >
+                              Discard
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Main tools listing table */}
+              {(!selectedTool || generatedToolTemplates.length === 0) && !isGeneratingToolTemplates && (
+                <div className="space-y-4 animate-fade-in">
+                  {/* Filter and search control board */}
+                  <div className="bg-[#0A0A12] border border-[#1C1C2E] rounded-2xl p-5 flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center">
+                    <div className="flex-grow relative">
+                      <Search className="absolute left-3.5 top-3 w-4 h-4 text-[#4E4E6E]" />
+                      <input 
+                        type="text" 
+                        value={searchToolQuery}
+                        onChange={(e) => setSearchToolQuery(e.target.value)}
+                        placeholder="Search all 100 tools by name, description, or slug..."
+                        className="w-full bg-[#06060F] border border-[#1C1C2E] focus:border-indigo-500/50 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white outline-none transition-all placeholder-[#4E4E6E]"
+                      />
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-2.5">
+                      <select 
+                        value={filterToolCategory}
+                        onChange={(e) => setFilterToolCategory(e.target.value)}
+                        className="bg-[#06060F] border border-[#1C1C2E] rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-indigo-500/50"
+                      >
+                        <option value="">All Categories</option>
+                        {Array.from(new Set(QR_TOOLS.map(t => t.category))).map(cat => (
+                          <option key={cat} value={cat}>{cat}</option>
+                        ))}
+                      </select>
+
+                      <select 
+                        value={filterToolStatus}
+                        onChange={(e) => setFilterToolStatus(e.target.value as any)}
+                        className="bg-[#06060F] border border-[#1C1C2E] rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-indigo-500/50"
+                      >
+                        <option value="all">All Statuses</option>
+                        <option value="unassigned">No Templates Yet</option>
+                        <option value="assigned">Has Active Templates</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* List Grid */}
+                  <div className="bg-[#0A0A12] border border-[#1C1C2E] rounded-2xl overflow-hidden shadow-lg">
+                    <div className="p-4 border-b border-[#1C1C2E] bg-black/20 flex justify-between items-center">
+                      <h3 className="text-xs font-black text-white uppercase tracking-wider">
+                        A2ZQR Catalog Tools Index
+                      </h3>
+                      <span className="text-[10px] text-indigo-400 font-mono font-bold bg-indigo-500/5 border border-indigo-500/10 px-2 py-0.5 rounded">
+                        Daily capacity: Unlimited via Gemini
+                      </span>
+                    </div>
+
+                    <div className="divide-y divide-[#1C1C2E] max-h-[600px] overflow-y-auto scrollbar-thin scrollbar-thumb-[#1C1C2E]">
+                      {QR_TOOLS
+                        .filter(tool => {
+                          const matchesSearch = tool.name.toLowerCase().includes(searchToolQuery.toLowerCase()) || 
+                                                tool.description.toLowerCase().includes(searchToolQuery.toLowerCase());
+                          const matchesCategory = filterToolCategory ? tool.category === filterToolCategory : true;
+                          
+                          const hasApprovedTemplates = curationTemplates.some(ct => ct.toolId === tool.id && ct.status === 'approved');
+                          const matchesStatus = filterToolStatus === 'all' ? true : 
+                                                filterToolStatus === 'assigned' ? hasApprovedTemplates : !hasApprovedTemplates;
+                          
+                          return matchesSearch && matchesCategory && matchesStatus;
+                        })
+                        .map(tool => {
+                          const approvedTemplatesCount = curationTemplates.filter(ct => ct.toolId === tool.id && ct.status === 'approved').length;
+
+                          return (
+                            <div key={tool.id} className="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:bg-[#12121E]/30 transition-colors">
+                              <div className="space-y-1">
+                                <div className="flex flex-wrap items-center gap-2">
+                                  <h4 className="font-extrabold text-white text-xs tracking-tight">{tool.name}</h4>
+                                  <span className="text-[9px] uppercase tracking-wider font-extrabold px-1.5 py-0.5 rounded bg-black text-[#8080A0] border border-[#1C1C2E]">
+                                    {tool.category}
+                                  </span>
+                                  {approvedTemplatesCount > 0 ? (
+                                    <span className="text-[9px] font-black uppercase bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full">
+                                      {approvedTemplatesCount} LIVE DESIGNS
+                                    </span>
+                                  ) : (
+                                    <span className="text-[9px] font-black uppercase bg-amber-500/10 border border-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full">
+                                      NO LAYOUT
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="text-[11px] text-[#8080A0] leading-normal max-w-xl">{tool.description}</p>
+                              </div>
+
+                              <button 
+                                onClick={() => handleGenerateToolTemplates(tool)}
+                                className="w-full sm:w-auto py-2 px-4 bg-indigo-500 hover:bg-indigo-600 text-white font-extrabold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5 shrink-0"
+                              >
+                                <Sparkles className="w-4 h-4" /> Generate 10 Variations
+                              </button>
+                            </div>
+                          );
+                        })}
                     </div>
                   </div>
                 </div>

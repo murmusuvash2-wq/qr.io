@@ -371,6 +371,7 @@ export default function App() {
             tool={activeTool} 
             user={user} 
             onOpenPayModal={() => setIsPayModalOpen(true)}
+            onSelectTemplate={setDirectTemplateToEdit}
           />
         </div>
       </section>

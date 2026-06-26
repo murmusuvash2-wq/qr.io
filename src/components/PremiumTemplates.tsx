@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Sparkles, Palette, Crown, Box, LayoutGrid, Image as ImageIcon, Download, ArrowLeft, Wand2, Loader2, Shuffle, Lock, Unlock, Check, AlertCircle, Eye } from 'lucide-react';
 import TemplateEditor from './TemplateEditor';
-import { UserStats } from '../lib/firebase';
+import { UserStats, templateService, TemplateDesign } from '../lib/firebase';
 
 const CATEGORIES = ['All', 'Posters', 'vCards', 'Social Media', 'Badges', 'Events'];
 
@@ -339,6 +339,7 @@ export default function PremiumTemplates({
   const [dailyTheme, setDailyTheme] = useState<any>(null);
   const [isDailyLoading, setIsDailyLoading] = useState(true);
   const [dailyTemplates, setDailyTemplates] = useState<any[]>([]);
+  const [approvedTemplates, setApprovedTemplates] = useState<any[]>([]);
 
   // Prompt states
   const [promptInput, setPromptInput] = useState('');
@@ -391,11 +392,31 @@ export default function PremiumTemplates({
       }
     };
 
+    const fetchApprovedTemplatesFromDB = async () => {
+      try {
+        const dbTemplates = await templateService.getTemplates();
+        const approved = dbTemplates.filter(t => t.status === 'approved');
+        const mapped = approved.map(t => {
+          if (t.bgType === 'image' && t.imageSearchTerm && !t.imgUrl) {
+            t.imgUrl = `https://images.unsplash.com/featured/400x533/?${encodeURIComponent(t.imageSearchTerm)}`;
+          } else if (!t.imgUrl) {
+            t.imgUrl = 'https://images.unsplash.com/photo-1557672172-298e090bd0f1?q=80&w=400';
+          }
+          return t;
+        });
+        setApprovedTemplates(mapped);
+      } catch (err) {
+        console.error("Error fetching approved templates from DB:", err);
+      }
+    };
+
     fetchDailyTemplates();
+    fetchApprovedTemplatesFromDB();
   }, []);
 
-  // Unified list of templates: daily templates displayed first
+  // Unified list of templates: approved templates and daily templates displayed first
   const combinedAllTemplates = [
+    ...approvedTemplates,
     ...dailyTemplates,
     ...templates
   ];
@@ -758,11 +779,11 @@ export default function PremiumTemplates({
                   backgroundPosition: 'center',
                 };
 
-                if (template.bgType === 'gradient' && template.gradient) {
+                if (template.imgUrl) {
+                  previewBgStyle.backgroundImage = `url(${template.imgUrl})`;
+                } else if (template.bgType === 'gradient' && template.gradient) {
                   const { from, to, via, angle = '135deg' } = template.gradient;
                   previewBgStyle.background = `linear-gradient(${angle}, ${from}, ${via ? via + ', ' : ''}${to})`;
-                } else {
-                  previewBgStyle.backgroundImage = `url(${template.imgUrl})`;
                 }
 
                 return (

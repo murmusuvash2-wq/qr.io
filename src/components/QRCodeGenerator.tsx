@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Download, Copy, Check, Eye, EyeOff, HelpCircle, LayoutGrid, CheckCircle, Wifi, User, Briefcase, Globe, MapPin, Coins, CreditCard, MessageSquare, Share2, Send, ExternalLink, Sparkles, Shield, Phone, Mail } from 'lucide-react';
 import QRCodeStyling from 'qr-code-styling';
 import { QRTool } from '../data/tools';
-import { UserStats } from '../lib/firebase';
+import { UserStats, templateService, TemplateDesign } from '../lib/firebase';
 
 import { getResolvedFieldsForTool, generateQRStringForTool } from '../data/forms';
 import { THEMES_DATABASE } from '../data/themes';
@@ -19,6 +19,7 @@ interface QRCodeGeneratorProps {
   tool: QRTool;
   user: UserStats | null;
   onOpenPayModal: () => void;
+  onSelectTemplate?: (template: TemplateDesign) => void;
 }
 
 const getToolGroup = (toolId: string, category: string) => {
@@ -51,10 +52,28 @@ const getSocialMediaBrandDetails = (toolId: string) => {
   return { name: 'Social Handle', color: 'text-[#7C6EFA]', bg: 'bg-[#7C6EFA]/5', border: 'border-[#7C6EFA]/20', prefix: '' };
 };
 
-export default function QRCodeGenerator({ tool, user, onOpenPayModal }: QRCodeGeneratorProps) {
+export default function QRCodeGenerator({ tool, user, onOpenPayModal, onSelectTemplate }: QRCodeGeneratorProps) {
   const [formValues, setFormValues] = useState<Record<string, string>>({});
   const [qrString, setQrString] = useState<string>('');
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [companionTemplates, setCompanionTemplates] = useState<TemplateDesign[]>([]);
+  const [loadingCompanions, setLoadingCompanions] = useState(false);
+
+  useEffect(() => {
+    const fetchCompanions = async () => {
+      setLoadingCompanions(true);
+      try {
+        const allTemplates = await templateService.getTemplates();
+        const filtered = allTemplates.filter(t => t.status === 'approved' && t.toolId === tool.id);
+        setCompanionTemplates(filtered);
+      } catch (err) {
+        console.error("Error loading companion templates:", err);
+      } finally {
+        setLoadingCompanions(false);
+      }
+    };
+    fetchCompanions();
+  }, [tool.id]);
 
   const validateField = (id: string, val: string, validationType?: string): string => {
     if (!val || val.trim() === '') return '';
@@ -962,6 +981,112 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal }: QRCodeGe
         <div className="space-y-5">
           {renderCustomForm()}
         </div>
+
+        {/* Companion AI Templates Specific to this Tool */}
+        {companionTemplates.length > 0 && (
+          <div className="mt-8 pt-6 border-t border-[#1C1C2E] space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-black text-white flex items-center gap-1.5">
+                  <Sparkles className="w-4 h-4 text-indigo-400 animate-pulse" />
+                  Premium Custom Templates for {tool.name}
+                </h3>
+                <p className="text-[11px] text-[#8080A0] mt-0.5">
+                  Pre-configured curated variations. Click to customize on canvas.
+                </p>
+              </div>
+              <span className="text-[9px] font-mono bg-indigo-500/10 text-indigo-400 px-2 py-0.5 rounded border border-indigo-500/20 uppercase tracking-wider font-bold">
+                {companionTemplates.length} Available
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              {companionTemplates.map((template) => {
+                const isGrad = template.bgType === 'gradient';
+                const bgStyle = isGrad && template.gradient ? {
+                  background: `linear-gradient(${template.gradient.angle || '135deg'}, ${template.gradient.from}, ${template.gradient.via ? template.gradient.via + ', ' : ''}${template.gradient.to})`
+                } : {
+                  background: '#12121E'
+                };
+
+                return (
+                  <div 
+                    key={template.id} 
+                    onClick={() => {
+                      if (onSelectTemplate) {
+                        onSelectTemplate(template);
+                      }
+                    }}
+                    className="group cursor-pointer bg-[#0A0A12] border border-[#1C1C2E] hover:border-indigo-500/40 rounded-xl p-3 flex flex-col gap-3 transition-all hover:shadow-[0_8px_20px_rgba(124,110,250,0.1)]"
+                  >
+                    <div className="aspect-[3/4] rounded-lg overflow-hidden relative shadow border border-white/5" style={bgStyle}>
+                      {/* Emojis overlay */}
+                      {template.visualOverlay?.emojis?.map((em: any, eIdx: number) => (
+                        <div 
+                          key={eIdx}
+                          className="absolute text-sm pointer-events-none select-none"
+                          style={{ left: `${(em.x / 400) * 100}%`, top: `${(em.y / 600) * 100}%` }}
+                        >
+                          {em.char}
+                        </div>
+                      ))}
+
+                      {/* SVG paths outline overlay */}
+                      <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                        {template.visualOverlay?.svgPaths?.map((path: any, pIdx: number) => (
+                          <path 
+                            key={pIdx}
+                            d={path.d} 
+                            stroke={path.stroke} 
+                            strokeWidth={(path.strokeWidth / 3)} 
+                            fill="none" 
+                            opacity={path.opacity} 
+                          />
+                        ))}
+                      </svg>
+
+                      {/* Simulated QR Code box at center */}
+                      <div className="absolute top-[35%] left-[27%] w-[46%] h-[30%] bg-white rounded flex flex-col items-center justify-center p-1 shadow" style={{ backgroundColor: template.qrConfig.bgColor }}>
+                        <div className="w-full h-full border border-dashed rounded flex items-center justify-center" style={{ borderColor: template.qrConfig.fgColor }}>
+                          <span className="text-[6px] font-black uppercase tracking-wider scale-75" style={{ color: template.qrConfig.fgColor }}>
+                            {template.qrConfig.dotsStyle} QR
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Text elements */}
+                      {template.textElements?.map((txt: any, tIdx: number) => (
+                        <div 
+                          key={tIdx} 
+                          className="absolute text-[6px] font-bold text-center w-full px-1"
+                          style={{ 
+                            top: `${(txt.y / 600) * 100}%`, 
+                            color: txt.color,
+                            fontSize: `${Math.max(6, (txt.fontSize / 3.5))}px`
+                          }}
+                        >
+                          {txt.content}
+                        </div>
+                      ))}
+
+                      {/* Hover action overlay */}
+                      <div className="absolute inset-0 bg-indigo-950/40 backdrop-blur-[1px] opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                        <span className="text-[10px] font-bold bg-white text-indigo-950 px-2 py-1 rounded-md shadow-md flex items-center gap-1">
+                          <LayoutGrid className="w-3 h-3" /> Personalize
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="min-w-0">
+                      <h4 className="font-extrabold text-white text-xs leading-tight truncate group-hover:text-indigo-400 transition-colors">{template.title}</h4>
+                      <p className="text-[9px] text-[#8080A0] mt-0.5 truncate">{template.visualOverlay?.themeType?.replace('_', ' ')}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Premium Options Gate */}
         <div className="mt-10 pt-8 border-t border-[#1C1C2E]">
