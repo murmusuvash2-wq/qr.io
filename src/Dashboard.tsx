@@ -15,18 +15,18 @@ import {
   Wand2, Clock
 } from 'lucide-react';
 
-// Custom theme colors matching our high-visibility light workspace
+// Custom theme colors matching our high-visibility minimalist workspace
 const COLORS = {
-  primary: '#4F46E5', // Premium Indigo
-  primaryLight: '#6366F1',
-  secondary: '#8B5CF6',
-  accent: '#10B981',
+  primary: '#000000', // Solid Black
+  primaryLight: '#222222',
+  secondary: '#111111',
+  accent: '#000000',
   warning: '#F59E0B',
   danger: '#EF4444',
-  text: '#0F172A', // Slate 900 for high visibility
-  textMuted: '#475569', // Slate 600
+  text: '#000000', // Solid Black for ultra high visibility
+  textMuted: '#555555', // Slate 600
   grid: '#E2E8F0', // Slate 200 grid
-  bg: '#F8FAFC', // Slate 50 background
+  bg: '#FFFFFF', // Pure White background
   cardBg: '#FFFFFF' // Pure White card background
 };
 
@@ -160,6 +160,85 @@ export default function Dashboard() {
   const [toolGeneratingMessage, setToolGeneratingMessage] = useState('');
   const [toolSuccessMessage, setToolSuccessMessage] = useState<string | null>(null);
   const [toolErrorMessage, setToolErrorMessage] = useState<string | null>(null);
+
+  // --- DYNAMIC SCAN PAGES PRO PLAN STATES ---
+  const [activeScanType, setActiveScanType] = useState<'wedding' | 'pet' | 'vcard' | 'wifi' | 'review' | 'capsule'>('wedding');
+  
+  // 1. Wedding RSVP Settings
+  const [weddingConfig, setWeddingConfig] = useState({
+    title: "Suvash & Maya's Grand Wedding RSVP",
+    hosts: "Suvash Astrologer & Maya Sharma",
+    date: "December 18, 2026",
+    venue: "The Palace Gardens, Mumbai, India",
+    welcomeMessage: "We invite you to celebrate our union of love, stars, and destiny. Please RSVP by November 1st to confirm your presence.",
+    foodChoices: "Vegetarian, Vegan, Non-Vegetarian",
+    showRsvpList: true
+  });
+  const [rsvps, setRsvps] = useState([
+    { name: "Rahul Patel", choice: "Yes", guests: 2, food: "Vegetarian", msg: "Can't wait! Congratulations!" },
+    { name: "Priya Rao", choice: "Yes", guests: 1, food: "Vegan", msg: "So happy for both of you! ✨" },
+    { name: "Amit Shah", choice: "No", guests: 0, food: "None", msg: "Warm wishes but cannot attend due to travel." }
+  ]);
+  const [newRsvpName, setNewRsvpName] = useState('');
+  const [newRsvpChoice, setNewRsvpChoice] = useState('Yes');
+  const [newRsvpGuests, setNewRsvpGuests] = useState(1);
+  const [newRsvpFood, setNewRsvpFood] = useState('Vegetarian');
+  const [newRsvpMsg, setNewRsvpMsg] = useState('');
+
+  // 2. Pet ID Tag Settings
+  const [petConfig, setPetConfig] = useState({
+    petName: "Rocky",
+    breed: "Golden Retriever (Friendly)",
+    ownerName: "Suvash Astrologer",
+    ownerPhone: "+91 98765 43210",
+    ownerAddress: "12, Celestial Towers, Bandra West, Mumbai",
+    medicalNotes: "Allergic to dairy. Microchipped #9851-24.",
+    emergencyContact: "+91 98765 43211",
+    rewardMessage: "Please call immediately! 10,000 INR reward for safe return."
+  });
+
+  // 3. Digital Business Card (vCard Extra) Settings
+  const [vcardConfig, setVcardConfig] = useState({
+    name: "Suvash Astrologer",
+    title: "Chief Branding Officer & Tech Strategist",
+    company: "A2ZQR Systems & AstroMedia LLC",
+    bio: "Helping businesses design permanent, high-contrast brand pathways that scale effortlessly.",
+    phone: "+91 98765 43210",
+    email: "suvash.astrology@gmail.com",
+    whatsapp: "+91 98765 43210",
+    website: "https://ai.studio/build",
+    avatarUrl: "https://api.dicebear.com/7.x/bottts/svg?seed=suvash"
+  });
+
+  // 4. Wi-Fi Easy Connect Settings
+  const [wifiConfig, setWifiConfig] = useState({
+    ssid: "A2ZQR_HighSpeed_Guest",
+    security: "WPA2/WPA3",
+    password: "connect_instant_99",
+    welcomeNote: "Welcome to A2ZQR Corporate Lounge. Enjoy ultra-fast 1Gbps fiber optics on us!",
+    supportPhone: "+91 98765 43210"
+  });
+
+  // 5. Google Review Booster Settings
+  const [reviewConfig, setReviewConfig] = useState({
+    storeName: "A2ZQR Premium Lounge",
+    promptText: "Love our QR designs? Help us grow by leaving a 5-star Google Review!",
+    targetUrl: "https://g.page/r/a2zqr-review",
+    incentiveText: "Scan and show your completed review screen to the counter desk for a free premium dessert/drink!"
+  });
+
+  // 6. Time Capsule Settings
+  const [capsuleConfig, setCapsuleConfig] = useState({
+    capsuleTitle: "My 10-Year Astro Prediction Capsule",
+    creator: "Suvash Astrologer",
+    lockDuration: "3650 Days (Unlock Year 2036)",
+    lockDate: "June 26, 2026",
+    secretMessage: "In 2036, decentralized QR systems will be embedded into physical clothing threads. Maintain absolute digital sovereignty.",
+    files: ["Astro_Predictions_2026_2036.pdf", "Key_Signature_Bandra.key"],
+    isUnlocked: false
+  });
+  const [capsuleCodeInput, setCapsuleCodeInput] = useState('');
+  const [capsuleStatusMsg, setCapsuleStatusMsg] = useState('');
 
   // Premium loading effect messages
   useEffect(() => {
@@ -718,18 +797,13 @@ export default function Dashboard() {
   // Login UI
   if (!isLoggedIn) {
     return (
-      <div id="dashboard-root" className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4 selection:bg-indigo-500/20 selection:text-indigo-900">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-[20%] left-[15%] w-96 h-96 bg-[#7C6EFA]/5 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-[20%] right-[15%] w-96 h-96 bg-[#C084FC]/5 rounded-full blur-3xl"></div>
-        </div>
-
-        <div className="w-full max-w-md bg-white border border-slate-200 rounded-[24px] p-8 relative z-10 shadow-[0_20px_50px_rgba(0,0,0,0.05)]">
+      <div id="dashboard-root" className="min-h-screen bg-white flex items-center justify-center p-4 selection:bg-slate-200">
+        <div className="w-full max-w-md bg-white border border-slate-300 rounded-2xl p-8 relative z-10 shadow-sm">
           <div className="text-center mb-8">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#7C6EFA] to-[#C084FC] flex items-center justify-center text-white mx-auto mb-4 shadow-lg shadow-indigo-500/10">
+            <div className="w-12 h-12 rounded-lg bg-black flex items-center justify-center text-white mx-auto mb-4">
               <LayoutDashboard className="w-6 h-6" />
             </div>
-            <h1 className="font-syne text-2xl font-extrabold text-slate-900 tracking-tight">
+            <h1 className="font-syne text-2xl font-extrabold text-black tracking-tight">
               A2ZQR Control Center
             </h1>
             <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
@@ -755,7 +829,7 @@ export default function Dashboard() {
                   type="email" 
                   value={emailInput}
                   onChange={(e) => setEmailInput(e.target.value)}
-                  className="w-full bg-white border border-slate-200 focus:border-indigo-500 text-xs text-slate-900 rounded-xl pl-11 pr-4 py-3.5 outline-none transition-all placeholder-slate-400"
+                  className="w-full bg-white border border-slate-200 focus:border-black text-xs text-slate-900 rounded-xl pl-11 pr-4 py-3.5 outline-none transition-all placeholder-slate-400"
                   placeholder="admin@a2zqr.com"
                   required
                 />
@@ -772,7 +846,7 @@ export default function Dashboard() {
                   type="password" 
                   value={passwordInput}
                   onChange={(e) => setPasswordInput(e.target.value)}
-                  className="w-full bg-white border border-slate-200 focus:border-indigo-500 text-xs text-slate-900 rounded-xl pl-11 pr-4 py-3.5 outline-none transition-all placeholder-slate-400"
+                  className="w-full bg-white border border-slate-200 focus:border-black text-xs text-slate-900 rounded-xl pl-11 pr-4 py-3.5 outline-none transition-all placeholder-slate-400"
                   placeholder="••••••••"
                   required
                 />
@@ -783,7 +857,7 @@ export default function Dashboard() {
               <label className="flex items-center gap-2 cursor-pointer select-none text-[11px] text-slate-600">
                 <input 
                   type="checkbox" 
-                  className="rounded border-slate-300 bg-white text-indigo-600 focus:ring-0 w-3.5 h-3.5"
+                  className="rounded border-slate-300 bg-white text-black focus:ring-0 w-3.5 h-3.5"
                   defaultChecked
                 />
                 <span>Remember console credentials</span>
@@ -793,7 +867,7 @@ export default function Dashboard() {
             <div className="pt-2">
               <button 
                 type="submit"
-                className="w-full py-3.5 bg-gradient-to-r from-[#7C6EFA] to-[#C084FC] hover:brightness-110 text-white font-extrabold text-xs tracking-wider uppercase rounded-xl transition-all shadow-lg shadow-indigo-500/20 flex items-center justify-center gap-2"
+                className="w-full py-3.5 bg-black hover:bg-zinc-800 text-white font-extrabold text-xs tracking-wider uppercase rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm"
               >
                 <Lock className="w-3.5 h-3.5" /> Initialize Session
               </button>
@@ -826,71 +900,51 @@ export default function Dashboard() {
 
   // Loaded Dashboard UI
   return (
-    <div id="dashboard-root" className="min-h-screen bg-[#F8FAFC] text-slate-900 flex flex-col md:flex-row font-['Syne',sans-serif]">
+    <div id="dashboard-root" className="min-h-screen bg-white text-black flex flex-col md:flex-row font-['Syne',sans-serif]">
       {/* 1. LEFT SIDEBAR CONSOLE LAYOUT */}
       <aside className="w-full md:w-[280px] bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 select-none">
         <div>
           {/* Logo Area */}
           <div className="p-6 border-b border-slate-200 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#7C6EFA] to-[#C084FC] flex items-center justify-center text-white shadow-md">
+              <div className="w-7 h-7 rounded-lg bg-black flex items-center justify-center text-white shadow-md">
                 <QrCode className="w-4 h-4" />
               </div>
-              <span className="font-extrabold text-lg tracking-tight text-slate-900">
-                A2Z<em className="font-normal not-italic text-indigo-600">QR</em> Panel
+              <span className="font-extrabold text-lg tracking-tight text-black">
+                A2Z<em className="font-normal not-italic text-black">QR</em> Panel
               </span>
             </div>
-            <span className="text-[9px] bg-emerald-50 border border-emerald-200 text-emerald-700 px-2 py-0.5 rounded-full font-bold">
-              v2.1
+            <span className="text-[9px] bg-slate-100 border border-slate-350 text-black px-2 py-0.5 rounded font-bold">
+              v2.5
             </span>
           </div>
 
           {/* Sidebar Menu Groups */}
           <nav className="p-4 space-y-6 max-h-[80vh] overflow-y-auto scrollbar-thin scrollbar-thumb-slate-200">
-            {/* Core Monitoring */}
+            {/* WORK CONSOLE */}
             <div className="space-y-1">
-              <span className="text-[9px] text-slate-450 uppercase tracking-wider font-extrabold px-3 block mb-1.5">
-                Core System
+              <span className="text-[10px] text-black uppercase tracking-wider font-extrabold px-3 block mb-1.5">
+                🛠️ WORK CONSOLE
               </span>
               <SidebarLink id="analytics" label="Analytics & Scans" icon={<Activity />} active={activeTab} onClick={setActiveTab} />
               <SidebarLink id="qrs" label="QR Redirection" icon={<QrCode />} active={activeTab} onClick={setActiveTab} count={dynamicQRs.length} />
-            </div>
-
-            {/* Design & Asset Factory */}
-            <div className="space-y-1">
-              <span className="text-[9px] text-slate-450 uppercase tracking-wider font-extrabold px-3 block mb-1.5">
-                Asset & Design Engine
-              </span>
-              <SidebarLink id="templates" label="Templates Register" icon={<LayoutGrid />} active={activeTab} onClick={setActiveTab} count={customTemplates.length} />
-              <SidebarLink id="posters" label="Poster Blueprint" icon={<FileText />} active={activeTab} onClick={setActiveTab} />
-              <SidebarLink id="stickers" label="Sticker Badges" icon={<Tags />} active={activeTab} onClick={setActiveTab} />
-              <SidebarLink id="frames" label="Decorative Frames" icon={<Square />} active={activeTab} onClick={setActiveTab} />
-              <SidebarLink id="library" label="SVG Asset Library" icon={<Library />} active={activeTab} onClick={setActiveTab} />
-              <SidebarLink id="packs" label="Theme Packs" icon={<Layers />} active={activeTab} onClick={setActiveTab} />
-              <SidebarLink id="ai" label="AI Recipe Generator" icon={<Sparkles />} active={activeTab} onClick={setActiveTab} badge="HOT" />
-              <SidebarLink id="ai_curation" label="AI Daily Curation" icon={<Sparkle />} active={activeTab} onClick={setActiveTab} badge="AUTO" />
-              <SidebarLink id="ai_tools_generator" label="AI 100-Tools Design" icon={<Wand2 />} active={activeTab} onClick={setActiveTab} badge="NEW" />
-              <SidebarLink id="mockups" label="Mockups Sandbox" icon={<Eye />} active={activeTab} onClick={setActiveTab} />
-            </div>
-
-            {/* Scale operations */}
-            <div className="space-y-1">
-              <span className="text-[9px] text-slate-450 uppercase tracking-wider font-extrabold px-3 block mb-1.5">
-                System Utilities
-              </span>
               <SidebarLink id="bulk" label="Bulk Generator" icon={<Settings2 />} active={activeTab} onClick={setActiveTab} />
-              <SidebarLink id="uploads" label="User Uploads" icon={<UploadCloud />} active={activeTab} onClick={setActiveTab} count={uploadedAssets.length} />
-              <SidebarLink id="categories" label="QR Directories" icon={<Tag />} active={activeTab} onClick={setActiveTab} />
               <SidebarLink id="seo" label="SEO Manager" icon={<Search />} active={activeTab} onClick={setActiveTab} />
+              <SidebarLink id="settings" label="White-Label Domain" icon={<Settings />} active={activeTab} onClick={setActiveTab} />
               <SidebarLink id="blog" label="Console Blog" icon={<BookOpen />} active={activeTab} onClick={setActiveTab} count={blogPosts.length} />
             </div>
 
-            {/* Configuration */}
-            <div className="space-y-1">
-              <span className="text-[9px] text-slate-450 uppercase tracking-wider font-extrabold px-3 block mb-1.5">
-                License & Settings
+            {/* BUSINESS CONSOLE */}
+            <div className="space-y-1 pt-4 border-t border-slate-100">
+              <span className="text-[10px] text-black uppercase tracking-wider font-extrabold px-3 block mb-1.5">
+                💼 BUSINESS CONSOLE
               </span>
-              <SidebarLink id="settings" label="White-Label Domain" icon={<Settings />} active={activeTab} onClick={setActiveTab} />
+              <SidebarLink id="ai_curation" label="Template Approval Panel" icon={<Sparkle />} active={activeTab} onClick={setActiveTab} badge="APPROVAL" />
+              <SidebarLink id="ai_tools_generator" label="AI Template Engine" icon={<Wand2 />} active={activeTab} onClick={setActiveTab} badge="FACTORY" />
+              <SidebarLink id="dynamic_pages" label="Dynamic Scan Pages" icon={<MapPin />} active={activeTab} onClick={setActiveTab} badge="RSVP/PET ID" />
+              <SidebarLink id="templates" label="Templates Register" icon={<LayoutGrid />} active={activeTab} onClick={setActiveTab} count={customTemplates.length} />
+              <SidebarLink id="library" label="Asset Library" icon={<Library />} active={activeTab} onClick={setActiveTab} />
+              <SidebarLink id="uploads" label="User Uploads" icon={<UploadCloud />} active={activeTab} onClick={setActiveTab} count={uploadedAssets.length} />
             </div>
           </nav>
         </div>
@@ -919,15 +973,15 @@ export default function Dashboard() {
       </aside>
 
       {/* 2. CORE CENTRAL STAGE LAYOUT */}
-      <main className="flex-1 min-h-screen bg-[#F8FAFC] flex flex-col justify-between overflow-x-hidden text-slate-900">
+      <main className="flex-1 min-h-screen bg-white flex flex-col justify-between overflow-x-hidden text-black">
         {/* Top bar header */}
-        <header className="h-16 border-b border-slate-200 px-6 md:px-8 flex items-center justify-between bg-white/80 backdrop-blur-xl sticky top-0 z-40">
+        <header className="h-16 border-b border-slate-200 px-6 md:px-8 flex items-center justify-between bg-white sticky top-0 z-40">
           <div className="flex items-center gap-3">
-            <span className="text-[10px] bg-gradient-to-r from-[#7C6EFA] to-[#C084FC] text-white font-extrabold px-2.5 py-1 rounded-md tracking-wider uppercase">
+            <span className="text-[10px] bg-black text-white font-extrabold px-2.5 py-1 rounded tracking-wider uppercase">
               CONSOLE {userRole.toUpperCase()} MODE
             </span>
             <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-500">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-black"></span>
               <span>Cluster Active (0.0.0.0:3000)</span>
             </div>
           </div>
@@ -2583,10 +2637,797 @@ export default function Dashboard() {
                 </div>
                 <button 
                   onClick={() => alert('Custom Domain Settings updated successfully on DNS lookup maps!')}
-                  className="py-3 px-5 bg-gradient-to-r from-[#7C6EFA] to-[#C084FC] hover:brightness-110 text-white font-extrabold text-xs rounded-xl shadow-md"
+                  className="py-3 px-5 bg-black hover:bg-zinc-800 text-white font-extrabold text-xs rounded-xl shadow-sm"
                 >
                   Save White-label Settings
                 </button>
+              </div>
+            </div>
+          )}
+
+          {/* TAB: DYNAMIC SCAN PAGES */}
+          {activeTab === 'dynamic_pages' && (
+            <div className="space-y-6">
+              <div className="border-b border-slate-200 pb-4">
+                <h2 className="text-2xl font-extrabold text-black flex items-center gap-2">
+                  <MapPin className="w-6 h-6 text-black" /> Dynamic Scan Pages Designer
+                </h2>
+                <p className="text-xs text-slate-500">
+                  Configure custom offline post-scan destination landing portals. Available exclusively on the <span className="font-extrabold text-black">A2ZQR Pro Plan</span>.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                {/* 1. Editor Configuration Form Panel */}
+                <div className="lg:col-span-7 space-y-6">
+                  {/* Category Pills Selector */}
+                  <div className="flex flex-wrap gap-2 p-1.5 bg-slate-100 rounded-xl border border-slate-250">
+                    {[
+                      { id: 'wedding', label: '🌸 Wedding RSVP' },
+                      { id: 'pet', label: '🐾 Pet ID Tag' },
+                      { id: 'vcard', label: '📇 Business Card' },
+                      { id: 'wifi', label: '⚡ Wi-Fi Connect' },
+                      { id: 'review', label: '⭐ Google Review' },
+                      { id: 'capsule', label: '🔒 Time Capsule' }
+                    ].map((type) => (
+                      <button
+                        key={type.id}
+                        onClick={() => setActiveScanType(type.id as any)}
+                        className={`flex-1 min-w-[110px] px-3 py-2 rounded-lg text-xs font-bold transition-all text-center ${
+                          activeScanType === type.id
+                            ? 'bg-black text-white shadow-sm'
+                            : 'text-slate-600 hover:text-black hover:bg-slate-200/50'
+                        }`}
+                      >
+                        {type.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Config Form Cards */}
+                  <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-6">
+                    {/* WEDDING RSVP CONFIG */}
+                    {activeScanType === 'wedding' && (
+                      <div className="space-y-4">
+                        <div className="border-b border-slate-200 pb-3">
+                          <h3 className="text-sm font-extrabold text-black">Wedding RSVP Experience Setup</h3>
+                          <p className="text-[11px] text-slate-500">Live preview matches after-scan page for guests.</p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] text-slate-600 font-bold block">Celebration Title</label>
+                            <input
+                              type="text"
+                              value={weddingConfig.title}
+                              onChange={(e) => setWeddingConfig({ ...weddingConfig, title: e.target.value })}
+                              className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] text-slate-600 font-bold block">Event Hosts</label>
+                            <input
+                              type="text"
+                              value={weddingConfig.hosts}
+                              onChange={(e) => setWeddingConfig({ ...weddingConfig, hosts: e.target.value })}
+                              className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] text-slate-600 font-bold block">Wedding Date</label>
+                            <input
+                              type="text"
+                              value={weddingConfig.date}
+                              onChange={(e) => setWeddingConfig({ ...weddingConfig, date: e.target.value })}
+                              className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] text-slate-600 font-bold block">Venue Location</label>
+                            <input
+                              type="text"
+                              value={weddingConfig.venue}
+                              onChange={(e) => setWeddingConfig({ ...weddingConfig, venue: e.target.value })}
+                              className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="text-[11px] text-slate-600 font-bold block">Welcome Message</label>
+                          <textarea
+                            rows={3}
+                            value={weddingConfig.welcomeMessage}
+                            onChange={(e) => setWeddingConfig({ ...weddingConfig, welcomeMessage: e.target.value })}
+                            className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black resize-none"
+                          />
+                        </div>
+
+                        <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
+                          <h4 className="text-[11px] font-bold text-black uppercase tracking-wider">Collected Guest Registry Entries (Live Mock DB)</h4>
+                          <div className="space-y-2 max-h-[140px] overflow-y-auto scrollbar-thin">
+                            {rsvps.map((r, i) => (
+                              <div key={i} className="flex justify-between items-center text-[11px] p-2 bg-white border border-slate-200 rounded">
+                                <span className="font-extrabold text-black">{r.name} <span className="font-normal text-slate-500">({r.choice}, {r.guests} guests)</span></span>
+                                <span className="text-[10px] text-slate-450 truncate max-w-[150px] italic">"{r.msg}"</span>
+                              </div>
+                            ))}
+                          </div>
+
+                          <div className="pt-2 border-t border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <input
+                              type="text"
+                              placeholder="Guest Name"
+                              value={newRsvpName}
+                              onChange={(e) => setNewRsvpName(e.target.value)}
+                              className="bg-white border border-slate-200 text-[10px] px-2 py-1.5 rounded"
+                            />
+                            <div className="flex gap-1.5">
+                              <select
+                                value={newRsvpChoice}
+                                onChange={(e) => setNewRsvpChoice(e.target.value)}
+                                className="bg-white border border-slate-200 text-[10px] px-1 py-1.5 rounded flex-1"
+                              >
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                              </select>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  if (!newRsvpName) return;
+                                  setRsvps([...rsvps, { name: newRsvpName, choice: newRsvpChoice, guests: newRsvpGuests, food: newRsvpFood, msg: newRsvpMsg || 'Joined RSVP' }]);
+                                  setNewRsvpName('');
+                                  setNewRsvpMsg('');
+                                }}
+                                className="px-3 bg-black text-white text-[10px] font-bold rounded"
+                              >
+                                Add Guest
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* PET ID TAG CONFIG */}
+                    {activeScanType === 'pet' && (
+                      <div className="space-y-4">
+                        <div className="border-b border-slate-200 pb-3">
+                          <h3 className="text-sm font-extrabold text-black">Pet ID QR Scan Landing Page Setup</h3>
+                          <p className="text-[11px] text-slate-500">Crucial for physical collars or tag scans in emergency scenarios.</p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] text-slate-600 font-bold block">Pet Name</label>
+                            <input
+                              type="text"
+                              value={petConfig.petName}
+                              onChange={(e) => setPetConfig({ ...petConfig, petName: e.target.value })}
+                              className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] text-slate-600 font-bold block">Breed / Friendly Note</label>
+                            <input
+                              type="text"
+                              value={petConfig.breed}
+                              onChange={(e) => setPetConfig({ ...petConfig, breed: e.target.value })}
+                              className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] text-slate-600 font-bold block">Owner Name</label>
+                            <input
+                              type="text"
+                              value={petConfig.ownerName}
+                              onChange={(e) => setPetConfig({ ...petConfig, ownerName: e.target.value })}
+                              className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] text-slate-600 font-bold block">Owner Contact Phone</label>
+                            <input
+                              type="text"
+                              value={petConfig.ownerPhone}
+                              onChange={(e) => setPetConfig({ ...petConfig, ownerPhone: e.target.value })}
+                              className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="text-[11px] text-slate-600 font-bold block">Home / Return Address</label>
+                          <input
+                            type="text"
+                            value={petConfig.ownerAddress}
+                            onChange={(e) => setPetConfig({ ...petConfig, ownerAddress: e.target.value })}
+                            className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] text-slate-600 font-bold block">Critical Medical Notes</label>
+                            <input
+                              type="text"
+                              value={petConfig.medicalNotes}
+                              onChange={(e) => setPetConfig({ ...petConfig, medicalNotes: e.target.value })}
+                              className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] text-slate-600 font-bold block">Reward Return Message</label>
+                            <input
+                              type="text"
+                              value={petConfig.rewardMessage}
+                              onChange={(e) => setPetConfig({ ...petConfig, rewardMessage: e.target.value })}
+                              className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* DYNAMIC VCARD BUSINESS CARD */}
+                    {activeScanType === 'vcard' && (
+                      <div className="space-y-4">
+                        <div className="border-b border-slate-200 pb-3">
+                          <h3 className="text-sm font-extrabold text-black">Digital Business Card Profile Setup</h3>
+                          <p className="text-[11px] text-slate-500">Provides immediate single-page link dashboard with interactive Save Contact triggers.</p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] text-slate-600 font-bold block">Profile Photo Avatar URL</label>
+                            <input
+                              type="text"
+                              value={vcardConfig.avatarUrl}
+                              onChange={(e) => setVcardConfig({ ...vcardConfig, avatarUrl: e.target.value })}
+                              className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] text-slate-600 font-bold block">Full Name</label>
+                            <input
+                              type="text"
+                              value={vcardConfig.name}
+                              onChange={(e) => setVcardConfig({ ...vcardConfig, name: e.target.value })}
+                              className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] text-slate-600 font-bold block">Job Title / Role</label>
+                            <input
+                              type="text"
+                              value={vcardConfig.title}
+                              onChange={(e) => setVcardConfig({ ...vcardConfig, title: e.target.value })}
+                              className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] text-slate-600 font-bold block">Company / Agency Name</label>
+                            <input
+                              type="text"
+                              value={vcardConfig.company}
+                              onChange={(e) => setVcardConfig({ ...vcardConfig, company: e.target.value })}
+                              className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="text-[11px] text-slate-600 font-bold block">Short Professional Bio</label>
+                          <textarea
+                            rows={2}
+                            value={vcardConfig.bio}
+                            onChange={(e) => setVcardConfig({ ...vcardConfig, bio: e.target.value })}
+                            className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black resize-none"
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] text-slate-600 font-bold block">Phone Number</label>
+                            <input
+                              type="text"
+                              value={vcardConfig.phone}
+                              onChange={(e) => setVcardConfig({ ...vcardConfig, phone: e.target.value })}
+                              className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] text-slate-600 font-bold block">Email Address</label>
+                            <input
+                              type="text"
+                              value={vcardConfig.email}
+                              onChange={(e) => setVcardConfig({ ...vcardConfig, email: e.target.value })}
+                              className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* WI-FI EASY CONNECT */}
+                    {activeScanType === 'wifi' && (
+                      <div className="space-y-4">
+                        <div className="border-b border-slate-200 pb-3">
+                          <h3 className="text-sm font-extrabold text-black">Instant Wi-Fi Connection Screen</h3>
+                          <p className="text-[11px] text-slate-500">Instead of raw config, shows a beautifully-branded portal detailing support line & policies.</p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] text-slate-600 font-bold block">Network SSID (Name)</label>
+                            <input
+                              type="text"
+                              value={wifiConfig.ssid}
+                              onChange={(e) => setWifiConfig({ ...wifiConfig, ssid: e.target.value })}
+                              className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] text-slate-600 font-bold block">Security Protocol</label>
+                            <select
+                              value={wifiConfig.security}
+                              onChange={(e) => setWifiConfig({ ...wifiConfig, security: e.target.value })}
+                              className="w-full bg-white border border-slate-200 text-xs px-3 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                            >
+                              <option value="WPA2/WPA3">WPA2 / WPA3 (Recommended)</option>
+                              <option value="WEP">WEP (Legacy)</option>
+                              <option value="Unsecured">Unsecured / Public Open</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="text-[11px] text-slate-600 font-bold block">Network Security Password</label>
+                          <input
+                            type="text"
+                            value={wifiConfig.password}
+                            onChange={(e) => setWifiConfig({ ...wifiConfig, password: e.target.value })}
+                            className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black font-mono"
+                          />
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="text-[11px] text-slate-600 font-bold block">Welcome / Terms Announcement Note</label>
+                          <textarea
+                            rows={3}
+                            value={wifiConfig.welcomeNote}
+                            onChange={(e) => setWifiConfig({ ...wifiConfig, welcomeNote: e.target.value })}
+                            className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black resize-none"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* GOOGLE REVIEW BOOSTER */}
+                    {activeScanType === 'review' && (
+                      <div className="space-y-4">
+                        <div className="border-b border-slate-200 pb-3">
+                          <h3 className="text-sm font-extrabold text-black">Google Review Booster Setup</h3>
+                          <p className="text-[11px] text-slate-500">Accelerates high-volume real store ratings with structured incentives.</p>
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="text-[11px] text-slate-600 font-bold block">Retail Store / Brand Name</label>
+                          <input
+                            type="text"
+                            value={reviewConfig.storeName}
+                            onChange={(e) => setReviewConfig({ ...reviewConfig, storeName: e.target.value })}
+                            className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                          />
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="text-[11px] text-slate-600 font-bold block">Main Call-To-Action rating prompt</label>
+                          <input
+                            type="text"
+                            value={reviewConfig.promptText}
+                            onChange={(e) => setReviewConfig({ ...reviewConfig, promptText: e.target.value })}
+                            className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                          />
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="text-[11px] text-slate-600 font-bold block">Target Review Redirect URL</label>
+                          <input
+                            type="text"
+                            value={reviewConfig.targetUrl}
+                            onChange={(e) => setReviewConfig({ ...reviewConfig, targetUrl: e.target.value })}
+                            className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black font-mono"
+                          />
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="text-[11px] text-slate-600 font-bold block">Incentive Offer Text (Pro only)</label>
+                          <textarea
+                            rows={2}
+                            value={reviewConfig.incentiveText}
+                            onChange={(e) => setReviewConfig({ ...reviewConfig, incentiveText: e.target.value })}
+                            className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black resize-none"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* SECURE TIME CAPSULE */}
+                    {activeScanType === 'capsule' && (
+                      <div className="space-y-4">
+                        <div className="border-b border-slate-200 pb-3">
+                          <h3 className="text-sm font-extrabold text-black">Time-Locked Prediction Capsule</h3>
+                          <p className="text-[11px] text-slate-500">Locks prophecies, media diaries or private predictions behind decryption time-locks.</p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] text-slate-600 font-bold block">Capsule Title</label>
+                            <input
+                              type="text"
+                              value={capsuleConfig.capsuleTitle}
+                              onChange={(e) => setCapsuleConfig({ ...capsuleConfig, capsuleTitle: e.target.value })}
+                              className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] text-slate-600 font-bold block">Creator/Lock Authority</label>
+                            <input
+                              type="text"
+                              value={capsuleConfig.creator}
+                              onChange={(e) => setCapsuleConfig({ ...capsuleConfig, creator: e.target.value })}
+                              className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] text-slate-600 font-bold block">Lock Duration</label>
+                            <input
+                              type="text"
+                              value={capsuleConfig.lockDuration}
+                              onChange={(e) => setCapsuleConfig({ ...capsuleConfig, lockDuration: e.target.value })}
+                              className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-[11px] text-slate-600 font-bold block">Lock Date</label>
+                            <input
+                              type="text"
+                              value={capsuleConfig.lockDate}
+                              onChange={(e) => setCapsuleConfig({ ...capsuleConfig, lockDate: e.target.value })}
+                              className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="text-[11px] text-slate-600 font-bold block">Locked Secret PDF Message Content</label>
+                          <textarea
+                            rows={3}
+                            value={capsuleConfig.secretMessage}
+                            onChange={(e) => setCapsuleConfig({ ...capsuleConfig, secretMessage: e.target.value })}
+                            className="w-full bg-white border border-slate-200 text-xs px-3.5 py-2.5 rounded-lg text-black outline-none focus:border-black resize-none"
+                          />
+                        </div>
+
+                        <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-500 flex justify-between items-center">
+                          <span>Decrypt Passcode bypass (for editor testing)</span>
+                          <span className="font-mono text-black font-extrabold">"1234"</span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Submit Design State */}
+                    <button
+                      onClick={() => alert('Dynamic Scan Landing Page settings successfully compiled to blockchain cloud routing. All active scanners will see the updated view immediately.')}
+                      className="w-full py-3.5 bg-black hover:bg-zinc-800 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all shadow-sm"
+                    >
+                      Deploy Dynamic Page Update & Sync QR
+                    </button>
+                  </div>
+                </div>
+
+                {/* 2. Interactive iPhone Simulator Mockup View */}
+                <div className="lg:col-span-5 flex flex-col items-center">
+                  <span className="text-[10px] text-slate-400 uppercase tracking-widest font-extrabold mb-3">Live Smartphone Scan View</span>
+
+                  {/* Simulated Mobile Frame */}
+                  <div className="w-[320px] h-[640px] rounded-[48px] bg-black p-3.5 shadow-2xl relative border-4 border-slate-800 overflow-hidden flex flex-col">
+                    {/* Speaker notch / dynamic island */}
+                    <div className="absolute top-4 left-1/2 -translate-x-1/2 w-28 h-5 rounded-full bg-black z-50 flex items-center justify-center">
+                      <div className="w-2.5 h-2.5 rounded-full bg-slate-900 absolute right-4"></div>
+                    </div>
+
+                    {/* Phone Screen body */}
+                    <div className="w-full h-full bg-slate-50 rounded-[34px] overflow-hidden flex flex-col justify-between text-black relative select-none text-left">
+                      {/* Simulated Status bar */}
+                      <div className="h-8 bg-white border-b border-slate-100 flex items-center justify-between px-6 shrink-0 text-[10px] font-bold text-slate-500 font-mono">
+                        <span>09:41 AM</span>
+                        <div className="flex gap-1.5">
+                          <span>5G</span>
+                          <span>99%</span>
+                        </div>
+                      </div>
+
+                      {/* Scrolling content container */}
+                      <div className="flex-1 overflow-y-auto px-4 py-5 space-y-5 scrollbar-none font-sans">
+                        {/* WEDDING PREVIEW */}
+                        {activeScanType === 'wedding' && (
+                          <div className="space-y-4 text-center">
+                            <span className="text-3xl">🌸</span>
+                            <div className="space-y-1">
+                              <h4 className="font-extrabold text-base text-rose-600 font-serif leading-tight">{weddingConfig.title}</h4>
+                              <p className="text-[10px] text-slate-500 uppercase tracking-widest">A Union of Destiny</p>
+                            </div>
+
+                            <div className="p-3.5 bg-rose-50/50 border border-rose-100 rounded-xl space-y-2 text-xs">
+                              <div>
+                                <span className="text-[10px] uppercase font-bold text-slate-400 block">Hosts</span>
+                                <span className="font-extrabold text-slate-800">{weddingConfig.hosts}</span>
+                              </div>
+                              <div className="grid grid-cols-2 gap-2 pt-2 border-t border-rose-100">
+                                <div>
+                                  <span className="text-[9px] uppercase font-bold text-slate-400 block">Date</span>
+                                  <span className="font-extrabold text-slate-800 text-[11px]">{weddingConfig.date}</span>
+                                </div>
+                                <div>
+                                  <span className="text-[9px] uppercase font-bold text-slate-400 block">Venue</span>
+                                  <span className="font-extrabold text-slate-800 text-[11px] truncate block">{weddingConfig.venue}</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            <p className="text-[11px] text-slate-600 leading-relaxed italic px-2">"{weddingConfig.welcomeMessage}"</p>
+
+                            <div className="bg-white border border-slate-200 p-4 rounded-xl space-y-3 shadow-sm text-left">
+                              <h5 className="text-[11px] font-extrabold text-black uppercase tracking-wider text-center border-b border-slate-100 pb-1.5">Submit RSVP Instantly</h5>
+                              
+                              <div className="space-y-1.5">
+                                <label className="text-[9px] text-slate-500 uppercase font-bold">Your Name</label>
+                                <input type="text" placeholder="e.g. John Doe" className="w-full bg-slate-50 border border-slate-200 text-[10px] px-2.5 py-2 rounded" disabled />
+                              </div>
+                              <div className="grid grid-cols-2 gap-1.5">
+                                <div className="space-y-1.5">
+                                  <label className="text-[9px] text-slate-500 uppercase font-bold">Will you attend?</label>
+                                  <select className="w-full bg-slate-50 border border-slate-200 text-[10px] p-1.5 rounded" disabled>
+                                    <option>Yes, absolutely</option>
+                                    <option>No, sadly</option>
+                                  </select>
+                                </div>
+                                <div className="space-y-1.5">
+                                  <label className="text-[9px] text-slate-500 uppercase font-bold">Food Choice</label>
+                                  <select className="w-full bg-slate-50 border border-slate-200 text-[10px] p-1.5 rounded" disabled>
+                                    <option>Vegetarian</option>
+                                    <option>Vegan</option>
+                                    <option>Non-Vegetarian</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <button type="button" onClick={() => alert('RSVP entry submitted in preview successfully!')} className="w-full bg-rose-600 text-white font-bold text-[10px] py-2 rounded shadow">Confirm Invitation RSVP</button>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* PET ID PREVIEW */}
+                        {activeScanType === 'pet' && (
+                          <div className="space-y-4">
+                            <div className="text-center space-y-1">
+                              <span className="text-4xl block">🐶</span>
+                              <h4 className="font-extrabold text-lg text-slate-800 leading-tight">My Name is {petConfig.petName}</h4>
+                              <span className="text-[10px] font-mono uppercase bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full font-bold">{petConfig.breed}</span>
+                            </div>
+
+                            <div className="bg-red-50 border border-red-100 p-3.5 rounded-xl text-center space-y-1">
+                              <span className="text-[9px] font-extrabold text-red-600 uppercase tracking-widest block">⚠️ EMERGENCY SOS</span>
+                              <p className="text-[11px] text-red-700 font-medium leading-normal">"{petConfig.rewardMessage}"</p>
+                            </div>
+
+                            <div className="bg-white border border-slate-200 rounded-xl p-4 space-y-3 shadow-sm text-xs">
+                              <div>
+                                <span className="text-[9px] uppercase font-bold text-slate-400 block">Owner / Parent Name</span>
+                                <span className="font-extrabold text-slate-800">{petConfig.ownerName}</span>
+                              </div>
+                              <div className="border-t border-slate-100 pt-2">
+                                <span className="text-[9px] uppercase font-bold text-slate-400 block">Home return address</span>
+                                <span className="font-medium text-slate-700 leading-snug block">{petConfig.ownerAddress}</span>
+                              </div>
+                              <div className="border-t border-slate-100 pt-2">
+                                <span className="text-[9px] uppercase font-bold text-slate-400 block">Allergies & Medical specifications</span>
+                                <span className="font-bold text-red-600 block">{petConfig.medicalNotes}</span>
+                              </div>
+                            </div>
+
+                            <div className="space-y-2 pt-2">
+                              <a href={`tel:${petConfig.ownerPhone}`} className="w-full py-3 bg-black text-white rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-sm">
+                                📞 Call Owner ({petConfig.ownerPhone})
+                              </a>
+                              <a href={`tel:${petConfig.emergencyContact}`} className="w-full py-2.5 bg-slate-200 text-slate-800 rounded-xl font-bold text-[11px] flex items-center justify-center gap-2">
+                                🚨 Secondary Emergency Line
+                              </a>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* DIGITAL BUSINESS CARD VCARD */}
+                        {activeScanType === 'vcard' && (
+                          <div className="space-y-4 text-center">
+                            <div className="relative pt-4">
+                              <img src={vcardConfig.avatarUrl} alt="Avatar" className="w-20 h-20 rounded-full mx-auto border-2 border-black bg-slate-200" />
+                            </div>
+
+                            <div className="space-y-0.5">
+                              <h4 className="font-black text-base text-slate-900 leading-tight">{vcardConfig.name}</h4>
+                              <p className="text-[11px] font-bold text-slate-500 leading-none">{vcardConfig.title}</p>
+                              <p className="text-[10px] text-black font-extrabold uppercase tracking-wide pt-1">{vcardConfig.company}</p>
+                            </div>
+
+                            <p className="text-[11px] text-slate-600 px-3 leading-relaxed">"{vcardConfig.bio}"</p>
+
+                            <div className="bg-white border border-slate-200 rounded-xl p-3 text-left space-y-2 text-[11px] shadow-sm">
+                              <div className="flex justify-between border-b border-slate-100 pb-1.5">
+                                <span className="text-slate-400">Email</span>
+                                <span className="font-bold truncate max-w-[160px]">{vcardConfig.email}</span>
+                              </div>
+                              <div className="flex justify-between border-b border-slate-100 pb-1.5">
+                                <span className="text-slate-400">Phone</span>
+                                <span className="font-bold">{vcardConfig.phone}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-slate-400">Website</span>
+                                <span className="font-bold text-indigo-600 truncate max-w-[160px]">{vcardConfig.website}</span>
+                              </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-2 pt-2">
+                              <button onClick={() => alert('VCF Contact Card downloaded successfully in simulation!')} className="py-2.5 bg-black text-white font-extrabold text-[10px] uppercase rounded-lg shadow">
+                                📥 Save Contact
+                              </button>
+                              <a href={`https://wa.me/${vcardConfig.whatsapp}`} className="py-2.5 bg-emerald-600 text-white font-extrabold text-[10px] uppercase rounded-lg shadow flex items-center justify-center gap-1">
+                                💬 WhatsApp
+                              </a>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* WI-FI CONNECTION PORTAL */}
+                        {activeScanType === 'wifi' && (
+                          <div className="space-y-4">
+                            <div className="text-center space-y-1">
+                              <span className="text-4xl block">⚡</span>
+                              <h4 className="font-black text-base text-slate-900 leading-tight">Instant Lounge Wi-Fi</h4>
+                              <span className="text-[9px] uppercase font-mono tracking-widest text-slate-400 block">Seamless Automatic Link</span>
+                            </div>
+
+                            <div className="bg-slate-100 border border-slate-200 p-4 rounded-xl space-y-3.5 shadow-inner">
+                              <div>
+                                <span className="text-[9px] uppercase font-bold text-slate-400 block">Network SSID</span>
+                                <span className="font-mono font-extrabold text-sm text-slate-800">{wifiConfig.ssid}</span>
+                              </div>
+                              <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200">
+                                <div>
+                                  <span className="text-[9px] uppercase font-bold text-slate-400 block">Security</span>
+                                  <span className="font-bold text-slate-700 text-xs">{wifiConfig.security}</span>
+                                </div>
+                                <div>
+                                  <span className="text-[9px] uppercase font-bold text-slate-400 block">Password</span>
+                                  <span className="font-mono font-bold text-slate-700 text-xs">{wifiConfig.password}</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            <p className="text-[11px] text-slate-500 leading-relaxed text-center italic px-3">"{wifiConfig.welcomeNote}"</p>
+
+                            <button onClick={() => {
+                              alert('Simulating device Wi-Fi easy connection protocol... Success! Connected to network.');
+                            }} className="w-full py-3 bg-black text-white font-bold text-xs rounded-xl shadow flex items-center justify-center gap-2">
+                              📶 Auto Connect Wi-Fi Now
+                            </button>
+                          </div>
+                        )}
+
+                        {/* GOOGLE REVIEW BOOSTER */}
+                        {activeScanType === 'review' && (
+                          <div className="space-y-4 text-center">
+                            <span className="text-4xl block">⭐</span>
+                            <div className="space-y-1">
+                              <h4 className="font-black text-lg text-slate-900 leading-tight">{reviewConfig.storeName}</h4>
+                              <span className="text-[10px] uppercase font-bold text-yellow-500 tracking-wider">Verified Business Partner</span>
+                            </div>
+
+                            <p className="text-xs text-slate-700 font-extrabold px-3 leading-relaxed">"{reviewConfig.promptText}"</p>
+
+                            <div className="flex justify-center gap-1 pt-1.5">
+                              {[1, 2, 3, 4, 5].map((s) => (
+                                <button key={s} onClick={() => window.open(reviewConfig.targetUrl, '_blank')} className="text-2xl text-yellow-400 hover:scale-125 transition-transform">★</button>
+                              ))}
+                            </div>
+
+                            <div className="bg-yellow-50 border border-yellow-200 p-3.5 rounded-xl text-left space-y-1 text-xs">
+                              <span className="text-[9px] font-extrabold text-yellow-700 uppercase tracking-wider block">🎁 Scan Reward Incentive</span>
+                              <p className="text-[11px] text-slate-600 leading-snug">{reviewConfig.incentiveText}</p>
+                            </div>
+
+                            <a href={reviewConfig.targetUrl} target="_blank" rel="noreferrer" className="w-full py-3 bg-black text-white rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-sm">
+                              👉 Leave 5-Star Review on Maps
+                            </a>
+                          </div>
+                        )}
+
+                        {/* SECURE TIME CAPSULE */}
+                        {activeScanType === 'capsule' && (
+                          <div className="space-y-4">
+                            <div className="text-center space-y-1">
+                              <span className="text-3xl block">🔒</span>
+                              <h4 className="font-extrabold text-base text-slate-800 leading-tight">{capsuleConfig.capsuleTitle}</h4>
+                              <span className="text-[9px] font-mono text-slate-400 block">Created by {capsuleConfig.creator} on {capsuleConfig.lockDate}</span>
+                            </div>
+
+                            <div className="p-3.5 bg-slate-100 border border-slate-200 rounded-xl space-y-2 text-xs text-center">
+                              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">Lock status timer</span>
+                              <span className="font-mono font-black text-black text-[13px]">{capsuleConfig.lockDuration} remaining</span>
+                            </div>
+
+                            {capsuleConfig.isUnlocked ? (
+                              <div className="bg-emerald-50 border border-emerald-200 p-4 rounded-xl space-y-3 animate-fade-in text-xs">
+                                <span className="text-[9px] font-extrabold text-emerald-700 uppercase tracking-wider block">🔓 DECRYPTED SUCCESS</span>
+                                <p className="text-slate-800 font-mono leading-relaxed">"{capsuleConfig.secretMessage}"</p>
+                                <div className="border-t border-slate-200 pt-2">
+                                  <span className="text-[9px] uppercase font-bold text-slate-400">Encrypted PDF Attachments</span>
+                                  {capsuleConfig.files.map((f, i) => (
+                                    <div key={i} className="font-mono text-indigo-600 text-[10px] mt-1 font-bold underline cursor-pointer hover:text-indigo-800">📄 {f}</div>
+                                  ))}
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="bg-white border border-slate-200 p-4 rounded-xl space-y-3 shadow-sm text-xs">
+                                <h5 className="text-[10px] font-bold text-black uppercase tracking-wider text-center">Enter bypass key to decrypt message</h5>
+                                <div className="space-y-1.5">
+                                  <input
+                                    type="text"
+                                    placeholder="Enter secret passcode"
+                                    value={capsuleCodeInput}
+                                    onChange={(e) => setCapsuleCodeInput(e.target.value)}
+                                    className="w-full bg-slate-50 border border-slate-200 text-xs px-2.5 py-2 rounded text-center font-mono focus:border-black outline-none"
+                                  />
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    if (capsuleCodeInput === '1234') {
+                                      setCapsuleConfig({ ...capsuleConfig, isUnlocked: true });
+                                    } else {
+                                      alert('Invalid bypass decryption key! Try entering "1234".');
+                                    }
+                                  }}
+                                  className="w-full bg-black text-white font-bold text-[10px] py-2 rounded shadow"
+                                >
+                                  Decrypt Capsule Message
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Simulated iOS Home Bar */}
+                      <div className="h-6 bg-white flex items-center justify-center shrink-0">
+                        <div className="w-32 h-1 rounded-full bg-slate-300"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}
