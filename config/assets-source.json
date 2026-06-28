@@ -1,0 +1,8 @@
+{
+  "backgrounds": [
+    { "url": "https://bgjar.com/api/svg/mesh-gradient", "name": "mesh-gradient-01", "tags": ["gradient", "modern"] }
+  ],
+  "tabler-icons": [
+    { "name": "restaurant", "url": "https://tabler-icons.io/svg/restaurant.svg", "category": "icons-category", "tags": ["food", "cafe"] }
+  ]
+}

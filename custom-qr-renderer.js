@@ -16,12 +16,22 @@ class ArtQREngine {
       artStyle: options.artStyle || 'standard', // standard, wave, fibonacci, sakura
       color: options.color || '#111827',
       bgColor: options.bgColor || '#ffffff',
-      errorCorrection: options.errorCorrection || 'H' // L, M, Q, H
+      errorCorrection: options.errorCorrection || 'H', // L, M, Q, H
+      gradient: options.gradient || null
     };
 
     // Ensure size is set properly
     this.canvas.width = this.options.size;
     this.canvas.height = this.options.size;
+    
+    if (this.options.gradient) {
+      const grad = this.ctx.createLinearGradient(0, 0, this.options.size, this.options.size);
+      grad.addColorStop(0, this.options.gradient.from);
+      grad.addColorStop(1, this.options.gradient.to);
+      this.gradientFill = grad;
+    } else {
+      this.gradientFill = null;
+    }
 
     this.generateMatrix();
     this.render();
@@ -237,7 +247,11 @@ class ArtQREngine {
     const offset = this.options.margin * moduleSize;
 
     // Default primary fill style
-    this.ctx.fillStyle = this.options.color;
+    if (this.gradientFill) {
+      this.ctx.fillStyle = this.gradientFill;
+    } else {
+      this.ctx.fillStyle = this.options.color;
+    }
 
     for (let r = 0; r < this.moduleCount; r++) {
       for (let c = 0; c < this.moduleCount; c++) {
@@ -268,7 +282,11 @@ class ArtQREngine {
         const radius = (moduleSize / 2) * 0.88;
 
         this.ctx.save();
-        this.ctx.fillStyle = this.options.color;
+        if (this.gradientFill) {
+          this.ctx.fillStyle = this.gradientFill;
+        } else {
+          this.ctx.fillStyle = this.options.color;
+        }
 
         // Color theme adaptations for artistic shapes
         if (this.options.shape === 'bowl') {
@@ -362,9 +380,9 @@ class ArtQREngine {
       this.ctx.save();
 
       // Outer color, inner background color, center core color
-      let outerColor = this.options.color;
+      let outerColor = this.gradientFill || this.options.color;
       let innerColor = this.options.bgColor === 'transparent' ? '#ffffff' : this.options.bgColor;
-      let coreColor = this.options.color;
+      let coreColor = this.gradientFill || this.options.color;
 
       if (shape === 'bowl') {
         outerColor = '#78350F'; // warm brown bowl

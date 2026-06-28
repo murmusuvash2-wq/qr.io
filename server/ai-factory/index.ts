@@ -1,0 +1,9 @@
+// Placeholder for other modules
+export const paletteEngine = {};
+export const seoSuggester = {};
+export const tagSuggester = {};
+export const previewRenderer = {};
+export const svgGenerator = {};
+export const workflow = {};
+export const feedbackLoop = {};
+export const batchQueue = {};

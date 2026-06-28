@@ -1,4 +1,6 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
+import type { TemplateDocument, AnyLayer } from '../data/template-schema';
+import { getPlaceholdersForTool } from '../hooks/useTemplatePlaceholders';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc, updateDoc, increment, collection, getDocs, deleteDoc } from 'firebase/firestore';
 import firebaseConfig from '../../firebase-applet-config.json'; // Make sure the path is correct depending on where the config is generated
@@ -434,5 +436,97 @@ if (isFirebaseConfigured && db) {
   } catch (err) {
     console.warn("Failed to subscribe persistent telemetry channel:", err);
   }
+}
+
+export function migrateToLayers(old: TemplateDesign): TemplateDocument {
+  const layers: AnyLayer[] = [];
+  
+  // 1. Background layer
+  layers.push({
+    id: 'bg-1',
+    type: 'background',
+    name: 'Background',
+    visible: true,
+    locked: true,
+    opacity: 1,
+    zIndex: 0,
+    blendMode: 'normal',
+    x: 0, y: 0, width: 100, height: 100, rotation: 0,
+    bgType: old.bgType as 'solid' | 'gradient' | 'image' | 'pattern',
+    gradient: old.gradient,
+    color: old.qrConfig?.bgColor,
+  });
+  
+  // 2. QR layer
+  layers.push({
+    id: 'qr-1',
+    type: 'qr',
+    name: 'QR Code',
+    visible: true,
+    locked: false,
+    opacity: 1,
+    zIndex: 10,
+    blendMode: 'normal',
+    x: 50, y: 45,          // centered
+    width: 30, height: 30,  // proportional
+    rotation: 0,
+    data: 'https://ezqr.io',
+    fgColor: old.qrConfig?.fgColor || '#000000',
+    bgColor: '#FFFFFF',
+    dotsType: (old.qrConfig?.dotsStyle as any) || 'rounded',
+    cornersType: (old.qrConfig?.cornersStyle as any) || 'extra-rounded',
+    errorLevel: 'H',
+    quietZone: 4,
+  });
+  
+  // 3. Text layers
+  (old.textElements || []).forEach((el, i) => {
+    layers.push({
+      id: `text-${i + 1}`,
+      type: 'text',
+      name: `Text ${i + 1}`,
+      visible: true,
+      locked: false,
+      opacity: 1,
+      zIndex: 20 + i,
+      blendMode: 'normal',
+      x: el.x, y: el.y,
+      width: 80, height: 10,
+      rotation: 0,
+      content: el.content,
+      fontFamily: 'Inter',
+      fontWeight: 700,
+      fontSize: el.fontSize,
+      lineHeight: 1.2,
+      letterSpacing: 0,
+      textAlign: 'center',
+      color: el.color,
+      autoWrap: true,
+      maxLines: 2,
+    });
+  });
+  
+  return {
+    id: old.id,
+    title: old.title,
+    category: old.category,
+    type: old.type,
+    description: old.description,
+    canvasWidth: 800,
+    canvasHeight: 600,
+    backgroundColor: '#FAFAFA',
+    layers,
+    safeZone: { top: 10, right: 10, bottom: 10, left: 10, showGuides: true },
+    placeholders: getPlaceholdersForTool(old.toolId || ''),
+    status: old.status === 'approved' ? 'approved' : 'draft',
+    createdAt: old.createdAt,
+    toolId: old.toolId,
+    toolName: old.toolName,
+    seoTitle: old.seoTitle,
+    metaDescription: old.metaDescription,
+    urlSlug: old.urlSlug,
+    keywords: old.keywords,
+    jsonLdSchema: old.jsonLdSchema,
+  };
 }
 

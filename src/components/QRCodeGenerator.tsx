@@ -14,12 +14,17 @@ import { TOOL_CONTENT_DATABASE } from '../data/toolContent';
 import { RELATED_TOOLS_DATABASE } from '../data/relatedTools';
 import { CAPABILITIES_DATABASE, DEFAULT_CAPABILITY } from '../data/capabilities';
 import { Field } from '../data/schemas';
+import { Input, Select, Button, Card, Textarea, Skeleton, Badge } from '../design-system';
+import { QREngine } from '../lib/qr-engine';
+import { renderArtQR, ART_SHAPES, ART_STYLES, ArtShape, ArtStyle } from '../lib/art-engine-adapter';
+import { validateQRScan, getQRQualityScore, ScanResult } from '../utils/scan-validator';
+import { QrGradientPicker, GradientConfig } from './ui/QrGradientPicker';
 
 interface QRCodeGeneratorProps {
   tool: QRTool;
   user: UserStats | null;
   onOpenPayModal: () => void;
-  onSelectTemplate?: (template: TemplateDesign) => void;
+  onSelectTemplate?: (template: TemplateDesign, tool?: QRTool, formValues?: Record<string, string>) => void;
 }
 
 const getToolGroup = (toolId: string, category: string) => {
@@ -161,6 +166,23 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal, onSelectTe
   const qrRef = useRef<HTMLDivElement>(null);
   const qrCode = useRef<QRCodeStyling | null>(null);
 
+  // Print/Export options
+  const [selectedDPI, setSelectedDPI] = useState(300);
+  const [errorLevel, setErrorLevel] = useState<string>('H');
+  const [quietZoneSize, setQuietZoneSize] = useState<number>(4);
+  
+  // Gradient & Art Engine
+  const [gradient, setGradient] = useState<GradientConfig | undefined>();
+  const [gradientEnabled, setGradientEnabled] = useState(false);
+  const [artShape, setArtShape] = useState<ArtShape>('circle');
+  const [artStyle, setArtStyle] = useState<ArtStyle>('standard');
+  const [useArtEngine, setUseArtEngine] = useState(false);
+  
+  // Scan Validation
+  const [scanResult, setScanResult] = useState<ScanResult | null>(null);
+  const [showScanner, setShowScanner] = useState(false);
+  const [qrQuality, setQrQuality] = useState<any>(null);
+
   // Purpose Specific Form States
   const [contactTab, setContactTab] = useState<'personal' | 'business'>('personal');
   const [showWifiPass, setShowWifiPass] = useState<boolean>(false);
@@ -244,26 +266,55 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal, onSelectTe
 
   // Re-draw qr code representation
   useEffect(() => {
-    if (qrCode.current && qrRef.current) {
-      qrRef.current.innerHTML = '';
-      qrCode.current.update({
-        data: qrString || 'Welcome',
-        dotsOptions: {
-          color: fgColor,
-          type: dotsType
-        },
-        cornersSquareOptions: {
-          color: fgColor,
-          type: cornersType
-        },
-        image: logoFile || undefined,
-        backgroundOptions: {
-          color: bgColor
+    if (useArtEngine || gradientEnabled) {
+      if (qrRef.current) {
+        qrRef.current.innerHTML = '';
+        const canvas = document.createElement('canvas');
+        canvas.width = 280;
+        canvas.height = 280;
+        qrRef.current.appendChild(canvas);
+        
+        try {
+          renderArtQR(canvas, {
+            data: qrString || 'Welcome',
+            size: 280,
+            shape: artShape,
+            artStyle: artStyle,
+            fgColor: fgColor,
+            bgColor: bgColor,
+            gradient: gradientEnabled && gradient ? { from: gradient.from, to: gradient.to } : undefined,
+            errorLevel: errorLevel as any,
+          });
+        } catch (e) {
+          console.error('Art Engine Error:', e);
         }
-      });
-      qrCode.current.append(qrRef.current);
+      }
+    } else {
+      if (qrCode.current && qrRef.current) {
+        qrRef.current.innerHTML = '';
+        qrCode.current.update({
+          data: qrString || 'Welcome',
+          margin: quietZoneSize,
+          qrOptions: {
+            errorCorrectionLevel: errorLevel as any,
+          },
+          dotsOptions: {
+            color: fgColor,
+            type: dotsType
+          },
+          cornersSquareOptions: {
+            color: fgColor,
+            type: cornersType
+          },
+          image: logoFile || undefined,
+          backgroundOptions: {
+            color: bgColor
+          }
+        });
+        qrCode.current.append(qrRef.current);
+      }
     }
-  }, [qrString, dotsType, cornersType, fgColor, bgColor, logoFile]);
+  }, [qrString, dotsType, cornersType, fgColor, bgColor, logoFile, useArtEngine, artShape, artStyle, gradientEnabled, gradient, errorLevel, quietZoneSize]);
 
   const handleInputChange = (key: string, val: string) => {
     setFormValues(prev => ({ ...prev, [key]: val }));
@@ -349,13 +400,119 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal, onSelectTe
           URL.revokeObjectURL(blobUrl);
         };
         img.src = blobUrl;
-      }).catch(() => {
-        qrCode.current?.download({
-          extension: 'png',
-          name: `ezqr-${tool.slug}-${Date.now()}`
-        });
       });
     }
+  };
+
+  const exportHighResPNG = async () => {
+    if (!user?.isPro) { onOpenPayModal(); return; }
+    try {
+      const engine = new QREngine({
+        data: qrString,
+        fgColor,
+        bgColor,
+        dotsType: dotsType as any,
+        cornersType: cornersType as any,
+        logo: logoFile || undefined,
+        errorLevel: errorLevel as any,
+      });
+      const blob = await engine.exportPNG(selectedDPI);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ezqr-${tool.slug}-${selectedDPI}dpi-${Date.now()}.png`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error('High-res export failed:', e);
+    }
+  };
+
+  const exportSVG = async () => {
+    if (!user?.isPro) { onOpenPayModal(); return; }
+    try {
+      const engine = new QREngine({
+        data: qrString,
+        fgColor,
+        bgColor,
+        dotsType: dotsType as any,
+        cornersType: cornersType as any,
+        logo: logoFile || undefined,
+        errorLevel: errorLevel as any,
+      });
+      const svgStr = await engine.exportSVG();
+      const blob = new Blob([svgStr], { type: 'image/svg+xml' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ezqr-${tool.slug}-${Date.now()}.svg`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error('SVG export failed:', e);
+    }
+  };
+
+  const exportPDF = async () => {
+    if (!user?.isPro) { onOpenPayModal(); return; }
+    try {
+      const engine = new QREngine({
+        data: qrString,
+        fgColor,
+        bgColor,
+        dotsType: dotsType as any,
+        cornersType: cornersType as any,
+        logo: logoFile || undefined,
+        errorLevel: errorLevel as any,
+      });
+      const pdfBlob = await engine.exportPDF();
+      const url = URL.createObjectURL(pdfBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ezqr-${tool.slug}-print-${Date.now()}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error('PDF export failed:', e);
+    }
+  };
+
+  const exportEPS = async () => {
+    if (!user?.isPro) { onOpenPayModal(); return; }
+    try {
+      const engine = new QREngine({
+        data: qrString,
+        fgColor,
+        bgColor,
+        dotsType: dotsType as any,
+        cornersType: cornersType as any,
+        logo: logoFile || undefined,
+        errorLevel: errorLevel as any,
+      });
+      const svgStr = await engine.exportSVG();
+      const { exportEPS } = await import('../lib/svg-to-eps');
+      const blob = await exportEPS(svgStr, `QR Code - ${tool.name}`, bgColor);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ezqr-${tool.slug}-${Date.now()}.eps`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error('EPS export failed:', e);
+    }
+  };
+
+  const handleValidateScan = async () => {
+    const canvas = qrRef.current?.querySelector('canvas');
+    if (!canvas) return;
+    
+    const result = await validateQRScan(canvas);
+    setScanResult(result);
+    
+    // Also get quality score
+    const quality = getQRQualityScore(qrString, errorLevel);
+    setQrQuality(quality);
   };
 
   const toolGroup = getToolGroup(tool.id, tool.category);
@@ -790,67 +947,49 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal, onSelectTe
 
                 {/* Field Wrapper with Icons & Inputs */}
                 {input.type === 'textarea' ? (
-                  <div className="relative">
-                    <textarea
-                      value={val}
-                      onChange={(e) => handleInputChange(input.id, e.target.value)}
-                      placeholder={input.placeholder}
-                      className="w-full px-4 py-3 bg-[#040408] border-[1.5px] border-[#28283E] text-[#F2F2FF] rounded-[10px] text-[14px] outline-none transition-all resize-y min-h-[90px] focus:border-[#7C6EFA] focus:shadow-[0_0_0_3px_rgba(124,110,250,0.1)] placeholder-[#42425A]"
-                    />
-                  </div>
+                  <Textarea
+                    value={val}
+                    onChange={(e) => handleInputChange(input.id, e.target.value)}
+                    placeholder={input.placeholder}
+                  />
                 ) : input.type === 'select' ? (
                   <div className="relative">
-                    <select
+                    <Select
                       value={val}
                       onChange={(e) => handleInputChange(input.id, e.target.value)}
-                      className="w-full px-3.5 py-3 bg-[#040408] border-[1.5px] border-[#28283E] text-[#F2F2FF] rounded-[10px] text-[14px] outline-none transition-all focus:border-[#7C6EFA] appearance-none"
-                    >
-                      {input.options?.map(opt => (
-                        <option key={opt} value={opt}>{opt}</option>
-                      ))}
-                    </select>
-                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8080A0] pointer-events-none text-[10px]">▼</span>
+                      options={input.options?.map(opt => ({ label: opt, value: opt })) || []}
+                      className="bg-[#040408] border-[#28283E] text-[#F2F2FF] focus:border-[#7C6EFA] py-3"
+                    />
                   </div>
                 ) : (
-                  <div className="relative flex items-center rounded-[10px] border-[1.5px] border-[#28283E] bg-[#040408] focus-within:border-[#7C6EFA] focus-within:shadow-[0_0_0_3px_rgba(124,110,250,0.1)] transition-all overflow-hidden p-0">
-                    {/* Inner Icon Prefix */}
-                    <span className="pl-3.5 text-[#8080A0] shrink-0 font-bold select-none">
-                      {isUrlType ? (
-                        <Globe className="w-4 h-4 text-[#7C6EFA]" />
-                      ) : (input.id === 'password' || input.id.includes('pass')) ? (
-                        <span>🔒</span>
-                      ) : (input.id === 'ssid' || input.id.includes('ssid') || input.id === 'network') ? (
-                        <Wifi className="w-4 h-4 text-[#7C6EFA]" />
-                      ) : isPhoneType ? (
-                        <Phone className="w-4 h-4 text-emerald-400" />
-                      ) : input.id === 'amount' ? (
-                        <Coins className="w-4 h-4 text-yellow-500" />
-                      ) : isCoordType ? (
-                        <MapPin className="w-4 h-4 text-red-500" />
-                      ) : (
-                        <span>🖊️</span>
-                      )}
-                    </span>
-                    
-                    {/* Exact Input */}
-                    <input
+                  <div className="relative">
+                    <Input
                       type={(input.id === 'password' || input.id.includes('pass')) ? (showWifiPass ? 'text' : 'password') : (input.type || 'text')}
                       value={val}
                       onChange={(e) => handleInputChange(input.id, e.target.value)}
                       placeholder={input.placeholder}
-                      className="w-full pl-3.5 pr-10 py-3 bg-transparent text-[#F2F2FF] text-[14px] outline-none placeholder-[#42425A]"
+                      className="bg-[#040408] border-[#28283E] text-[#F2F2FF] focus:border-[#7C6EFA] focus:shadow-[0_0_0_3px_rgba(124,110,250,0.1)] py-3"
+                      leftIcon={
+                        isUrlType ? <Globe className="w-4 h-4 text-[#7C6EFA]" />
+                        : (input.id === 'password' || input.id.includes('pass')) ? <span>🔒</span>
+                        : (input.id === 'ssid' || input.id.includes('ssid') || input.id === 'network') ? <Wifi className="w-4 h-4 text-[#7C6EFA]" />
+                        : isPhoneType ? <Phone className="w-4 h-4 text-emerald-400" />
+                        : input.id === 'amount' ? <Coins className="w-4 h-4 text-yellow-500" />
+                        : isCoordType ? <MapPin className="w-4 h-4 text-red-500" />
+                        : <span>🖊️</span>
+                      }
+                      rightElement={
+                        (input.id === 'password' || input.id.includes('pass')) ? (
+                          <button
+                            type="button"
+                            onClick={() => setShowWifiPass(!showWifiPass)}
+                            className="text-[#8080A0] hover:text-white transition-colors"
+                          >
+                            {showWifiPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </button>
+                        ) : undefined
+                      }
                     />
-
-                    {/* Password toggle icon */}
-                    {(input.id === 'password' || input.id.includes('pass')) && (
-                      <button
-                        type="button"
-                        onClick={() => setShowWifiPass(!showWifiPass)}
-                        className="absolute right-3.5 text-[#8080A0] hover:text-white transition-colors"
-                      >
-                        {showWifiPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </button>
-                    )}
                   </div>
                 )}
 
@@ -1033,7 +1172,7 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal, onSelectTe
                     key={template.id} 
                     onClick={() => {
                       if (onSelectTemplate) {
-                        onSelectTemplate(template);
+                        onSelectTemplate(template, tool, formValues);
                       }
                     }}
                     className="group cursor-pointer bg-[#0A0A12] border border-[#1C1C2E] hover:border-indigo-500/40 rounded-xl p-3 flex flex-col gap-3 transition-all hover:shadow-[0_8px_20px_rgba(124,110,250,0.1)]"
@@ -1307,6 +1446,114 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal, onSelectTe
               </div>
             </div>
           </div>
+
+            {/* NEW ART ENGINE SECTION */}
+            <div className="col-span-2 pt-4 mt-4 border-t border-[#1C1C2E]">
+              <h4 className="text-[var(--ez-text-xs)] font-bold text-[#8080A0] uppercase tracking-[1.2px] mb-4">
+                Art Style (Pro)
+              </h4>
+              
+              <label className="flex items-center gap-3 cursor-pointer mb-4">
+                <div className={`w-9 h-5 rounded-full transition-all relative ${useArtEngine ? "bg-[#7C6EFA]" : "bg-[#1C1C2E]"}`}>
+                  <input type="checkbox" className="sr-only peer" checked={useArtEngine} 
+                    onChange={(e) => { if (!user?.isPro) { onOpenPayModal(); return; } setUseArtEngine(e.target.checked); }} />
+                  <div className={`absolute top-[2px] left-[2px] w-3.5 h-3.5 rounded-full bg-white transition-all ${useArtEngine ? "translate-x-4" : ""}`} />
+                </div>
+                <span className="text-[12px] font-bold text-white">
+                  Enable Art Engine
+                </span>
+                {!user?.isPro && <span className="text-[9px] uppercase font-bold bg-[rgba(244,114,182,0.1)] border border-[rgba(244,114,182,0.2)] text-[#F472B6] px-[7px] py-[2px] rounded-[4px]">PRO</span>}
+              </label>
+              
+              {useArtEngine && (
+                <div className="space-y-4">
+                  <div className="flex flex-wrap gap-2">
+                    {ART_SHAPES.map((s) => (
+                      <button
+                        key={s.value}
+                        onClick={() => setArtShape(s.value)}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold border transition-all ${
+                          artShape === s.value
+                            ? "bg-[#12121E] border-[#7C6EFA] text-white"
+                            : "bg-transparent border-[#28283E] text-[#8080A0] hover:border-[#4A4A68]"
+                        }`}
+                      >
+                        <span>{s.preview}</span> {s.label}
+                      </button>
+                    ))}
+                  </div>
+                  
+                  <div>
+                    <label className="text-[10px] font-bold text-[#8080A0] uppercase tracking-[1.2px] block mb-2">Art Pattern</label>
+                    <select 
+                      value={artStyle} 
+                      onChange={(e) => setArtStyle(e.target.value as ArtStyle)}
+                      className="w-full text-sm font-bold bg-[#040408] border-[1.5px] border-[#28283E] text-white rounded-[10px] px-3.5 py-3 outline-none focus:border-[#7C6EFA] appearance-none"
+                    >
+                      {ART_STYLES.map(s => <option key={s.value} value={s.value}>{s.label} — {s.description}</option>)}
+                    </select>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* GRADIENT PICKER */}
+            <div className="col-span-2 pt-4 mt-2 border-t border-[#1C1C2E]">
+              <QrGradientPicker 
+                enabled={gradientEnabled} 
+                onToggle={(enabled) => { if (!user?.isPro && enabled) { onOpenPayModal(); return; } setGradientEnabled(enabled); }} 
+                value={gradient} 
+                onChange={setGradient} 
+              />
+            </div>
+
+            {/* QR TECHNICAL OPTIONS */}
+            <div className="col-span-2 pt-4 mt-2 border-t border-[#1C1C2E]">
+              <h4 className="text-[var(--ez-text-xs)] font-bold text-[#8080A0] uppercase tracking-[1.2px] mb-4">
+                QR Technical Options
+              </h4>
+              
+              <div className="grid grid-cols-2 gap-5 mb-4">
+                <div>
+                  <label className="text-[10px] font-bold text-[#8080A0] uppercase tracking-[1.2px] block mb-2">Error Correction</label>
+                  <select 
+                    value={errorLevel} 
+                    onChange={(e) => setErrorLevel(e.target.value)}
+                    className="w-full text-sm font-bold bg-[#040408] border-[1.5px] border-[#28283E] text-white rounded-[10px] px-3.5 py-2 outline-none focus:border-[#7C6EFA] appearance-none"
+                  >
+                    <option value="L">Low (7%)</option>
+                    <option value="M">Medium (15%)</option>
+                    <option value="Q">Quartile (25%)</option>
+                    <option value="H">High (30%)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-[10px] font-bold text-[#8080A0] uppercase tracking-[1.2px] block mb-2">Quiet Zone</label>
+                  <select 
+                    value={String(quietZoneSize)} 
+                    onChange={(e) => setQuietZoneSize(Number(e.target.value))}
+                    className="w-full text-sm font-bold bg-[#040408] border-[1.5px] border-[#28283E] text-white rounded-[10px] px-3.5 py-2 outline-none focus:border-[#7C6EFA] appearance-none"
+                  >
+                    <option value="2">2 modules</option>
+                    <option value="4">4 modules</option>
+                    <option value="6">6 modules</option>
+                    <option value="8">8 modules</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div className="bg-[#0A0A12] border border-[#1C1C2E] p-3 rounded-lg flex items-center gap-3">
+                <div className={`w-3 h-3 rounded-full ${errorLevel === 'H' ? "bg-emerald-500" : errorLevel === 'Q' ? "bg-amber-500" : "bg-red-500"}`} />
+                <div>
+                  <p className="text-[11px] font-bold text-white">
+                    {errorLevel === 'H' ? 'Maximum Reliability' : errorLevel === 'Q' ? 'Good Reliability' : 'Standard Reliability'}
+                  </p>
+                  <p className="text-[9px] text-[#8080A0]">
+                    {errorLevel === 'H' ? 'Best for small/crowded prints with logo overlay' : errorLevel === 'L' ? 'Use only for clean, large format prints' : 'Suitable for most use cases'}
+                  </p>
+                </div>
+              </div>
+            </div>
           
           {!user?.isPro && (
             <button onClick={onOpenPayModal} className="mt-6 w-full text-center py-3 bg-[rgba(124,110,250,0.05)] border border-[rgba(124,110,250,0.2)] rounded-[10px] hover:bg-[rgba(124,110,250,0.1)] transition-colors">
@@ -1338,7 +1585,12 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal, onSelectTe
 
         <div className="flex flex-col items-center justify-center w-full relative z-10 max-w-[340px]">
           
-          {isMockupMode ? (
+          {!qrString ? (
+            <div className="flex flex-col items-center gap-4 py-8">
+              <Skeleton variant="rectangular" width={280} height={280} />
+              <Skeleton width="60%" />
+            </div>
+          ) : isMockupMode ? (
             /* PRINT/LAYOUT MOCKUP BOX */
             <div className="w-[300px] h-[380px] rounded-[24px] p-5 flex flex-col justify-between text-center shadow-[0_16px_50px_rgba(0,0,0,0.9)] border border-[#28283E]/50 overflow-hidden relative" style={{ backgroundImage: previewLayout.mockupBg }}>
               {/* Overlay shading for realistic texture */}
@@ -1440,25 +1692,132 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal, onSelectTe
           </div>
 
           <div className="w-full mt-6 grid grid-cols-1 gap-3">
-            <button
+            <Button
+              variant="gradient"
               onClick={downloadPNG}
-              className="w-full py-3.5 px-4 bg-gradient-to-br from-[#7C6EFA] to-[#C084FC] hover:opacity-90 text-white rounded-[10px] flex items-center justify-center gap-2 transition-all font-bold text-[13px]"
+              fullWidth
+              size="lg"
+              className="text-[13px]"
+              icon={<Download className="w-4 h-4" />}
             >
-              <Download className="w-4 h-4" /> Download QR Code (PNG)
-            </button>
-            <button
-              onClick={() => {
-                if(!user?.isPro) { onOpenPayModal(); return; }
-                navigator.clipboard.writeText(qrString);
-                setCopied(true);
-                setTimeout(() => setCopied(false), 2000);
-              }}
-              className="w-full py-3 px-4 bg-transparent border-[1.5px] border-[#28283E] hover:border-[#7C6EFA] text-[#8080A0] hover:text-[#F2F2FF] rounded-[10px] flex items-center justify-center gap-2 transition-all font-bold text-[12px]"
-            >
-              {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
-              {copied ? 'Copied Data' : 'Clean SVG / PDF Export'}
-              {!user?.isPro && <span className="text-[9px] uppercase font-bold bg-[rgba(244,114,182,0.1)] border border-[rgba(244,114,182,0.2)] text-[#F472B6] px-[6px] py-[1px] ml-1 rounded-[4px]">PRO</span>}
-            </button>
+              Download QR Code (PNG)
+            </Button>
+            
+            <div className="grid grid-cols-2 gap-2 mt-2">
+              <Button
+                variant="secondary"
+                size="sm"
+                fullWidth
+                onClick={exportHighResPNG}
+                className="text-[11px] bg-transparent border border-[#28283E] text-[#8080A0] hover:text-[#F2F2FF] hover:border-[#7C6EFA]"
+              >
+                High-Res PNG
+                {!user?.isPro && <span className="text-[8px] uppercase font-bold bg-[rgba(244,114,182,0.1)] border border-[rgba(244,114,182,0.2)] text-[#F472B6] px-1 py-[1px] ml-1 rounded-[3px]">PRO</span>}
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                fullWidth
+                onClick={exportSVG}
+                className="text-[11px] bg-transparent border border-[#28283E] text-[#8080A0] hover:text-[#F2F2FF] hover:border-[#7C6EFA]"
+              >
+                Vector SVG
+                {!user?.isPro && <span className="text-[8px] uppercase font-bold bg-[rgba(244,114,182,0.1)] border border-[rgba(244,114,182,0.2)] text-[#F472B6] px-1 py-[1px] ml-1 rounded-[3px]">PRO</span>}
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                fullWidth
+                onClick={exportPDF}
+                className="text-[11px] bg-transparent border border-[#28283E] text-[#8080A0] hover:text-[#F2F2FF] hover:border-[#7C6EFA]"
+              >
+                Print PDF (A4)
+                {!user?.isPro && <span className="text-[8px] uppercase font-bold bg-[rgba(244,114,182,0.1)] border border-[rgba(244,114,182,0.2)] text-[#F472B6] px-1 py-[1px] ml-1 rounded-[3px]">PRO</span>}
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                fullWidth
+                onClick={exportEPS}
+                className="text-[11px] bg-transparent border border-[#28283E] text-[#8080A0] hover:text-[#F2F2FF] hover:border-[#7C6EFA]"
+              >
+                Pro EPS
+                {!user?.isPro && <span className="text-[8px] uppercase font-bold bg-[rgba(244,114,182,0.1)] border border-[rgba(244,114,182,0.2)] text-[#F472B6] px-1 py-[1px] ml-1 rounded-[3px]">PRO</span>}
+              </Button>
+            </div>
+            
+            <div className="mt-4 pt-4 border-t border-[#1C1C2E]">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] font-bold text-[#8080A0]">Print Resolution</span>
+                <select
+                  value={selectedDPI}
+                  onChange={(e) => setSelectedDPI(Number(e.target.value))}
+                  className="bg-[#0A0A12] border border-[#28283E] text-white text-[10px] rounded px-2 py-1 outline-none"
+                >
+                  <option value="150">150dpi — Draft/Home</option>
+                  <option value="300">300dpi — Professional</option>
+                  <option value="600">600dpi — High Quality</option>
+                  <option value="1200">1200dpi — Premium</option>
+                </select>
+              </div>
+            </div>
+
+            {/* SCAN VALIDATION SECTION */}
+            <div className="mt-4 p-4 bg-[#0A0A12] border border-[#1C1C2E] rounded-xl">
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="text-[10px] font-bold text-[#8080A0] uppercase tracking-wider">
+                  Scan Validation
+                </h4>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={handleValidateScan}
+                  className="h-6 text-[10px] py-0 px-2"
+                >
+                  Test Scan
+                </Button>
+              </div>
+
+              {scanResult && (
+                <div className={`mt-3 p-3 rounded-lg border text-[11px] ${
+                  scanResult.success 
+                    ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
+                    : "border-amber-500/30 bg-amber-500/10 text-amber-400"
+                }`}>
+                  {scanResult.success ? (
+                    <>
+                      <p className="font-bold flex items-center gap-1.5"><CheckCircle className="w-3.5 h-3.5" /> Scans Successfully!</p>
+                      <p className="text-white/60 mt-1 truncate">Data: {scanResult.rawValue}</p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="font-bold">⚠️ {scanResult.error}</p>
+                      <p className="text-white/60 mt-1">Try increasing contrast or reducing data length.</p>
+                    </>
+                  )}
+                </div>
+              )}
+              
+              {qrQuality && (
+                <div className="mt-3 pt-3 border-t border-[#1C1C2E]">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-[10px] font-bold text-white">Quality Score</span>
+                    <span className="text-[10px] font-bold" style={{ color: qrQuality.color }}>
+                      {qrQuality.label} ({qrQuality.score}/100)
+                    </span>
+                  </div>
+                  <div className="w-full h-1.5 bg-[#1C1C2E] rounded-full overflow-hidden mb-2">
+                    <div className="h-full rounded-full transition-all" style={{
+                      width: `${qrQuality.score}%`,
+                      background: qrQuality.color,
+                    }} />
+                  </div>
+                  {qrQuality.issues.map((issue: string, i: number) => (
+                    <p key={i} className="text-[10px] text-[#8080A0] mt-1">• {issue}</p>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

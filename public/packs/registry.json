@@ -1,0 +1,167 @@
+{
+  "version": "1.0",
+  "totalPacks": 16,
+  "totalDesigns": 128,
+  "packs": [
+    {
+      "id": "pack-restaurant",
+      "name": "Smart Dining Restaurant Pack",
+      "icon": "🍽️",
+      "industry": "restaurant",
+      "isPremium": false,
+      "tools": 8,
+      "templates": 8,
+      "slug": "restaurant-qr-design-pack"
+    },
+    {
+      "id": "pack-wedding",
+      "name": "Royal Elegance Wedding Pack",
+      "icon": "💍",
+      "industry": "wedding",
+      "isPremium": true,
+      "tools": 8,
+      "templates": 8,
+      "slug": "wedding-qr-design-pack"
+    },
+    {
+      "id": "pack-medical",
+      "name": "Healthcare Professional Pack",
+      "icon": "🏥",
+      "industry": "medical",
+      "isPremium": false,
+      "tools": 8,
+      "templates": 8,
+      "slug": "medical-qr-design-pack"
+    },
+    {
+      "id": "pack-tech",
+      "name": "Cyber Tech Startup Pack",
+      "icon": "💻",
+      "industry": "tech",
+      "isPremium": false,
+      "tools": 8,
+      "templates": 8,
+      "slug": "tech-qr-design-pack"
+    },
+    {
+      "id": "pack-travel",
+      "name": "Wanderlust Travel Pack",
+      "icon": "✈️",
+      "industry": "travel",
+      "isPremium": false,
+      "tools": 8,
+      "templates": 8,
+      "slug": "travel-qr-design-pack"
+    },
+    {
+      "id": "pack-real-estate",
+      "name": "Property Pro Real Estate Pack",
+      "icon": "🏠",
+      "industry": "real_estate",
+      "isPremium": true,
+      "tools": 8,
+      "templates": 8,
+      "slug": "real-estate-qr-design-pack"
+    },
+    {
+      "id": "pack-education",
+      "name": "Academic Learning Pack",
+      "icon": "📚",
+      "industry": "education",
+      "isPremium": false,
+      "tools": 8,
+      "templates": 8,
+      "slug": "education-qr-design-pack"
+    },
+    {
+      "id": "pack-business",
+      "name": "Corporate Enterprise Pack",
+      "icon": "💼",
+      "industry": "business",
+      "isPremium": true,
+      "tools": 8,
+      "templates": 8,
+      "slug": "business-qr-design-pack"
+    },
+    {
+      "id": "pack-fitness",
+      "name": "Energize Fitness Pack",
+      "icon": "💪",
+      "industry": "fitness",
+      "isPremium": false,
+      "tools": 8,
+      "templates": 8,
+      "slug": "fitness-qr-design-pack"
+    },
+    {
+      "id": "pack-cafe",
+      "name": "Cozy Cafe Corner Pack",
+      "icon": "☕",
+      "industry": "cafe",
+      "isPremium": false,
+      "tools": 8,
+      "templates": 8,
+      "slug": "cafe-qr-design-pack"
+    },
+    {
+      "id": "pack-salon",
+      "name": "Glamour Salon Beauty Pack",
+      "icon": "💇♀️",
+      "industry": "salon",
+      "isPremium": true,
+      "tools": 8,
+      "templates": 8,
+      "slug": "salon-qr-design-pack"
+    },
+    {
+      "id": "pack-hotel",
+      "name": "Grand Hospitality Hotel Pack",
+      "icon": "🏨",
+      "industry": "hotel",
+      "isPremium": true,
+      "tools": 8,
+      "templates": 8,
+      "slug": "hotel-qr-design-pack"
+    },
+    {
+      "id": "pack-retail",
+      "name": "Smart Retail Shop Pack",
+      "icon": "🛍️",
+      "industry": "retail",
+      "isPremium": false,
+      "tools": 8,
+      "templates": 8,
+      "slug": "retail-qr-design-pack"
+    },
+    {
+      "id": "pack-crypto",
+      "name": "Crypto Finance Blockchain Pack",
+      "icon": "₿",
+      "industry": "crypto",
+      "isPremium": true,
+      "tools": 8,
+      "templates": 8,
+      "slug": "crypto-qr-design-pack"
+    },
+    {
+      "id": "pack-festival",
+      "name": "Celebration Festival Pack",
+      "icon": "🎉",
+      "industry": "festival",
+      "isPremium": false,
+      "tools": 8,
+      "templates": 8,
+      "slug": "festival-qr-design-pack"
+    },
+    {
+      "id": "pack-pet",
+      "name": "Pet Care & ID Pack",
+      "icon": "🐾",
+      "industry": "pet",
+      "isPremium": false,
+      "tools": 8,
+      "templates": 8,
+      "slug": "pet-qr-design-pack"
+    }
+  ]
+}

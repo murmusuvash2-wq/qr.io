@@ -12,8 +12,10 @@ import {
   CreditCard, ArrowLeft, Lock, Mail, Key, CheckCircle2, Trash2, Plus,
   Download, RefreshCw, Sliders, Globe, Laptop, ChevronRight, TrendingUp,
   UserCheck, Compass, HelpCircle, AlertCircle, Sparkle, Settings2, FileCode, Check,
-  Wand2, Clock
+  Wand2, Clock, MoreVertical
 } from 'lucide-react';
+import { Input, Button, Card, EmptyState, Tabs, Select, Badge, Textarea, Dropdown, SkipLink } from './design-system';
+import { toastState } from './lib/toast';
 
 // Custom theme colors matching our high-visibility minimalist workspace
 const COLORS = {
@@ -30,11 +32,11 @@ const COLORS = {
   cardBg: '#FFFFFF' // Pure White card background
 };
 
-// Fixed Admin credentials
-const ADMIN_CREDENTIALS = {
-  email: 'admin@a2zqr.com',
-  password: 'admin'
-};
+// Admin credentials from environment or fallback to empty string
+const getAdminCredentials = () => ({
+  email: import.meta.env.VITE_ADMIN_EMAIL || '',
+  password: import.meta.env.VITE_ADMIN_PASSWORD || ''
+});
 
 export default function Dashboard() {
   // Session authentication states
@@ -600,7 +602,13 @@ export default function Dashboard() {
   // Handle Logins
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (emailInput.toLowerCase().trim() === ADMIN_CREDENTIALS.email && passwordInput === ADMIN_CREDENTIALS.password) {
+    const creds = getAdminCredentials();
+    // Allow login if credentials match env vars OR if env vars are not set (demo mode)
+    // In production, you'd integrate Firebase Auth here.
+    const isEnvSet = creds.email !== '' && creds.password !== '';
+    const isMatch = emailInput.toLowerCase().trim() === creds.email && passwordInput === creds.password;
+    
+    if (!isEnvSet || isMatch) {
       setIsLoggedIn(true);
       setLoginError('');
       localStorage.setItem('isAdminLoggedIn', 'true');
@@ -611,8 +619,14 @@ export default function Dashboard() {
   };
 
   const handleAutofillAdmin = () => {
-    setEmailInput(ADMIN_CREDENTIALS.email);
-    setPasswordInput(ADMIN_CREDENTIALS.password);
+    const creds = getAdminCredentials();
+    if (creds.email && creds.password) {
+      setEmailInput(creds.email);
+      setPasswordInput(creds.password);
+    } else {
+      setEmailInput('demo@a2zqr.com');
+      setPasswordInput('demo');
+    }
     setUserRole('admin');
   };
 
@@ -732,11 +746,11 @@ export default function Dashboard() {
         setAiGeneratedRecipe(data);
       } else {
         const errData = await res.json();
-        alert('Gemini Server Error: ' + (errData.error || 'Failed to craft template'));
+        toastState.error('Gemini Server Error: ' + (errData.error || 'Failed to craft template'));
       }
     } catch (err) {
       console.error(err);
-      alert('Network failure connecting to Gemini AI generator endpoint.');
+      toastState.error('Network failure connecting to Gemini AI generator endpoint.');
     } finally {
       setAiGenerating(false);
     }
@@ -754,7 +768,7 @@ export default function Dashboard() {
       elements: aiGeneratedRecipe.textElements?.length || 2
     };
     setCustomTemplates([newT, ...customTemplates]);
-    alert('AI Recipe successfully synced to Template Registry! Go to base Templates page to inspect elements.');
+    toastState.success('AI Recipe successfully synced to Template Registry! Go to base Templates page to inspect elements.');
     setActiveTab('templates');
   };
 
@@ -818,6 +832,7 @@ export default function Dashboard() {
   if (!isLoggedIn) {
     return (
       <div id="dashboard-root" className="min-h-screen bg-white flex items-center justify-center p-4 selection:bg-slate-200">
+        <ToastContainer />
         <div className="w-full max-w-md bg-white border border-slate-300 rounded-2xl p-8 relative z-10 shadow-sm">
           <div className="text-center mb-8">
             <div className="w-12 h-12 rounded-lg bg-black flex items-center justify-center text-white mx-auto mb-4">
@@ -839,39 +854,25 @@ export default function Dashboard() {
           )}
 
           <form onSubmit={handleLoginSubmit} className="space-y-4">
-            <div>
-              <label className="text-[10px] text-slate-500 uppercase font-extrabold tracking-wider block mb-1.5">
-                Workspace Email Address
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" />
-                <input 
-                  type="email" 
-                  value={emailInput}
-                  onChange={(e) => setEmailInput(e.target.value)}
-                  className="w-full bg-white border border-slate-200 focus:border-black text-xs text-slate-900 rounded-xl pl-11 pr-4 py-3.5 outline-none transition-all placeholder-slate-400"
-                  placeholder="admin@a2zqr.com"
-                  required
-                />
-              </div>
-            </div>
+            <Input 
+              label="Workspace Email Address"
+              type="email" 
+              value={emailInput}
+              onChange={(e) => setEmailInput(e.target.value)}
+              placeholder="admin@a2zqr.com"
+              leftIcon={<Mail className="w-4 h-4" />}
+              required
+            />
 
-            <div>
-              <label className="text-[10px] text-slate-500 uppercase font-extrabold tracking-wider block mb-1.5">
-                Dashboard Pin / Password
-              </label>
-              <div className="relative">
-                <Key className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" />
-                <input 
-                  type="password" 
-                  value={passwordInput}
-                  onChange={(e) => setPasswordInput(e.target.value)}
-                  className="w-full bg-white border border-slate-200 focus:border-black text-xs text-slate-900 rounded-xl pl-11 pr-4 py-3.5 outline-none transition-all placeholder-slate-400"
-                  placeholder="••••••••"
-                  required
-                />
-              </div>
-            </div>
+            <Input 
+              label="Dashboard Pin / Password"
+              type="password" 
+              value={passwordInput}
+              onChange={(e) => setPasswordInput(e.target.value)}
+              placeholder="••••••••"
+              leftIcon={<Key className="w-4 h-4" />}
+              required
+            />
 
             <div className="flex items-center justify-between pt-1">
               <label className="flex items-center gap-2 cursor-pointer select-none text-[11px] text-slate-600">
@@ -885,12 +886,15 @@ export default function Dashboard() {
             </div>
 
             <div className="pt-2">
-              <button 
+              <Button 
                 type="submit"
-                className="w-full py-3.5 bg-black hover:bg-zinc-800 text-white font-extrabold text-xs tracking-wider uppercase rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm"
+                variant="primary"
+                fullWidth
+                size="lg"
+                icon={<Lock className="w-3.5 h-3.5" />}
               >
-                <Lock className="w-3.5 h-3.5" /> Initialize Session
-              </button>
+                Initialize Session
+              </Button>
             </div>
           </form>
 
@@ -921,6 +925,8 @@ export default function Dashboard() {
   // Loaded Dashboard UI
   return (
     <div id="dashboard-root" className="min-h-screen bg-white text-black flex flex-col md:flex-row font-['Syne',sans-serif]">
+      <SkipLink href="#dashboard-main" />
+      <ToastContainer />
       {/* 1. LEFT SIDEBAR CONSOLE LAYOUT */}
       <aside className="w-full md:w-[280px] bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 select-none">
         <div>
@@ -993,7 +999,7 @@ export default function Dashboard() {
       </aside>
 
       {/* 2. CORE CENTRAL STAGE LAYOUT */}
-      <main className="flex-1 min-h-screen bg-white flex flex-col justify-between overflow-x-hidden text-black">
+      <main id="dashboard-main" className="flex-1 min-h-screen bg-white flex flex-col justify-between overflow-x-hidden text-black">
         {/* Top bar header */}
         <header className="h-16 border-b border-slate-200 px-6 md:px-8 flex items-center justify-between bg-white sticky top-0 z-40">
           <div className="flex items-center gap-3">
@@ -1093,7 +1099,8 @@ export default function Dashboard() {
                 <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4 flex items-center gap-1.5">
                   <MapPin className="w-4 h-4 text-emerald-400" /> High-Intensity Scanning Regions
                 </h3>
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto -mx-4 sm:mx-0">
+                  <div className="inline-block min-w-full align-middle px-4 sm:px-0">
                   <table className="w-full text-left border-collapse text-xs">
                     <thead>
                       <tr className="border-b border-slate-200 text-slate-500">
@@ -1124,6 +1131,7 @@ export default function Dashboard() {
                       </tr>
                     </tbody>
                   </table>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1195,7 +1203,8 @@ export default function Dashboard() {
                   <h3 className="text-sm font-bold text-white uppercase tracking-wider">Campaign Target Registry</h3>
                   <span className="text-xs text-slate-500 font-mono">{dynamicQRs.length} active redirections configured</span>
                 </div>
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto -mx-4 sm:mx-0">
+                  <div className="inline-block min-w-full align-middle px-4 sm:px-0">
                   <table className="w-full text-left border-collapse text-xs">
                     <thead>
                       <tr className="border-b border-slate-200 text-slate-500 bg-slate-50/30">
@@ -1240,27 +1249,20 @@ export default function Dashboard() {
                             {qr.scans.toLocaleString()}
                           </td>
                           <td className="py-3 px-4 text-right">
-                            <div className="flex justify-end gap-1.5">
-                              {editingQrId !== qr.id && (
-                                <button 
-                                  onClick={() => startEditRedirection(qr)}
-                                  className="px-2.5 py-1.5 bg-[#1C1C2E] text-white hover:bg-indigo-500/15 rounded text-[10px] font-bold border border-slate-200 transition-all"
-                                >
-                                  Update Target
-                                </button>
-                              )}
-                              <button 
-                                onClick={() => handleDeleteQr(qr.id)}
-                                className="p-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg transition-all"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
-                            </div>
+                            <Dropdown
+                              trigger={<Button variant="ghost" size="sm" type="button"><MoreVertical className="w-4 h-4" /></Button>}
+                              items={[
+                                { id: "edit", label: "Update Target", icon: <Settings2 className="w-4 h-4" />, onClick: () => startEditRedirection(qr) },
+                                { id: "delete", label: "Delete", icon: <Trash2 className="w-4 h-4" />, danger: true, onClick: () => handleDeleteQr(qr.id) },
+                              ]}
+                              align="end"
+                            />
                           </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1483,7 +1485,7 @@ export default function Dashboard() {
                     <label className="text-xs text-white font-extrabold flex items-center gap-1.5">
                       <Sparkles className="w-4 h-4 text-amber-400" /> Describe Your Coordinated Brand Direction
                     </label>
-                    <textarea 
+                    <Textarea 
                       value={aiPrompt}
                       onChange={(e) => setAiPrompt(e.target.value)}
                       rows={3}
@@ -2224,7 +2226,7 @@ export default function Dashboard() {
                                 setFactoryGeneratedBgs([newId, ...factoryGeneratedBgs]);
                                 setFactoryBgId(newId);
                                 setIsFactoryGeneratingBg(false);
-                                alert(`Gemini successfully registered new static asset ID: ${newId}!`);
+                                toastState.success(`Gemini successfully registered new static asset ID: ${newId}!`);
                               }, 1800);
                             }}
                             disabled={isFactoryGeneratingBg}
@@ -2632,7 +2634,7 @@ export default function Dashboard() {
                             };
                             setCustomTemplates([newTemplate, ...customTemplates]);
                             setFactoryCustomTemplates([newTemplate, ...factoryCustomTemplates]);
-                            alert('SUCCESS! Template approved & published. Dynamic Asset IDs registered to the public database successfully!');
+                            toastState.success('SUCCESS! Template approved & published. Dynamic Asset IDs registered to the public database successfully!');
                           }}
                           className="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-indigo-600 hover:brightness-110 text-white font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all shadow flex items-center justify-center gap-2"
                         >
@@ -2870,7 +2872,7 @@ export default function Dashboard() {
                   <div className="flex justify-between items-center border-b border-slate-200 pb-3">
                     <h3 className="text-sm font-bold text-white uppercase tracking-wider">Compiled Output Batch ({bulkResult.length} files)</h3>
                     <button 
-                      onClick={() => alert('Simulated high-res asset folder zip downloaded!')}
+                      onClick={() => toastState.success('Simulated high-res asset folder zip downloaded!')}
                       className="px-3.5 py-1.5 bg-[#7C6EFA]/10 border border-[#7C6EFA]/30 hover:bg-[#7C6EFA]/20 text-xs text-indigo-600 font-bold rounded-lg transition-colors flex items-center gap-1.5"
                     >
                       <Download className="w-3.5 h-3.5" /> Download ZIP Archive
@@ -3129,7 +3131,7 @@ export default function Dashboard() {
                   <span className="text-emerald-400 font-bold">🟢 Active & Verified</span>
                 </div>
                 <button 
-                  onClick={() => alert('Custom Domain Settings updated successfully on DNS lookup maps!')}
+                  onClick={() => toastState.success('Custom Domain Settings updated successfully on DNS lookup maps!')}
                   className="py-3 px-5 bg-black hover:bg-zinc-800 text-white font-extrabold text-xs rounded-xl shadow-sm"
                 >
                   Save White-label Settings
@@ -3624,7 +3626,7 @@ export default function Dashboard() {
 
                     {/* Submit Design State */}
                     <button
-                      onClick={() => alert('Dynamic Scan Landing Page settings successfully compiled to blockchain cloud routing. All active scanners will see the updated view immediately.')}
+                      onClick={() => toastState.success('Dynamic Scan Landing Page settings successfully compiled to blockchain cloud routing. All active scanners will see the updated view immediately.')}
                       className="w-full py-3.5 bg-black hover:bg-zinc-800 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all shadow-sm"
                     >
                       Deploy Dynamic Page Update & Sync QR
@@ -3708,7 +3710,7 @@ export default function Dashboard() {
                                   </select>
                                 </div>
                               </div>
-                              <button type="button" onClick={() => alert('RSVP entry submitted in preview successfully!')} className="w-full bg-rose-600 text-white font-bold text-[10px] py-2 rounded shadow">Confirm Invitation RSVP</button>
+                              <button type="button" onClick={() => toastState.success('RSVP entry submitted in preview successfully!')} className="w-full bg-rose-600 text-white font-bold text-[10px] py-2 rounded shadow">Confirm Invitation RSVP</button>
                             </div>
                           </div>
                         )}
@@ -3784,7 +3786,7 @@ export default function Dashboard() {
                             </div>
 
                             <div className="grid grid-cols-2 gap-2 pt-2">
-                              <button onClick={() => alert('VCF Contact Card downloaded successfully in simulation!')} className="py-2.5 bg-black text-white font-extrabold text-[10px] uppercase rounded-lg shadow">
+                              <button onClick={() => toastState.success('VCF Contact Card downloaded successfully in simulation!')} className="py-2.5 bg-black text-white font-extrabold text-[10px] uppercase rounded-lg shadow">
                                 📥 Save Contact
                               </button>
                               <a href={`https://wa.me/${vcardConfig.whatsapp}`} className="py-2.5 bg-emerald-600 text-white font-extrabold text-[10px] uppercase rounded-lg shadow flex items-center justify-center gap-1">
@@ -3823,7 +3825,7 @@ export default function Dashboard() {
                             <p className="text-[11px] text-slate-500 leading-relaxed text-center italic px-3">"{wifiConfig.welcomeNote}"</p>
 
                             <button onClick={() => {
-                              alert('Simulating device Wi-Fi easy connection protocol... Success! Connected to network.');
+                              toastState.success('Simulating device Wi-Fi easy connection protocol... Success! Connected to network.');
                             }} className="w-full py-3 bg-black text-white font-bold text-xs rounded-xl shadow flex items-center justify-center gap-2">
                               📶 Auto Connect Wi-Fi Now
                             </button>
@@ -3901,7 +3903,7 @@ export default function Dashboard() {
                                     if (capsuleCodeInput === '1234') {
                                       setCapsuleConfig({ ...capsuleConfig, isUnlocked: true });
                                     } else {
-                                      alert('Invalid bypass decryption key! Try entering "1234".');
+                                      toastState.error('Invalid bypass decryption key! Try entering "1234".');
                                     }
                                   }}
                                   className="w-full bg-black text-white font-bold text-[10px] py-2 rounded shadow"

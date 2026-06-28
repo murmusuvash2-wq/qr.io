@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs";
 import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
+import aiFactoryRoutes from "./server/routes/ai-factory.js";
 
 dotenv.config();
 
@@ -58,6 +59,8 @@ const DAILY_THEMES = [
 
 const app = express();
 app.use(express.json());
+
+app.use("/api/ai-factory", aiFactoryRoutes);
 
 const PORT = 3000;
 

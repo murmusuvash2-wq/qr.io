@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { QrCode, Shield, Zap, Globe, Link, Wifi, CreditCard, MessageCircle, FileText, Phone, CheckCircle2, ChevronDown, ChevronUp, BookOpen, Sparkles, HelpCircle, Box, LayoutGrid, ArrowLeft, LayoutDashboard } from 'lucide-react';
+import { QrCode, Shield, Zap, Globe, Link, Wifi, CreditCard, MessageCircle, FileText, Phone, CheckCircle2, ChevronDown, ChevronUp, BookOpen, Sparkles, HelpCircle, Box, LayoutGrid, ArrowLeft, LayoutDashboard, Layers } from 'lucide-react';
 import { QR_TOOLS, QRTool } from './data/tools';
 import QRCodeGenerator from './components/QRCodeGenerator';
 import SaaSPaymentModal from './components/SaaSPaymentModal';
@@ -8,10 +8,17 @@ import PremiumTemplates from './components/PremiumTemplates';
 import TemplateEditor from './components/TemplateEditor';
 import LandingPage from './components/LandingPage';
 import { authService, UserStats } from './lib/firebase';
+import { Button, Card, Badge, Modal, Tabs, Footer, ToolCard, DownloadButtons } from "./design-system";
+
+import { Header } from "./components/layout";
+import { ToastContainer, Accordion, SkipLink } from "./components/ui";
 
 import { TOOL_CONTENT_DATABASE } from './data/toolContent';
 import { FAQS_DATABASE, DEFAULT_FAQ } from './data/faqs';
 import { RELATED_TOOLS_DATABASE } from './data/relatedTools';
+
+import DesignPackGallery from './components/DesignPackGallery';
+import DesignPackDetail from './components/DesignPackDetail';
 
 const getToolIcon = (type: string) => {
   switch (type) {
@@ -105,9 +112,11 @@ const getRelatedToolsItems = (toolId: string, allTools: QRTool[]) => {
 
 export default function App() {
   const [showLanding, setShowLanding] = useState(true);
-  const [directTemplateToEdit, setDirectTemplateToEdit] = useState<any | null>(null);
+  const [directTemplateToEdit, setDirectTemplateToEdit] = useState<{template: any, tool?: any, formValues?: any} | null>(null);
   const [showAssetLibrary, setShowAssetLibrary] = useState(false);
   const [showTemplateGallery, setShowTemplateGallery] = useState(false);
+  const [showDesignPacks, setShowDesignPacks] = useState(false);
+  const [selectedPackId, setSelectedPackId] = useState<string | null>(null);
   const [activeTool, setActiveTool] = useState<QRTool>(QR_TOOLS[0]);
   const [showAllTools, setShowAllTools] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string>('All');
@@ -193,7 +202,9 @@ export default function App() {
   if (directTemplateToEdit) {
     return (
       <TemplateEditor 
-        template={directTemplateToEdit} 
+        template={directTemplateToEdit.template} 
+        tool={directTemplateToEdit.tool}
+        formValues={directTemplateToEdit.formValues}
         user={user}
         onOpenPayModal={() => setIsPayModalOpen(true)}
         onBack={() => setDirectTemplateToEdit(null)}
@@ -205,7 +216,7 @@ export default function App() {
     return (
       <LandingPage 
         onEnter={handleEnterFromLanding} 
-        onSelectTemplate={setDirectTemplateToEdit}
+        onSelectTemplate={(template, tool, formValues) => setDirectTemplateToEdit({ template, tool, formValues })}
       />
     );
   }
@@ -221,6 +232,37 @@ export default function App() {
         onOpenPayModal={() => setIsPayModalOpen(true)} 
         onBack={() => setShowTemplateGallery(false)} 
       />
+    );
+  }
+
+  if (showDesignPacks) {
+    if (selectedPackId) {
+      return (
+        <div className="min-h-screen bg-[#040408] text-[#F2F2FF] font-sans flex flex-col">
+          <DesignPackDetail packId={selectedPackId} onBack={() => setSelectedPackId(null)} />
+        </div>
+      );
+    }
+    return (
+      <div className="min-h-screen bg-[#040408] text-[#F2F2FF] font-sans flex flex-col">
+        <Header 
+          brandName="EzQR"
+          links={[
+            { label: "Dashboard", href: "/dashboard", icon: <LayoutDashboard className="w-3.5 h-3.5" aria-hidden="true" /> },
+            { label: "Design Packs", onClick: () => { setShowDesignPacks(true); setShowAssetLibrary(false); setShowLanding(false); }, icon: <Sparkles className="w-3.5 h-3.5" aria-hidden="true" /> },
+            { label: "Assets", onClick: () => { setShowAssetLibrary(true); setShowDesignPacks(false); }, icon: <Layers className="w-3.5 h-3.5" aria-hidden="true" /> }
+          ]}
+          onSearch={(q) => handleEnterFromLanding(undefined, q, undefined)}
+          onGetStarted={() => setIsPayModalOpen(true)}
+        />
+        <div className="pt-24 px-4 max-w-7xl mx-auto w-full">
+           <div className="text-center mb-10">
+             <h2 className="text-4xl font-extrabold mb-4 font-syne">Industry Design Packs</h2>
+             <p className="text-[#8080A0]">Complete QR ecosystems with ready-to-use premium designs tailored for your industry.</p>
+           </div>
+           <DesignPackGallery onSelectPack={(id) => setSelectedPackId(id)} />
+        </div>
+      </div>
     );
   }
 
@@ -240,88 +282,21 @@ export default function App() {
         @keyframes glow { 0% { opacity: 0.5; } 100% { opacity: 1; } }
       `}</style>
       
+      <SkipLink />
+      <ToastContainer />
       {/* Top Navbar */}
-      <nav className="sticky top-0 z-50 bg-[#040408]/90 backdrop-blur-xl border-b border-[#1C1C2E]">
-        <div className="max-w-[1100px] mx-auto px-5 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => setShowLanding(true)}>
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#7C6EFA] to-[#C084FC] flex items-center justify-center text-white">
-                <QrCode className="w-5 h-5" />
-              </div>
-              <span className="font-syne font-extrabold text-[19px] tracking-tight">
-                A2Z<em className="font-normal not-italic text-[#A89EFF]">QR</em>
-              </span>
-            </div>
-            
-            <button 
-              onClick={() => setShowLanding(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#12121E] border border-[#28283E] text-[11px] font-bold text-[#A89EFF] hover:text-white rounded-lg hover:bg-[#1C1C2E] transition-all shadow-sm"
-              title="Return to Landing Page"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" /> Back to Home
-            </button>
-          </div>
+      <Header 
+        brandName="EzQR"
+        links={[
+          { label: "Dashboard", href: "/dashboard", icon: <LayoutDashboard className="w-3.5 h-3.5" aria-hidden="true" /> },
+          { label: "Design Packs", onClick: () => setShowDesignPacks(true), icon: <Sparkles className="w-3.5 h-3.5" aria-hidden="true" /> },
+          { label: "Assets", onClick: () => setShowAssetLibrary(true), icon: <Layers className="w-3.5 h-3.5" aria-hidden="true" /> }
+        ]}
+        onSearch={(q) => handleEnterFromLanding(undefined, q, undefined)}
+        onGetStarted={() => setIsPayModalOpen(true)}
+      />
 
-          <div className="flex items-center gap-2">
-            <button 
-              onClick={() => setShowAssetLibrary(true)}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-[#12121E] border border-[#28283E] text-xs font-bold text-[#A89EFF] rounded-lg hover:text-white hover:border-[#7C6EFA] transition-all"
-            >
-              <Box className="w-4 h-4" />
-              Asset Library
-            </button>
-
-            <a 
-              href="/dashboard.html"
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-[#12121E] border border-[#28283E] text-xs font-bold text-[#A89EFF] rounded-lg hover:text-white hover:border-[#7C6EFA] transition-all"
-            >
-              <LayoutDashboard className="w-4 h-4" />
-              Console Panel
-            </a>
-
-            <button 
-              onClick={() => setShowTemplateGallery(true)}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-[#7C6EFA] to-[#C084FC] text-xs font-bold text-white rounded-lg hover:opacity-90 transition-opacity shadow-lg"
-            >
-              <LayoutGrid className="w-4 h-4" />
-              Templates
-            </button>
-            <div className="hidden md:flex items-center gap-1.5 mr-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></div>
-              <span className="text-xs font-bold text-[#8080A0] tracking-widest uppercase">
-                {scans.toLocaleString()} Created
-              </span>
-            </div>
-            
-            {user ? (
-              <div className="flex items-center gap-3 px-3 py-1.5 bg-[#12121E] border border-[#28283E] rounded-full text-xs font-medium">
-                {user.isPro ? (
-                  <span className="flex items-center gap-1.5 text-[#F472B6] font-bold">
-                    <Shield className="w-3.5 h-3.5" /> PRO
-                  </span>
-                ) : (
-                  <span className="text-[#8080A0]">FREE</span>
-                )}
-                <span className="w-px h-3 bg-[#28283E]"></span>
-                <button 
-                  onClick={() => { authService.logout(); setUser(null); }}
-                  className="text-[#A89EFF] hover:text-white font-bold transition-colors"
-                >
-                  Logout
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={() => setIsPayModalOpen(true)}
-                className="px-4 py-2 bg-gradient-to-br from-[#7C6EFA] to-[#C084FC] hover:opacity-90 text-white text-xs font-bold rounded-lg transition-all line-clamp-1 truncate"
-              >
-                Go Pro
-              </button>
-            )}
-          </div>
-        </div>
-      </nav>
-
+      <main id="main-content">
       {/* Hero Section */}
       <section className="relative pt-16 pb-12 px-4 text-center overflow-hidden">
         <div className="hero-glow"></div>
@@ -341,19 +316,20 @@ export default function App() {
             <span className="text-emerald-400 font-bold">Privacy First</span>
           </div>
 
-          <p className="text-[16px] text-[#A89EFF] max-w-md mx-auto leading-relaxed mb-10 font-medium">
+          <p className="text-sm sm:text-base text-[#A89EFF] max-w-md mx-auto leading-relaxed mb-10 font-medium">
             100+ QR Solutions for Business, Events & Personal Use
           </p>
 
           <div className="mb-12">
-            <button 
+            <Button 
+              variant="gradient"
+              size="lg"
               onClick={() => {
                 document.getElementById('generator-section')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="px-8 py-4 bg-gradient-to-r from-[#7C6EFA] to-[#C084FC] hover:opacity-90 text-white text-[15px] font-bold rounded-xl transition-all shadow-[0_0_30px_rgba(124,110,250,0.3)] hover:shadow-[0_0_40px_rgba(124,110,250,0.4)]"
             >
               Generate QR — It's Free
-            </button>
+            </Button>
           </div>
           
           <div className="flex items-center justify-center gap-4 flex-wrap text-xs font-bold text-[#42425A] uppercase tracking-wider">
@@ -379,7 +355,7 @@ export default function App() {
             tool={activeTool} 
             user={user} 
             onOpenPayModal={() => setIsPayModalOpen(true)}
-            onSelectTemplate={setDirectTemplateToEdit}
+            onSelectTemplate={(template, tool, formValues) => setDirectTemplateToEdit({ template, tool, formValues })}
           />
         </div>
       </section>
@@ -423,10 +399,10 @@ export default function App() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-[#0A0A12] border border-[#1C1C2E] p-6 rounded-2xl flex flex-col justify-between">
             <div>
-              <span className="text-[#F59E0B] text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 mb-4">
+              <span className="text-[#F59E0B] text-xs sm:text-sm font-bold uppercase tracking-wider flex items-center gap-1.5 mb-4">
                 <Sparkles className="w-4 h-4" /> Real Use Cases
               </span>
-              <ul className="space-y-3.5 text-xs text-[#8080A0] leading-relaxed">
+              <ul className="space-y-3.5 text-xs sm:text-sm text-[#8080A0] leading-relaxed">
                 {toolContent.useCases.map((uc, i) => (
                   <li key={i} className="flex gap-2">
                     <span className="text-[#F59E0B] font-bold shrink-0">•</span>
@@ -439,10 +415,10 @@ export default function App() {
 
           <div className="bg-[#0A0A12] border border-[#1C1C2E] p-6 rounded-2xl flex flex-col justify-between">
             <div>
-              <span className="text-emerald-400 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 mb-4">
+              <span className="text-emerald-400 text-xs sm:text-sm font-bold uppercase tracking-wider flex items-center gap-1.5 mb-4">
                 <CheckCircle2 className="w-4 h-4" /> Lifetime Benefits
               </span>
-              <ul className="space-y-3.5 text-xs text-[#8080A0] leading-relaxed">
+              <ul className="space-y-3.5 text-xs sm:text-sm text-[#8080A0] leading-relaxed">
                 {toolContent.benefits.map((bn, i) => (
                   <li key={i} className="flex gap-2">
                     <span className="text-emerald-400 font-bold shrink-0">✓</span>
@@ -455,10 +431,10 @@ export default function App() {
 
           <div className="bg-[#0A0A12] border border-[#1C1C2E] p-6 rounded-2xl flex flex-col justify-between">
             <div>
-              <span className="text-[#C084FC] text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 mb-4">
+              <span className="text-[#C084FC] text-xs sm:text-sm font-bold uppercase tracking-wider flex items-center gap-1.5 mb-4">
                 <BookOpen className="w-4 h-4" /> Best Scan Practices
               </span>
-              <ul className="space-y-3.5 text-xs text-[#8080A0] leading-relaxed">
+              <ul className="space-y-3.5 text-xs sm:text-sm text-[#8080A0] leading-relaxed">
                 {toolContent.bestPractices.map((bp, i) => (
                   <li key={i} className="flex gap-2">
                     <span className="text-[#C084FC] font-mono font-bold shrink-0">{i+1}.</span>
@@ -479,25 +455,13 @@ export default function App() {
             <HelpCircle className="w-5 h-5 text-[#7C6EFA]" /> Helpful Question & Answer Mappings ({toolFAQs.length})
           </h3>
           <div className="space-y-3">
-            {toolFAQs.map((faq) => {
-              const isExpanded = expandedFaqId === faq.id;
-              return (
-                <div key={faq.id} className="border border-[#141424] bg-black/20 rounded-xl overflow-hidden transition-all duration-200">
-                  <button
-                    onClick={() => setExpandedFaqId(isExpanded ? null : faq.id)}
-                    className="w-full text-left p-4 flex items-center justify-between text-xs sm:text-sm font-semibold text-white hover:bg-[#12121E]/50 transition-colors"
-                  >
-                    <span>{faq.question}</span>
-                    {isExpanded ? <ChevronUp className="w-4 h-4 text-[#7C6EFA]" /> : <ChevronDown className="w-4 h-4 text-[#8080A0]" />}
-                  </button>
-                  {isExpanded && (
-                    <div className="p-4 pt-0 text-xs sm:text-sm text-[#8080A0] border-t border-[#141424] leading-relaxed bg-[#12121E]/10">
-                      {faq.answer}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+            <Accordion 
+              items={toolFAQs.map((faq) => ({
+                id: faq.id,
+                title: faq.question,
+                content: faq.answer
+              }))}
+            />
           </div>
         </div>
 
@@ -515,7 +479,7 @@ export default function App() {
                     setActiveTool(companion);
                     document.getElementById('generator-section')?.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="flex items-center gap-2.5 p-3 rounded-xl border border-[#141424] bg-[#0A0A12]/80 text-left hover:border-[#7C6EFA] hover:bg-[#12121E] transition-all group"
+                  className="flex items-center gap-2.5 p-3 rounded-xl border border-[#141424] bg-[#0A0A12]/80 text-left hover:border-[#7C6EFA] hover:bg-[#12121E] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7C6EFA] transition-all group"
                 >
                   <div className="text-[#8080A0] group-hover:text-[#7C6EFA] shrink-0 transition-colors">
                     {getToolIcon(companion.type || 'url')}
@@ -544,15 +508,15 @@ export default function App() {
             { title: 'Property QR', desc: 'Real estate listings', icon: <FileText className="w-5 h-5" />, color: 'from-emerald-400 to-teal-500' },
             { title: 'Event Registration', desc: 'Quick check-ins', icon: <CheckCircle2 className="w-5 h-5" />, color: 'from-amber-400 to-orange-500' }
           ].map((useCase) => (
-            <div key={useCase.title} className="bg-[#0A0A12] border border-[#1C1C2E] rounded-xl p-5 hover:border-[#28283E] transition-colors cursor-pointer group">
+            <Card key={useCase.title} variant="interactive" padding="md" className="group">
               <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${useCase.color} p-[1px] mb-4 group-hover:scale-110 transition-transform`}>
-                <div className="w-full h-full bg-[#12121E] rounded-[7px] flex items-center justify-center text-white">
+                <div className="w-full h-full bg-[var(--ez-bg-elevated)] rounded-[7px] flex items-center justify-center text-white">
                   {useCase.icon}
                 </div>
               </div>
               <h3 className="text-[15px] font-bold text-white mb-1">{useCase.title}</h3>
-              <p className="text-xs text-[#8080A0]">{useCase.desc}</p>
-            </div>
+              <p className="text-xs text-[var(--ez-text-muted)]">{useCase.desc}</p>
+            </Card>
           ))}
         </div>
       </section>
@@ -616,27 +580,19 @@ export default function App() {
           </span>
         </div>
 
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 p-2 max-h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-[#28283E] scrollbar-track-transparent">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 p-2 max-h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-[#28283E] scrollbar-track-transparent">
           {QR_TOOLS.filter(UI_CATEGORIES.find(c => c.label === activeCategory)?.filter || (() => true)).map((tool) => {
             const isActive = activeTool.slug === tool.slug;
             return (
-              <button
+              <ToolCard 
                 key={tool.slug}
+                tool={{...tool, icon: () => getToolIcon(tool.type)}} 
+                isActive={isActive} 
                 onClick={() => {
                   setActiveTool(tool);
                   document.getElementById('generator-section')?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className={`flex flex-col items-center justify-center text-center gap-2 p-3 aspect-square rounded-xl text-[10px] sm:text-xs font-bold transition-all duration-200 border ${
-                  isActive 
-                    ? 'bg-[#12121E] border-[#7C6EFA] text-white shadow-[0_0_20px_rgba(124,110,250,0.15)] ring-1 ring-[#7C6EFA]' 
-                    : 'bg-[#0A0A12] border-[#1C1C2E] text-[#8080A0] hover:border-[#28283E] hover:bg-[#12121E]'
-                }`}
-              >
-                {getToolIcon(tool.type)}
-                <span className="line-clamp-2 leading-tight">
-                  {tool.name.replace(' QR Code', '').replace(' Generator', '').replace(' QR', '')}
-                </span>
-              </button>
+                }} 
+              />
             );
           })}
         </div>
@@ -646,68 +602,54 @@ export default function App() {
       <section className="relative z-10 max-w-5xl mx-auto w-full px-4 mb-20 text-center">
         <h2 className="font-syne text-3xl font-extrabold mb-10">Why EZQR.IO?</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-6">
-          <div className="flex flex-col items-center">
-            <div className="w-12 h-12 rounded-full bg-[#12121E] border border-[#28283E] flex items-center justify-center mb-4 text-emerald-400">
+          <Card variant="elevated" padding="md" className="flex flex-col items-center border-none bg-transparent shadow-none">
+            <div className="w-12 h-12 rounded-full bg-[var(--ez-bg-elevated)] border border-[var(--ez-border-strong)] flex items-center justify-center mb-4 text-emerald-400">
               <CheckCircle2 className="w-6 h-6" />
             </div>
             <h3 className="font-bold text-white mb-2">Free Forever Base</h3>
-            <p className="text-xs text-[#8080A0] max-w-[200px]">Unlimited creation for all fundamental static QR codes.</p>
-          </div>
-          <div className="flex flex-col items-center">
-            <div className="w-12 h-12 rounded-full bg-[#12121E] border border-[#28283E] flex items-center justify-center mb-4 text-[#F472B6]">
+            <p className="text-xs text-[var(--ez-text-muted)] max-w-[200px]">Unlimited creation for all fundamental static QR codes.</p>
+          </Card>
+          <Card variant="elevated" padding="md" className="flex flex-col items-center border-none bg-transparent shadow-none">
+            <div className="w-12 h-12 rounded-full bg-[var(--ez-bg-elevated)] border border-[var(--ez-border-strong)] flex items-center justify-center mb-4 text-[#F472B6]">
               <Shield className="w-6 h-6" />
             </div>
             <h3 className="font-bold text-white mb-2">Privacy First</h3>
-            <p className="text-xs text-[#8080A0] max-w-[200px]">Data is converted to QR on your device. We don't track your content.</p>
-          </div>
-          <div className="flex flex-col items-center">
-            <div className="w-12 h-12 rounded-full bg-[#12121E] border border-[#28283E] flex items-center justify-center mb-4 text-[#7C6EFA]">
+            <p className="text-xs text-[var(--ez-text-muted)] max-w-[200px]">Data is converted to QR on your device. We don't track your content.</p>
+          </Card>
+          <Card variant="elevated" padding="md" className="flex flex-col items-center border-none bg-transparent shadow-none">
+            <div className="w-12 h-12 rounded-full bg-[var(--ez-bg-elevated)] border border-[var(--ez-border-strong)] flex items-center justify-center mb-4 text-[#7C6EFA]">
               <Zap className="w-6 h-6" />
             </div>
             <h3 className="font-bold text-white mb-2">No Expiry</h3>
-            <p className="text-xs text-[#8080A0] max-w-[200px]">Your static QR codes will never stop working. Ever.</p>
-          </div>
-          <div className="flex flex-col items-center">
-            <div className="w-12 h-12 rounded-full bg-[#12121E] border border-[#28283E] flex items-center justify-center mb-4 text-[#F59E0B]">
+            <p className="text-xs text-[var(--ez-text-muted)] max-w-[200px]">Your static QR codes will never stop working. Ever.</p>
+          </Card>
+          <Card variant="elevated" padding="md" className="flex flex-col items-center border-none bg-transparent shadow-none">
+            <div className="w-12 h-12 rounded-full bg-[var(--ez-bg-elevated)] border border-[var(--ez-border-strong)] flex items-center justify-center mb-4 text-[#F59E0B]">
               <Globe className="w-6 h-6" />
             </div>
             <h3 className="font-bold text-white mb-2">100+ Solutions</h3>
-            <p className="text-xs text-[#8080A0] max-w-[200px]">The largest library of specific QR generation tools.</p>
-          </div>
-          <div className="flex flex-col items-center">
-            <div className="w-12 h-12 rounded-full bg-[#12121E] border border-[#28283E] flex items-center justify-center mb-4 text-blue-400">
+            <p className="text-xs text-[var(--ez-text-muted)] max-w-[200px]">The largest library of specific QR generation tools.</p>
+          </Card>
+          <Card variant="elevated" padding="md" className="flex flex-col items-center border-none bg-transparent shadow-none">
+            <div className="w-12 h-12 rounded-full bg-[var(--ez-bg-elevated)] border border-[var(--ez-border-strong)] flex items-center justify-center mb-4 text-blue-400">
               <FileText className="w-6 h-6" />
             </div>
             <h3 className="font-bold text-white mb-2">Beautiful Designs</h3>
-            <p className="text-xs text-[#8080A0] max-w-[200px]">Export directly to high-res, styled, and colorful patterns.</p>
-          </div>
-          <div className="flex flex-col items-center">
-            <div className="w-12 h-12 rounded-full bg-[#12121E] border border-[#28283E] flex items-center justify-center mb-4 text-indigo-400">
+            <p className="text-xs text-[var(--ez-text-muted)] max-w-[200px]">Export directly to high-res, styled, and colorful patterns.</p>
+          </Card>
+          <Card variant="elevated" padding="md" className="flex flex-col items-center border-none bg-transparent shadow-none">
+            <div className="w-12 h-12 rounded-full bg-[var(--ez-bg-elevated)] border border-[var(--ez-border-strong)] flex items-center justify-center mb-4 text-indigo-400">
               <CreditCard className="w-6 h-6" />
             </div>
             <h3 className="font-bold text-white mb-2">Business Ready</h3>
-            <p className="text-xs text-[#8080A0] max-w-[200px]">From restaurant menus to real estate property links.</p>
-          </div>
+            <p className="text-xs text-[var(--ez-text-muted)] max-w-[200px]">From restaurant menus to real estate property links.</p>
+          </Card>
         </div>
       </section>
+      </main>
 
       {/* Trust & Footer */}
-      <footer className="border-t border-[#1C1C2E] py-14">
-        <div className="max-w-[1100px] mx-auto px-5 text-center flex flex-col items-center">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#7C6EFA] to-[#C084FC] flex items-center justify-center text-white mb-4">
-            <QrCode className="w-5 h-5" />
-          </div>
-          <span className="font-syne font-extrabold text-[19px] tracking-tight mb-2">
-            EZ<em className="font-normal not-italic text-[#A89EFF]">QR.IO</em>
-          </span>
-          <p className="text-[12px] text-[#42425A] mb-1">
-            © 2026 EZQR.IO · Clean generation in your browser
-          </p>
-          <p className="text-[10px] text-[#28283E]">
-            Powered by open source
-          </p>
-        </div>
-      </footer>
+      <Footer />
 
       <SaaSPaymentModal
         isOpen={isPayModalOpen}

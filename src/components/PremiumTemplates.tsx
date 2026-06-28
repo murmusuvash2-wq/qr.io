@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Sparkles, Palette, Crown, Box, LayoutGrid, Image as ImageIcon, Download, ArrowLeft, Wand2, Loader2, Shuffle, Lock, Unlock, Check, AlertCircle, Eye, TrendingUp, ThumbsUp, RefreshCw, BarChart3, ShieldCheck, Heart, Search, Code, Tag, Trash2, Plus, AlertTriangle, Layers, CheckCircle2, Activity, Copy, CheckSquare, PlusCircle, RotateCcw, FileText } from 'lucide-react';
+import { Input, Button, EmptyState, Modal, Skeleton } from '../design-system';
 import TemplateEditor from './TemplateEditor';
 import { UserStats, templateService, TemplateDesign } from '../lib/firebase';
 import { getTemplateAnalytics, incrementTemplateMetric, BACKGROUND_PRESETS, FLAGSHIP_TOOLS, generateTemplatesForTool, logTemplateEvent, TemplateTrackingEvent, getTemplateEventLogs } from '../lib/templates-generator';
@@ -1618,20 +1619,20 @@ export default function PremiumTemplates({
                               {bulkGenerateMode ? 'Batch Prompt Theme (Synthesize 5 distinct categories):' : 'Prompt creative theme or style tags:'}
                             </label>
                             <div className="flex gap-2">
-                              <input
-                                  type="text"
+                              <Input
                                   value={aiPrompt}
                                   onChange={(e) => setAiPrompt(e.target.value)}
                                   placeholder={bulkGenerateMode ? "e.g., Luxury Corporate Gold Accent" : "e.g., Midnight Gold Filigree luxury texture"}
-                                  className="flex-1 bg-[#06060F] border border-[#28283E] focus:border-indigo-500 rounded-xl px-4 py-3 text-sm text-white outline-none"
+                                  className="bg-[#06060F] border-[#28283E] focus:border-indigo-500 py-3 text-white"
                               />
-                              <button
+                              <Button
+                                  variant="primary"
                                   onClick={handleAdminGenerate}
-                                  className="bg-indigo-500 hover:bg-indigo-600 text-white font-bold px-5 py-3 rounded-xl flex items-center gap-2 shadow-lg transition-colors shrink-0"
+                                  className="px-5 py-3 shadow-lg"
+                                  icon={<Wand2 className="w-4 h-4" />}
                               >
-                                <Wand2 className="w-4 h-4" />
                                 {bulkGenerateMode ? 'Generate Bulk' : 'Generate'}
-                              </button>
+                              </Button>
                             </div>
 
                             {/* Prompt Presets */}
@@ -3370,6 +3371,9 @@ export default function PremiumTemplates({
                               <div className="p-3.5">
                                 <span className="text-[10px] text-[#8080A0] font-mono block mb-1">{template.id}</span>
                                 <span className="block text-xs font-bold truncate text-white">{template.title}</span>
+                                <span className="block text-[9px] text-[#4E4E6E] font-mono mt-1">
+                                  {template.layers ? template.layers.length : ((template.textElements?.length || 0) + 2)} layers
+                                </span>
                               </div>
                             </div>
                           );
@@ -3487,8 +3491,7 @@ export default function PremiumTemplates({
 
                 {/* Input Box */}
                 <div className="mt-5 flex flex-col sm:flex-row gap-3">
-                  <input 
-                    type="text"
+                  <Input 
                     placeholder="Describe your design mockup... e.g. Neon Cyberpunk underground club flyer"
                     disabled={isGenerating}
                     value={promptInput}
@@ -3496,25 +3499,18 @@ export default function PremiumTemplates({
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') handleGenerateTemplate();
                     }}
-                    className="flex-1 bg-[#06060F]/95 border border-[#1C1C2E] focus:border-[#7C6EFA] focus:ring-1 focus:ring-[#7C6EFA] rounded-xl px-4 py-3.5 text-sm text-white placeholder-[#4E4E6E] outline-none transition-all disabled:opacity-50"
+                    className="bg-[#06060F]/95 border-[#1C1C2E] focus:border-[#7C6EFA] py-3.5 text-white disabled:opacity-50"
                   />
-                  <button
+                  <Button
+                    variant="gradient"
                     onClick={handleGenerateTemplate}
                     disabled={isGenerating || !promptInput.trim()}
-                    className="bg-gradient-to-r from-[#7C6EFA] to-[#C084FC] hover:opacity-90 disabled:opacity-40 text-white font-bold text-sm px-6 py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg select-none shrink-0"
+                    className="px-6 py-3.5 shadow-lg shrink-0 text-sm"
+                    loading={isGenerating}
+                    icon={!isGenerating && <Sparkles className="w-4 h-4" />}
                   >
-                    {isGenerating ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        Generating...
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="w-4 h-4" />
-                        Design Mockup
-                      </>
-                    )}
-                  </button>
+                    {isGenerating ? 'Generating...' : 'Design Mockup'}
+                  </Button>
                 </div>
 
                 {/* Steps & loading simulator */}
@@ -3621,13 +3617,11 @@ export default function PremiumTemplates({
 
           {isDailyLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="bg-[#07070F] border border-[#16162E] rounded-2xl p-4 space-y-4 animate-pulse">
-                  <div className="aspect-[3/4] bg-[#12121F] rounded-xl flex items-center justify-center">
-                    <Loader2 className="w-8 h-8 text-[#7C6EFA] animate-spin" />
-                  </div>
-                  <div className="h-4 bg-[#12121F] rounded-md w-3/4"></div>
-                  <div className="h-3 bg-[#12121F] rounded-md w-1/2"></div>
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="bg-[var(--ez-bg-surface)] border border-[var(--ez-border-default)] rounded-2xl p-4 space-y-4">
+                  <Skeleton variant="rectangular" className="w-full aspect-[3/4] rounded-xl" />
+                  <Skeleton width="60%" />
+                  <Skeleton width="80%" />
                 </div>
               ))}
             </div>
@@ -3720,6 +3714,10 @@ export default function PremiumTemplates({
                         <div className="flex items-center gap-1.5 text-[10px] font-bold text-[#8080A0] uppercase tracking-wider">
                           <ImageIcon className="w-3.5 h-3.5" /> High-DPI Vector
                         </div>
+                        <span className="text-[10px] text-[#4E4E6E] font-mono">
+                          {template.layers ? template.layers.length : ((template.textElements?.length || 0) + 2)} layers
+                          {template.layers ? ` · ${template.canvasWidth}×${template.canvasHeight}` : ''}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -3727,8 +3725,12 @@ export default function PremiumTemplates({
               })}
             </div>
           ) : (
-            <div className="text-center py-12 text-[#8080A0] text-sm border border-dashed border-[#1C1C2E] rounded-2xl bg-[#07070F]">
-              No templates found matching category "{activeTab}". Please try selection "All" or other filters!
+            <div className="py-12">
+              <EmptyState
+                icon={<Search className="w-6 h-6" />}
+                title={`No templates found matching category "${activeTab}"`}
+                description="Please try selection 'All' or other filters!"
+              />
             </div>
           )}
             </>
@@ -3739,61 +3741,68 @@ export default function PremiumTemplates({
       </div>
 
       {/* Auth Passcode Dialog Modal */}
-      {showAdminModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-fade-in">
-          <div className="bg-[#0A0A14] border border-[#28283E] rounded-2xl p-6 w-full max-w-sm relative shadow-2xl">
-            <div className="text-center space-y-3 mb-6">
-              <div className="mx-auto w-12 h-12 rounded-full bg-[#7C6EFA]/10 flex items-center justify-center border border-[#7C6EFA]/20">
-                <Lock className="w-5 h-5 text-[#A89EFF]" />
-              </div>
-              <h3 className="font-syne text-lg font-bold text-white">Creator Panel Access</h3>
-              <p className="text-xs text-[#8080A0]">
-                Enter creator security passcode to unlock backend Gemini AI Prompt generator tools.
-              </p>
-            </div>
-
-            <form onSubmit={handleAdminVerify} className="space-y-4">
-              <div>
-                <input
-                  type="password"
-                  placeholder="Passcode (e.g. admin123)"
-                  value={adminPassword}
-                  onChange={(e) => setAdminPassword(e.target.value)}
-                  className="w-full bg-[#06060F] border border-[#28283E] focus:border-[#7C6EFA] focus:ring-1 focus:ring-[#7C6EFA] text-white placeholder-[#4E4E6E] rounded-xl px-4 py-3 text-sm text-center outline-none transition-all"
-                  autoFocus
-                />
-              </div>
-
-              {adminError && (
-                <div className="bg-red-950/30 border border-red-500/20 text-red-400 text-xs px-3 py-2 rounded-lg flex items-center gap-2 justify-center">
-                  <AlertCircle className="w-4 h-4 shrink-0" />
-                  <span>{adminError}</span>
-                </div>
-              )}
-
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowAdminModal(false);
-                    setAdminPassword('');
-                    setAdminError('');
-                  }}
-                  className="flex-1 bg-[#12121E] hover:bg-[#1C1C2E] text-[#8080A0] hover:text-white border border-[#28283E] font-bold text-sm py-2.5 rounded-xl transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 bg-gradient-to-r from-[#7C6EFA] to-[#C084FC] hover:opacity-90 text-white font-bold text-sm py-2.5 rounded-xl transition-opacity shadow-lg"
-                >
-                  Unlock Lab
-                </button>
-              </div>
-            </form>
+      <Modal
+        isOpen={showAdminModal}
+        onClose={() => {
+          setShowAdminModal(false);
+          setAdminPassword('');
+          setAdminError('');
+        }}
+        title="Creator Panel Access"
+        size="sm"
+      >
+        <div className="text-center space-y-3 mb-6">
+          <div className="mx-auto w-12 h-12 rounded-full bg-[#7C6EFA]/10 flex items-center justify-center border border-[#7C6EFA]/20">
+            <Lock className="w-5 h-5 text-[#A89EFF]" />
           </div>
+          <p className="text-xs text-[#8080A0]">
+            Enter creator security passcode to unlock backend Gemini AI Prompt generator tools.
+          </p>
         </div>
-      )}
+
+        <form onSubmit={handleAdminVerify} className="space-y-4">
+          <div>
+            <Input
+              type="password"
+              placeholder="Passcode (e.g. admin123)"
+              value={adminPassword}
+              onChange={(e) => setAdminPassword(e.target.value)}
+              className="text-center bg-[#06060F] border-[#28283E] focus:border-[#7C6EFA] py-3 text-white"
+              autoFocus
+            />
+          </div>
+
+          {adminError && (
+            <div className="bg-red-950/30 border border-red-500/20 text-red-400 text-xs px-3 py-2 rounded-lg flex items-center gap-2 justify-center">
+              <AlertCircle className="w-4 h-4 shrink-0" />
+              <span>{adminError}</span>
+            </div>
+          )}
+
+          <div className="flex gap-3 mt-6">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => {
+                setShowAdminModal(false);
+                setAdminPassword('');
+                setAdminError('');
+              }}
+              fullWidth
+              className="bg-[#12121E] border-[#28283E] text-[#8080A0]"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="gradient"
+              fullWidth
+            >
+              Unlock Lab
+            </Button>
+          </div>
+        </form>
+      </Modal>
 
       {/* Structured Template Package Explorer Modal */}
       {showExportBundleModal && exportedBundle && (

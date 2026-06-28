@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./styles/tokens.css";
 
 /* 1. Global Reset for the Dashboard Page to ensure light theme */
 #dashboard-root, 
@@ -139,5 +140,14 @@ html {
 
 #dashboard-root .recharts-text {
   fill: #64748b !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 

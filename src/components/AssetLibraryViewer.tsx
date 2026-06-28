@@ -1,8 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Layers, Image as ImageIcon, Box, Square, Grid, Tag, CheckCircle, 
-  ArrowLeft, Search, Cloud, Plus, Filter, Code, Trash2, HelpCircle, Sparkles, AlertCircle
+  ArrowLeft, Search, Cloud, Plus, Filter, Code, Trash2, HelpCircle, Sparkles, AlertCircle, Wrench, Palette, Monitor, QrCode, ScrollText, Award, CornerDownRight, Droplets, Type, Package
 } from 'lucide-react';
+
+function getCategoryIcon(categoryId: string) {
+  switch (categoryId) {
+    case 'backgrounds': return <ImageIcon className="h-3.5 w-3.5" />;
+    case 'frames': return <Square className="h-3.5 w-3.5" />;
+    case 'patterns': return <Grid className="h-3.5 w-3.5" />;
+    case 'stickers': return <Tag className="h-3.5 w-3.5" />;
+    case 'icons-category': return <Box className="h-3.5 w-3.5" />;
+    case 'icons-tool': return <Wrench className="h-3.5 w-3.5" />;
+    case 'textures': return <Layers className="h-3.5 w-3.5" />;
+    case 'illustrations': return <Palette className="h-3.5 w-3.5" />;
+    case 'mockups': return <Monitor className="h-3.5 w-3.5" />;
+    case 'qr-shapes': return <QrCode className="h-3.5 w-3.5" />;
+    case 'ribbons': return <ScrollText className="h-3.5 w-3.5" />;
+    case 'badges': return <Award className="h-3.5 w-3.5" />;
+    case 'corners': return <CornerDownRight className="h-3.5 w-3.5" />;
+    case 'gradients': return <Droplets className="h-3.5 w-3.5" />;
+    case 'typography': return <Type className="h-3.5 w-3.5" />;
+    case 'themed-sets': return <Package className="h-3.5 w-3.5" />;
+    default: return <Layers className="h-3.5 w-3.5" />;
+  }
+}
+import { Input, Button, Select } from '../design-system';
 
 interface Asset {
   id: string;
@@ -10,6 +33,18 @@ interface Asset {
   path: string;
   tags: string[];
   category: string;
+  type?: string;
+  version?: number;
+  license?: string;
+  source?: string;
+  dependencies?: string[];
+  width?: number;
+  height?: number;
+  dateAdded?: string;
+  hash?: string;
+  usageCount?: number;
+  isPremium?: boolean;
+  altText?: string;
 }
 
 interface Registry {
@@ -245,28 +280,24 @@ export default function AssetLibraryViewer({ onBack }: { onBack: () => void }) {
           <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
             {/* Search Input */}
             <div className="relative flex-1 md:w-64">
-              <Search className="absolute left-3 top-2.5 w-3.5 h-3.5 text-slate-500" />
-              <input 
+              <Input 
                 type="text" 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search name, ID (e.g. BG-001) or tags..."
-                className="w-full bg-slate-950 border border-slate-800 focus:border-[#7C6EFA] text-xs text-white pl-9 pr-4 py-2 rounded-xl outline-none transition-all placeholder-slate-600"
+                leftIcon={<Search className="w-3.5 h-3.5" />}
+                className="bg-slate-950 border-slate-800 text-white placeholder-slate-600"
               />
             </div>
 
             {/* Register Trigger */}
-            <button 
+            <Button 
+              variant={showImportForm ? 'danger' : 'primary'}
+              icon={<Plus className="w-3.5 h-3.5" />}
               onClick={() => setShowImportForm(!showImportForm)}
-              className={`px-4 py-2 rounded-xl text-xs font-extrabold uppercase tracking-wider transition-all flex items-center gap-1.5 border ${
-                showImportForm 
-                  ? 'bg-red-950 border-red-900/60 text-red-200 hover:bg-red-900/40' 
-                  : 'bg-[#7C6EFA] hover:bg-indigo-600 border-[#7C6EFA] text-white hover:shadow-[0_0_15px_rgba(124,110,250,0.3)]'
-              }`}
             >
-              <Plus className="w-3.5 h-3.5" />
               {showImportForm ? "Close Form" : "Import Asset"}
-            </button>
+            </Button>
           </div>
         </div>
       </header>
@@ -386,68 +417,61 @@ export default function AssetLibraryViewer({ onBack }: { onBack: () => void }) {
 
               <form onSubmit={handleRegisterAsset} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-[10px] text-slate-500 uppercase font-extrabold tracking-wider block">
-                    1. Asset Class Category
-                  </label>
-                  <select
+                  <Select
+                    label="1. Asset Class Category"
                     value={importCategory}
                     onChange={(e) => setImportCategory(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl text-xs text-white p-3 outline-none focus:border-[#7C6EFA]"
-                  >
-                    <option value="backgrounds">Backgrounds (BG-XXXXXX)</option>
-                    <option value="borders">Borders & Frames (FRAME-XXXXXX)</option>
-                    <option value="patterns">Patterns & Overlays (PATTERN-XXXXXX)</option>
-                    <option value="stickers">Stickers & Badges (STICKER-XXXXXX)</option>
-                    <option value="icons">Brand Icons (ICON-XXXXXX)</option>
-                  </select>
+                    options={[
+                      { value: "backgrounds", label: "Backgrounds (BG-XXXXXX)" },
+                      { value: "borders", label: "Borders & Frames (FRAME-XXXXXX)" },
+                      { value: "patterns", label: "Patterns & Overlays (PATTERN-XXXXXX)" },
+                      { value: "stickers", label: "Stickers & Badges (STICKER-XXXXXX)" },
+                      { value: "icons", label: "Brand Icons (ICON-XXXXXX)" },
+                    ]}
+                    className="bg-slate-950 border-slate-800 text-white"
+                  />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-[10px] text-slate-500 uppercase font-extrabold tracking-wider block">
-                    2. Elegant Friendly Name
-                  </label>
-                  <input
+                  <Input
+                    label="2. Elegant Friendly Name"
                     type="text"
                     value={importName}
                     onChange={(e) => setImportName(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-[#7C6EFA] rounded-xl text-xs text-white p-3 outline-none"
+                    className="bg-slate-950 border-slate-800 text-white"
                     placeholder="e.g. Royal Velvet Gold Dust"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-[10px] text-slate-500 uppercase font-extrabold tracking-wider block">
-                    3. Dynamic Tags (Comma-separated)
-                  </label>
-                  <input
+                  <Input
+                    label="3. Dynamic Tags (Comma-separated)"
                     type="text"
                     value={importTags}
                     onChange={(e) => setImportTags(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-[#7C6EFA] rounded-xl text-xs text-white p-3 outline-none"
+                    className="bg-slate-950 border-slate-800 text-white"
                     placeholder="e.g. luxury, gold, dark, hospitality"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-[10px] text-slate-500 uppercase font-extrabold tracking-wider block">
-                    4. Asset Source Value / Path
-                  </label>
-                  <input
+                  <Input
+                    label="4. Asset Source Value / Path"
                     type="text"
                     value={importPath}
                     onChange={(e) => setImportPath(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-[#7C6EFA] rounded-xl text-xs text-white p-3 outline-none font-mono"
+                    className="bg-slate-950 border-slate-800 text-white font-mono"
                     placeholder="e.g. #0F0E14, ☕, or /assets/borders/my-frame.svg"
                   />
                 </div>
 
                 <div className="md:col-span-2 pt-2 flex justify-end">
-                  <button
+                  <Button
                     type="submit"
-                    className="px-6 py-3 bg-[#7C6EFA] hover:bg-indigo-600 border border-[#7C6EFA] hover:shadow-[0_0_15px_rgba(124,110,250,0.4)] text-xs text-white uppercase font-extrabold tracking-wider rounded-xl transition-all"
+                    variant="primary"
                   >
                     Register and Sync Asset ID
-                  </button>
+                  </Button>
                 </div>
               </form>
             </div>
@@ -560,13 +584,4 @@ export default function AssetLibraryViewer({ onBack }: { onBack: () => void }) {
   );
 }
 
-function getCategoryIcon(categoryId: string) {
-  switch (categoryId) {
-    case 'backgrounds': return <ImageIcon className="h-3.5 w-3.5" />;
-    case 'borders': return <Square className="h-3.5 w-3.5" />;
-    case 'patterns': return <Grid className="h-3.5 w-3.5" />;
-    case 'stickers': return <Tag className="h-3.5 w-3.5" />;
-    case 'icons': return <Box className="h-3.5 w-3.5" />;
-    default: return <Layers className="h-3.5 w-3.5" />;
-  }
-}
+

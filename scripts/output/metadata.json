@@ -1,0 +1,83 @@
+{
+  "total": 6,
+  "assets": [
+    {
+      "filename": "basic-border.svg",
+      "category": "borders",
+      "path": "/assets/borders/basic-border.svg",
+      "format": "svg",
+      "size_bytes": 202,
+      "file_hash": "92fa32803a50d93647d66c49102b789b7d7d00c283e59c17fce581d7454e3115",
+      "dimensions": {
+        "width": 100,
+        "height": 100
+      },
+      "date_added": "2026-06-28"
+    },
+    {
+      "filename": "elegant-frame.svg",
+      "category": "borders",
+      "path": "/assets/borders/elegant-frame.svg",
+      "format": "svg",
+      "size_bytes": 475,
+      "file_hash": "c0e99b56f955b252dadc0598a74215549513f184c8a0e7c40d482417ffa3bda8",
+      "dimensions": {
+        "width": 100,
+        "height": 100
+      },
+      "date_added": "2026-06-28"
+    },
+    {
+      "filename": "classic-corner.svg",
+      "category": "corners",
+      "path": "/assets/corners/classic-corner.svg",
+      "format": "svg",
+      "size_bytes": 263,
+      "file_hash": "94d57e7cc9a703dcedc22dccb15da974d995fffe157697458a69f7834072a45b",
+      "dimensions": {
+        "width": 50,
+        "height": 50
+      },
+      "date_added": "2026-06-28"
+    },
+    {
+      "filename": "dots.svg",
+      "category": "patterns",
+      "path": "/assets/patterns/dots.svg",
+      "format": "svg",
+      "size_bytes": 140,
+      "file_hash": "f8b249b9d4f66bf682bcdf3cb43d7ad2f78b4427ee0de36283f5571b81bab220",
+      "dimensions": {
+        "width": 20,
+        "height": 20
+      },
+      "date_added": "2026-06-28"
+    },
+    {
+      "filename": "star-badge.svg",
+      "category": "shapes",
+      "path": "/assets/shapes/star-badge.svg",
+      "format": "svg",
+      "size_bytes": 224,
+      "file_hash": "21d75de08525554b5e4d73f92848ec3f600bc7e06fe913628de8967052561e14",
+      "dimensions": {
+        "width": 100,
+        "height": 100
+      },
+      "date_added": "2026-06-28"
+    },
+    {
+      "filename": "scan-me.svg",
+      "category": "stickers",
+      "path": "/assets/stickers/scan-me.svg",
+      "format": "svg",
+      "size_bytes": 422,
+      "file_hash": "41ef97d647a42bd9955205a8189a0187979ad07c9220eec248a8cee8cbaa04a9",
+      "dimensions": {
+        "width": 100,
+        "height": 100
+      },
+      "date_added": "2026-06-28"
+    }
+  ]
+}

@@ -4,6 +4,9 @@ import {
   HelpCircle, Smartphone, Award, ArrowRight, Activity, Globe, User, Lock, Mail, ChevronRight, Compass
 } from 'lucide-react';
 import { authService, UserStats } from '../lib/firebase';
+import { Modal, Button, Input } from '../design-system';
+import { useForm } from '../hooks/useForm';
+import { Form } from '../components/ui';
 
 interface SaaSPaymentModalProps {
   isOpen: boolean;
@@ -59,8 +62,6 @@ export default function SaaSPaymentModal({
     setPaymentMethod(country === 'IN' ? 'upi' : 'card');
   }, [country]);
 
-  if (!isOpen) return null;
-
   // Localized pricing structures
   const pricing = {
     IN: {
@@ -107,27 +108,37 @@ export default function SaaSPaymentModal({
     }
   };
 
+  const form = useForm({
+    initialValues: { upiId: '', cardNumber: '', cardExpiry: '', cardCvv: '' },
+    validation: {
+      upiId: { validate: (v) => country === 'IN' && !v ? 'UPI ID is required' : undefined },
+      cardNumber: { validate: (v) => country !== 'IN' && (!v || v.length < 16) ? 'Invalid card number' : undefined },
+      cardExpiry: { validate: (v) => country !== 'IN' && (!v || v.length < 5) ? 'Invalid expiry' : undefined },
+      cardCvv: { validate: (v) => country !== 'IN' && (!v || v.length < 3) ? 'Invalid CVV' : undefined }
+    },
+    onSubmit: async () => {
+      if (!currentUser) {
+        setAuthError('No customer session detected. Please log in first.');
+        return;
+      }
+      try {
+        const upgraded = await authService.upgradeUserToPro(currentUser.uid, billingCycle, country);
+        setCurrentUser(upgraded);
+        onPaymentSuccess(upgraded);
+        setActiveStep('success');
+      } catch (err: any) {
+        setAuthError(err.message || 'Secured billing simulator failed.');
+      }
+    }
+  });
+
   const handlePaymentSubmit = async () => {
-    if (!currentUser) {
-      setAuthError('No customer session detected. Please log in first.');
-      return;
-    }
-    setLoading(true);
-    try {
-      const upgraded = await authService.upgradeUserToPro(currentUser.uid, billingCycle, country);
-      setCurrentUser(upgraded);
-      onPaymentSuccess(upgraded);
-      setActiveStep('success');
-    } catch (err: any) {
-      setAuthError(err.message || 'Secured billing simulator failed.');
-    } finally {
-      setLoading(false);
-    }
+    form.handleSubmit();
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 bg-slate-950/80 backdrop-blur-md animate-fadeIn">
-      <div className="relative w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[96vh]">
+    <Modal isOpen={isOpen} onClose={onClose} hideCloseButton className="max-w-4xl p-0">
+      <div className="relative w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden flex flex-col max-h-[96vh]">
         
         {/* Modal Branding Header */}
         <div className="flex items-center justify-between p-4 px-6 border-b border-slate-800 bg-slate-900/60 backdrop-blur">
@@ -260,29 +271,25 @@ export default function SaaSPaymentModal({
                   </div>
 
                   <form onSubmit={handleAuthSubmit} className="space-y-3 pt-2">
-                    <div className="space-y-1">
-                      <label className="text-[10px] uppercase font-mono text-slate-500 font-bold block">Email Address</label>
-                      <input
-                        type="email"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="suvash.astrology@gmail.com"
-                        className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl focus:border-indigo-500 focus:outline-none text-xs text-slate-200"
-                      />
-                    </div>
+                    <Input
+                      label="Email Address"
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="suvash.astrology@gmail.com"
+                      className="bg-slate-950 border-slate-800 focus:border-indigo-500 text-slate-200"
+                    />
 
-                    <div className="space-y-1">
-                      <label className="text-[10px] uppercase font-mono text-slate-500 font-bold block">Password</label>
-                      <input
-                        type="password"
-                        required
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="••••••••"
-                        className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl focus:border-indigo-500 focus:outline-none text-xs text-slate-200"
-                      />
-                    </div>
+                    <Input
+                      label="Password"
+                      type="password"
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="••••••••"
+                      className="bg-slate-950 border-slate-800 focus:border-indigo-500 text-slate-200"
+                    />
 
                     {isRegister && (
                       <div className="space-y-1.5">
@@ -318,14 +325,15 @@ export default function SaaSPaymentModal({
                       </div>
                     )}
 
-                    <button
+                    <Button
                       type="submit"
-                      disabled={loading}
-                      className="w-full py-2.5 bg-indigo-650 hover:bg-indigo-550 text-white rounded-xl text-xs font-black shadow transition-all flex items-center justify-center gap-1.5 mt-4 group cursor-pointer"
+                      loading={loading}
+                      fullWidth
+                      className="mt-4 bg-indigo-650 hover:bg-indigo-550 shadow"
                     >
-                      <span>{loading ? 'Authenticating...' : isRegister ? 'Confirm Account & Start Payments' : 'Verify Account Session'}</span>
-                      <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-                    </button>
+                      {isRegister ? 'Confirm Account & Start Payments' : 'Verify Account Session'}
+                      {!loading && <ChevronRight className="w-3.5 h-3.5 ml-1.5 transition-transform" />}
+                    </Button>
                   </form>
 
                   <div className="text-center pt-2">
@@ -392,7 +400,7 @@ export default function SaaSPaymentModal({
                   </div>
 
                   {/* Payment Details Container */}
-                  <div className="p-4 bg-slate-950 rounded-2xl border border-slate-850/80 space-y-4">
+                  <Form onSubmit={form.handleSubmit} loading={form.submitting} className="p-4 bg-slate-950 rounded-2xl border border-slate-850/80 space-y-4">
                     <div className="flex justify-between items-center bg-slate-900/60 p-3 rounded-xl">
                       <span className="text-xs text-slate-400 font-medium">Subscription Bill Rate:</span>
                       <div className="text-right">
@@ -435,67 +443,69 @@ export default function SaaSPaymentModal({
                             SIMULATOR: Scan QR using PhonePe, GPay, or Paytm
                           </p>
 
-                          <div className="space-y-1">
-                            <label className="text-[9px] uppercase font-mono text-slate-500 block">VPA UPI Address</label>
-                            <input
+                          <div className="space-y-1 mt-2">
+                            <Input
+                              label="VPA UPI Address"
                               type="text"
-                              value={upiId}
-                              onChange={(e) => setUpiId(e.target.value)}
+                              value={form.values.upiId}
+                              onChange={(e) => form.setFieldValue("upiId", e.target.value)}
+                              error={form.touched.upiId ? form.errors.upiId : undefined}
+                              onBlur={() => form.setFieldTouched("upiId")}
                               placeholder="suvash@okaxis"
-                              className="w-full px-3 py-1.5 bg-[#05050c] border border-slate-800 rounded-lg focus:border-indigo-500 focus:outline-none text-xs text-slate-200"
+                              className="bg-[#05050c] border-slate-800 text-slate-200"
                             />
                           </div>
                         </div>
                       ) : (
                         <div className="space-y-2.5">
-                          <div className="space-y-1">
-                            <label className="text-[9px] uppercase font-mono text-slate-500 block">Credit Card Number</label>
-                            <input
+                          <Input
+                            label="Credit Card Number"
+                            type="text"
+                            maxLength={19}
+                            value={form.values.cardNumber}
+                            onChange={(e) => form.setFieldValue("cardNumber", e.target.value)}
+                            error={form.touched.cardNumber ? form.errors.cardNumber : undefined}
+                            onBlur={() => form.setFieldTouched("cardNumber")}
+                            placeholder="4242 4242 4242 4242"
+                            className="bg-[#05050c] border-slate-800 text-slate-200"
+                          />
+                          <div className="grid grid-cols-2 gap-2.5 mt-2">
+                            <Input
+                              label="Expiry (MM/YY)"
                               type="text"
-                              maxLength={19}
-                              value={cardNumber}
-                              onChange={(e) => setCardNumber(e.target.value)}
-                              placeholder="4242 4242 4242 4242"
-                              className="w-full px-3 py-1.5 bg-[#05050c] border border-slate-800 rounded-lg focus:border-indigo-500 focus:outline-none text-xs text-slate-200"
+                              maxLength={5}
+                              value={form.values.cardExpiry}
+                              onChange={(e) => form.setFieldValue("cardExpiry", e.target.value)}
+                              error={form.touched.cardExpiry ? form.errors.cardExpiry : undefined}
+                              onBlur={() => form.setFieldTouched("cardExpiry")}
+                              placeholder="12/30"
+                              className="bg-[#05050c] border-slate-800 text-slate-200"
                             />
-                          </div>
-                          <div className="grid grid-cols-2 gap-2.5">
-                            <div className="space-y-1">
-                              <label className="text-[9px] uppercase font-mono text-slate-500 block">Expiry (MM/YY)</label>
-                              <input
-                                type="text"
-                                maxLength={5}
-                                value={cardExpiry}
-                                onChange={(e) => setCardExpiry(e.target.value)}
-                                placeholder="12/30"
-                                className="w-full px-3 py-1.5 bg-[#05050c] border border-slate-800 rounded-lg focus:border-indigo-500 focus:outline-none text-xs text-slate-200"
-                              />
-                            </div>
-                            <div className="space-y-1">
-                              <label className="text-[9px] uppercase font-mono text-slate-500 block">CVV</label>
-                              <input
-                                type="password"
-                                maxLength={3}
-                                value={cardCvv}
-                                onChange={(e) => setCardCvv(e.target.value)}
-                                placeholder="***"
-                                className="w-full px-3 py-1.5 bg-[#05050c] border border-slate-800 rounded-lg focus:border-indigo-500 focus:outline-none text-xs text-slate-200"
-                              />
-                            </div>
+                            <Input
+                              label="CVV"
+                              type="password"
+                              maxLength={3}
+                              value={form.values.cardCvv}
+                              onChange={(e) => form.setFieldValue("cardCvv", e.target.value)}
+                              error={form.touched.cardCvv ? form.errors.cardCvv : undefined}
+                              onBlur={() => form.setFieldTouched("cardCvv")}
+                              placeholder="***"
+                              className="bg-[#05050c] border-slate-800 text-slate-200"
+                            />
                           </div>
                         </div>
                       )}
                     </div>
-                  </div>
 
-                  <button
-                    type="button"
-                    onClick={handlePaymentSubmit}
-                    disabled={loading}
-                    className="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:brightness-110 text-white rounded-xl text-xs font-black shadow transition-all uppercase tracking-wider cursor-pointer"
-                  >
-                    {loading ? 'Processing premium billing...' : 'Simulate secure checkout & bypass locks'}
-                  </button>
+                    <Button
+                      type="submit"
+                      loading={form.submitting}
+                      fullWidth
+                      className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:brightness-110 text-white font-black shadow tracking-wider uppercase text-xs"
+                    >
+                      Simulate secure checkout & bypass locks
+                    </Button>
+                  </Form>
                 </div>
               )}
 
@@ -531,13 +541,13 @@ export default function SaaSPaymentModal({
                     </div>
                   </div>
 
-                  <button
+                  <Button
                     type="button"
                     onClick={onClose}
-                    className="px-6 py-2 bg-indigo-650 hover:bg-indigo-550 text-white text-xs font-bold rounded-xl shadow transition-all"
+                    className="bg-indigo-650 hover:bg-indigo-550"
                   >
                     Start Creating Brands
-                  </button>
+                  </Button>
                 </div>
               )}
             </div>
@@ -552,6 +562,6 @@ export default function SaaSPaymentModal({
 
         </div>
       </div>
-    </div>
+    </Modal>
   );
 }

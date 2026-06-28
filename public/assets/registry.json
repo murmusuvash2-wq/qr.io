@@ -1,42 +1,3059 @@
 {
   "categories": [
-    { "id": "backgrounds", "label": "Backgrounds" },
-    { "id": "borders", "label": "Borders & Frames" },
-    { "id": "patterns", "label": "Patterns & Overlays" },
-    { "id": "stickers", "label": "Stickers & Badges" },
-    { "id": "icons", "label": "Brand Icons" }
+    {
+      "id": "backgrounds",
+      "label": "Backgrounds",
+      "icon": "Image"
+    },
+    {
+      "id": "frames",
+      "label": "Frames & Borders",
+      "icon": "Square"
+    },
+    {
+      "id": "patterns",
+      "label": "Patterns",
+      "icon": "Grid"
+    },
+    {
+      "id": "stickers",
+      "label": "Stickers",
+      "icon": "Tag"
+    },
+    {
+      "id": "icons-category",
+      "label": "Category Icons",
+      "icon": "Box"
+    },
+    {
+      "id": "icons-tool",
+      "label": "Tool Icons",
+      "icon": "Wrench"
+    },
+    {
+      "id": "textures",
+      "label": "Textures",
+      "icon": "Layers"
+    },
+    {
+      "id": "illustrations",
+      "label": "Illustrations",
+      "icon": "Palette"
+    },
+    {
+      "id": "mockups",
+      "label": "Mockups",
+      "icon": "Monitor"
+    },
+    {
+      "id": "qr-shapes",
+      "label": "QR Shapes",
+      "icon": "QrCode"
+    },
+    {
+      "id": "ribbons",
+      "label": "Ribbons & Banners",
+      "icon": "ScrollText"
+    },
+    {
+      "id": "badges",
+      "label": "Badges & Labels",
+      "icon": "Award"
+    },
+    {
+      "id": "corners",
+      "label": "Corners & Accents",
+      "icon": "CornerDownRight"
+    },
+    {
+      "id": "gradients",
+      "label": "Gradient Presets",
+      "icon": "Droplets"
+    },
+    {
+      "id": "typography",
+      "label": "Typography Assets",
+      "icon": "Type"
+    },
+    {
+      "id": "themed-sets",
+      "label": "Themed Design Sets",
+      "icon": "Package"
+    }
   ],
   "assets": {
-    "backgrounds": [
-      { "id": "BG-000001", "name": "Obsidian Luxury Dark", "path": "#0F0E14", "tags": ["luxury", "dark", "premium", "modern"], "category": "backgrounds" },
-      { "id": "BG-000002", "name": "Soft Satin Rose", "path": "#FFEBF0", "tags": ["minimal", "wedding", "light", "pastel"], "category": "backgrounds" },
-      { "id": "BG-000003", "name": "Golden Marble Crest", "path": "#FFFBF2", "tags": ["luxury", "light", "premium", "gold"], "category": "backgrounds" },
-      { "id": "BG-000004", "name": "Cyberpunk Neon Electro", "path": "#05020D", "tags": ["dark", "neon", "modern", "tech"], "category": "backgrounds" },
-      { "id": "BG-000005", "name": "Minimalist Snow Alabaster", "path": "#F9FAFB", "tags": ["minimal", "light", "corporate"], "category": "backgrounds" },
-      { "id": "BG-000006", "name": "Mint Organic Wellness", "path": "#F0FDF4", "tags": ["minimal", "light", "eco", "pastel"], "category": "backgrounds" }
-    ],
     "borders": [
-      { "id": "FRAME-000001", "name": "Filigree Luxury Gold", "path": "/assets/borders/elegant-frame.svg", "tags": ["luxury", "gold", "premium"], "category": "borders" },
-      { "id": "FRAME-000002", "name": "Minimalist Slate Hairline", "path": "/assets/borders/basic-border.svg", "tags": ["minimal", "corporate", "light"], "category": "borders" },
-      { "id": "FRAME-000003", "name": "Retro Cyber Grid", "path": "/assets/borders/cyber-grid.svg", "tags": ["tech", "neon", "modern"], "category": "borders" },
-      { "id": "FRAME-000004", "name": "Cherry Blossom Floral", "path": "/assets/borders/sakura.svg", "tags": ["wedding", "pastel", "minimal"], "category": "borders" }
+      {
+        "id": "BO-000001",
+        "name": "basic border",
+        "path": "/assets/borders/basic-border.svg",
+        "path_webp": "/assets/borders/basic-border.webp",
+        "thumbnail": "/assets/thumbnails/92fa32803a50.webp",
+        "category": "borders",
+        "format": "svg",
+        "size_bytes": 202,
+        "dimensions": {
+          "width": 100,
+          "height": 100
+        },
+        "palette": [
+          "#000000"
+        ],
+        "dominant_color": "#000000",
+        "file_hash": "92fa32803a50d93647d66c49102b789b7d7d00c283e59c17fce581d7454e3115",
+        "date_added": "2026-06-28",
+        "tags": [
+          "borders"
+        ],
+        "license": "CC0",
+        "source": "content-factory"
+      },
+      {
+        "id": "BO-000002",
+        "name": "elegant frame",
+        "path": "/assets/borders/elegant-frame.svg",
+        "path_webp": "/assets/borders/elegant-frame.webp",
+        "thumbnail": "/assets/thumbnails/c0e99b56f955.webp",
+        "category": "borders",
+        "format": "svg",
+        "size_bytes": 475,
+        "dimensions": {
+          "width": 100,
+          "height": 100
+        },
+        "palette": [
+          "#000000",
+          "#204060",
+          "#e08020",
+          "#404040",
+          "#204040"
+        ],
+        "dominant_color": "#000000",
+        "file_hash": "c0e99b56f955b252dadc0598a74215549513f184c8a0e7c40d482417ffa3bda8",
+        "date_added": "2026-06-28",
+        "tags": [
+          "borders"
+        ],
+        "license": "CC0",
+        "source": "content-factory"
+      }
+    ],
+    "corners": [
+      {
+        "id": "CO-000003",
+        "name": "classic corner",
+        "path": "/assets/corners/classic-corner.svg",
+        "path_webp": "/assets/corners/classic-corner.webp",
+        "thumbnail": "/assets/thumbnails/94d57e7cc9a7.webp",
+        "category": "corners",
+        "format": "svg",
+        "size_bytes": 263,
+        "dimensions": {
+          "width": 50,
+          "height": 50
+        },
+        "palette": [
+          "#000000",
+          "#204060",
+          "#e04040",
+          "#204040",
+          "#404060"
+        ],
+        "dominant_color": "#000000",
+        "file_hash": "94d57e7cc9a703dcedc22dccb15da974d995fffe157697458a69f7834072a45b",
+        "date_added": "2026-06-28",
+        "tags": [
+          "corners"
+        ],
+        "license": "CC0",
+        "source": "content-factory"
+      }
     ],
     "patterns": [
-      { "id": "PATTERN-000001", "name": "Delicate Gold Dust", "path": "/assets/patterns/dots.svg", "tags": ["luxury", "gold", "premium"], "category": "patterns" },
-      { "id": "PATTERN-000002", "name": "Geometric Wireframe Grid", "path": "/assets/patterns/grid.svg", "tags": ["tech", "corporate", "modern"], "category": "patterns" },
-      { "id": "PATTERN-000003", "name": "Liquid Flow Lines", "path": "/assets/patterns/waves.svg", "tags": ["minimal", "modern", "pastel"], "category": "patterns" }
+      {
+        "id": "PA-000004",
+        "name": "dots",
+        "path": "/assets/patterns/dots.svg",
+        "path_webp": "/assets/patterns/dots.webp",
+        "thumbnail": "/assets/thumbnails/f8b249b9d4f6.webp",
+        "category": "patterns",
+        "format": "svg",
+        "size_bytes": 140,
+        "dimensions": {
+          "width": 20,
+          "height": 20
+        },
+        "palette": [
+          "#000000",
+          "#c0c0c0",
+          "#80100100"
+        ],
+        "dominant_color": "#000000",
+        "file_hash": "f8b249b9d4f66bf682bcdf3cb43d7ad2f78b4427ee0de36283f5571b81bab220",
+        "date_added": "2026-06-28",
+        "tags": [
+          "patterns"
+        ],
+        "license": "CC0",
+        "source": "content-factory"
+      },
+      {
+        "id": "PATTERN-000005",
+        "name": "Geometric Diamond Mesh",
+        "path": "/assets/patterns/geometricdiamondmesh.svg",
+        "tags": [
+          "geometric",
+          "diamond",
+          "modern",
+          "tileable"
+        ],
+        "category": "patterns",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "PATTERN-000006",
+        "name": "Polka Dot Playful",
+        "path": "/assets/patterns/polkadotplayful.svg",
+        "tags": [
+          "dots",
+          "playful",
+          "colorful",
+          "tileable"
+        ],
+        "category": "patterns",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "PATTERN-000007",
+        "name": "Honeycomb Hexagon",
+        "path": "/assets/patterns/honeycombhexagon.svg",
+        "tags": [
+          "hexagon",
+          "geometric",
+          "tech",
+          "tileable"
+        ],
+        "category": "patterns",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "PATTERN-000008",
+        "name": "Diagonal Stripes Premium",
+        "path": "/assets/patterns/diagonalstripespremium.svg",
+        "tags": [
+          "stripes",
+          "diagonal",
+          "premium",
+          "tileable"
+        ],
+        "category": "patterns",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "PATTERN-000009",
+        "name": "Houndstooth Classic",
+        "path": "/assets/patterns/houndstoothclassic.svg",
+        "tags": [
+          "houndstooth",
+          "classic",
+          "vintage",
+          "tileable"
+        ],
+        "category": "patterns",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "PATTERN-000010",
+        "name": "Chevron Zigzag",
+        "path": "/assets/patterns/chevronzigzag.svg",
+        "tags": [
+          "chevron",
+          "zigzag",
+          "modern",
+          "tileable"
+        ],
+        "category": "patterns",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "PATTERN-000011",
+        "name": "Stars Night Sky",
+        "path": "/assets/patterns/starsnightsky.svg",
+        "tags": [
+          "stars",
+          "night",
+          "space",
+          "tileable"
+        ],
+        "category": "patterns",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "PATTERN-000012",
+        "name": "Floral Garden",
+        "path": "/assets/patterns/floralgarden.svg",
+        "tags": [
+          "floral",
+          "flowers",
+          "garden",
+          "tileable"
+        ],
+        "category": "patterns",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "PATTERN-000013",
+        "name": "Wave Organic Flow",
+        "path": "/assets/patterns/waveorganicflow.svg",
+        "tags": [
+          "waves",
+          "organic",
+          "flow",
+          "tileable"
+        ],
+        "category": "patterns",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "PATTERN-000014",
+        "name": "Concrete Texture",
+        "path": "/assets/patterns/concretetexture.svg",
+        "tags": [
+          "concrete",
+          "texture",
+          "urban",
+          "tileable"
+        ],
+        "category": "patterns",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "PATTERN-000015",
+        "name": "Leather Grain",
+        "path": "/assets/patterns/leathergrain.svg",
+        "tags": [
+          "leather",
+          "texture",
+          "premium",
+          "tileable"
+        ],
+        "category": "patterns",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "PATTERN-000016",
+        "name": "Marble Vein",
+        "path": "/assets/patterns/marblevein.svg",
+        "tags": [
+          "marble",
+          "texture",
+          "luxury",
+          "tileable"
+        ],
+        "category": "patterns",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "PATTERN-000017",
+        "name": "Paisley Indian",
+        "path": "/assets/patterns/paisleyindian.svg",
+        "tags": [
+          "paisley",
+          "indian",
+          "traditional",
+          "tileable"
+        ],
+        "category": "patterns",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "PATTERN-000018",
+        "name": "Mosaic Tile",
+        "path": "/assets/patterns/mosaictile.svg",
+        "tags": [
+          "mosaic",
+          "tile",
+          "geometric",
+          "tileable"
+        ],
+        "category": "patterns",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "PATTERN-000019",
+        "name": "Confetti Celebration",
+        "path": "/assets/patterns/confetticelebration.svg",
+        "tags": [
+          "confetti",
+          "celebration",
+          "party",
+          "tileable"
+        ],
+        "category": "patterns",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "PATTERN-000020",
+        "name": "Circuit Board Traces",
+        "path": "/assets/patterns/circuitboardtraces.svg",
+        "tags": [
+          "circuit",
+          "tech",
+          "electronic",
+          "tileable"
+        ],
+        "category": "patterns",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "PATTERN-000021",
+        "name": "Herringbone Wood",
+        "path": "/assets/patterns/herringbonewood.svg",
+        "tags": [
+          "herringbone",
+          "wood",
+          "floor",
+          "tileable"
+        ],
+        "category": "patterns",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "PATTERN-000022",
+        "name": "Scale Pattern Like Fish",
+        "path": "/assets/patterns/scalepatternlikefish.svg",
+        "tags": [
+          "scales",
+          "fish",
+          "organic",
+          "tileable"
+        ],
+        "category": "patterns",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "PATTERN-000023",
+        "name": "Tribal Geometric",
+        "path": "/assets/patterns/tribalgeometric.svg",
+        "tags": [
+          "tribal",
+          "geometric",
+          "cultural",
+          "tileable"
+        ],
+        "category": "patterns",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "PATTERN-000024",
+        "name": "Watercolor Splash",
+        "path": "/assets/patterns/watercolorsplash.svg",
+        "tags": [
+          "watercolor",
+          "artistic",
+          "colorful",
+          "tileable"
+        ],
+        "category": "patterns",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      }
+    ],
+    "shapes": [
+      {
+        "id": "SH-000005",
+        "name": "star badge",
+        "path": "/assets/shapes/star-badge.svg",
+        "path_webp": "/assets/shapes/star-badge.webp",
+        "thumbnail": "/assets/thumbnails/21d75de08525.webp",
+        "category": "shapes",
+        "format": "svg",
+        "size_bytes": 224,
+        "dimensions": {
+          "width": 100,
+          "height": 100
+        },
+        "palette": [
+          "#000000",
+          "#100e000",
+          "#c08000",
+          "#c0a000",
+          "#100c000"
+        ],
+        "dominant_color": "#000000",
+        "file_hash": "21d75de08525554b5e4d73f92848ec3f600bc7e06fe913628de8967052561e14",
+        "date_added": "2026-06-28",
+        "tags": [
+          "shapes"
+        ],
+        "license": "CC0",
+        "source": "content-factory"
+      }
     ],
     "stickers": [
-      { "id": "STICKER-000001", "name": "🎀 Scan Me Ribbon", "path": "/assets/stickers/scan-me.svg", "tags": ["restaurant", "ribbon", "modern"], "category": "stickers" },
-      { "id": "STICKER-000002", "name": "🌸 Save Contact Badge", "path": "/assets/stickers/save-contact.svg", "tags": ["minimal", "wedding", "personal"], "category": "stickers" },
-      { "id": "STICKER-000003", "name": "⭐ Google Review 5-Star", "path": "/assets/stickers/google-star.svg", "tags": ["business", "badge", "premium"], "category": "stickers" },
-      { "id": "STICKER-000004", "name": "📅 Reserve Seat Badge", "path": "/assets/stickers/reserve.svg", "tags": ["events", "badge", "corporate"], "category": "stickers" }
+      {
+        "id": "ST-000006",
+        "name": "scan me",
+        "path": "/assets/stickers/scan-me.svg",
+        "path_webp": "/assets/stickers/scan-me.webp",
+        "thumbnail": "/assets/thumbnails/41ef97d647a4.webp",
+        "category": "stickers",
+        "format": "svg",
+        "size_bytes": 422,
+        "dimensions": {
+          "width": 100,
+          "height": 100
+        },
+        "palette": [
+          "#40a0e0",
+          "#000000",
+          "#2080c0",
+          "#100100100",
+          "#80c0e0"
+        ],
+        "dominant_color": "#40a0e0",
+        "file_hash": "41ef97d647a42bd9955205a8189a0187979ad07c9220eec248a8cee8cbaa04a9",
+        "date_added": "2026-06-28",
+        "tags": [
+          "stickers"
+        ],
+        "license": "CC0",
+        "source": "content-factory"
+      },
+      {
+        "id": "STICKER-000007",
+        "name": "Scan Me Gold Premium",
+        "path": "/assets/stickers/scanmegoldpremium.svg",
+        "tags": [
+          "scan",
+          "premium",
+          "gold",
+          "badge"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000008",
+        "name": "Scan Here Arrow",
+        "path": "/assets/stickers/scanherearrow.svg",
+        "tags": [
+          "scan",
+          "modern",
+          "minimal",
+          "clean"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000009",
+        "name": "QR Code Pointer",
+        "path": "/assets/stickers/qrcodepointer.svg",
+        "tags": [
+          "scan",
+          "pointer",
+          "arrow",
+          "modern"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000010",
+        "name": "WiFi Signal Strong",
+        "path": "/assets/stickers/wifisignalstrong.svg",
+        "tags": [
+          "wifi",
+          "tech",
+          "signal",
+          "badge"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000011",
+        "name": "UPI Payment Accepted",
+        "path": "/assets/stickers/upipaymentaccepted.svg",
+        "tags": [
+          "upi",
+          "payment",
+          "india",
+          "badge"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000012",
+        "name": "Google Review Us",
+        "path": "/assets/stickers/googlereviewus.svg",
+        "tags": [
+          "google",
+          "review",
+          "business",
+          "badge"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000013",
+        "name": "Follow Us Instagram",
+        "path": "/assets/stickers/followusinstagram.svg",
+        "tags": [
+          "instagram",
+          "social",
+          "follow",
+          "badge"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000014",
+        "name": "WhatsApp Chat Now",
+        "path": "/assets/stickers/whatsappchatnow.svg",
+        "tags": [
+          "whatsapp",
+          "chat",
+          "social",
+          "badge"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000015",
+        "name": "Premium Exclusive",
+        "path": "/assets/stickers/premiumexclusive.svg",
+        "tags": [
+          "premium",
+          "exclusive",
+          "vip",
+          "badge"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000016",
+        "name": "New Arrival",
+        "path": "/assets/stickers/newarrival.svg",
+        "tags": [
+          "new",
+          "badge",
+          "fresh",
+          "label"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000017",
+        "name": "Best Seller",
+        "path": "/assets/stickers/bestseller.svg",
+        "tags": [
+          "best-seller",
+          "badge",
+          "popular",
+          "label"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000018",
+        "name": "Limited Offer",
+        "path": "/assets/stickers/limitedoffer.svg",
+        "tags": [
+          "limited",
+          "offer",
+          "sale",
+          "badge"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000019",
+        "name": "Free Download",
+        "path": "/assets/stickers/freedownload.svg",
+        "tags": [
+          "free",
+          "download",
+          "badge",
+          "label"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000020",
+        "name": "Menu Digital Badge",
+        "path": "/assets/stickers/menudigitalbadge.svg",
+        "tags": [
+          "restaurant",
+          "menu",
+          "digital",
+          "badge"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000021",
+        "name": "Book Now Table",
+        "path": "/assets/stickers/booknowtable.svg",
+        "tags": [
+          "restaurant",
+          "reservation",
+          "booking",
+          "badge"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000022",
+        "name": "Wedding RSVP",
+        "path": "/assets/stickers/weddingrsvp.svg",
+        "tags": [
+          "wedding",
+          "rsvp",
+          "invitation",
+          "badge"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000023",
+        "name": "Save The Date",
+        "path": "/assets/stickers/savethedate.svg",
+        "tags": [
+          "wedding",
+          "save-date",
+          "invitation",
+          "badge"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000024",
+        "name": "Contact Us",
+        "path": "/assets/stickers/contactus.svg",
+        "tags": [
+          "business",
+          "contact",
+          "vcard",
+          "badge"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000025",
+        "name": "Learn More",
+        "path": "/assets/stickers/learnmore.svg",
+        "tags": [
+          "education",
+          "learn",
+          "info",
+          "badge"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000026",
+        "name": "Get Direction",
+        "path": "/assets/stickers/getdirection.svg",
+        "tags": [
+          "travel",
+          "direction",
+          "map",
+          "badge"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000027",
+        "name": "Emergency Info",
+        "path": "/assets/stickers/emergencyinfo.svg",
+        "tags": [
+          "medical",
+          "emergency",
+          "health",
+          "badge"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000028",
+        "name": "Pet ID Badge",
+        "path": "/assets/stickers/petidbadge.svg",
+        "tags": [
+          "pet",
+          "animal",
+          "id",
+          "badge"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000029",
+        "name": "Real Estate Agent",
+        "path": "/assets/stickers/realestateagent.svg",
+        "tags": [
+          "real-estate",
+          "agent",
+          "property",
+          "badge"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000030",
+        "name": "Made With Love",
+        "path": "/assets/stickers/madewithlove.svg",
+        "tags": [
+          "heart",
+          "love",
+          "personal",
+          "badge"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000031",
+        "name": "Eco Friendly",
+        "path": "/assets/stickers/ecofriendly.svg",
+        "tags": [
+          "eco",
+          "green",
+          "environment",
+          "badge"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000032",
+        "name": "Verified Secure",
+        "path": "/assets/stickers/verifiedsecure.svg",
+        "tags": [
+          "secure",
+          "verified",
+          "trust",
+          "badge"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000033",
+        "name": "Handcrafted",
+        "path": "/assets/stickers/handcrafted.svg",
+        "tags": [
+          "handcrafted",
+          "artisan",
+          "quality",
+          "badge"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000034",
+        "name": "Scan For Offer",
+        "path": "/assets/stickers/scanforoffer.svg",
+        "tags": [
+          "scan",
+          "offer",
+          "discount",
+          "deal"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "STICKER-000035",
+        "name": "Vote For Us",
+        "path": "/assets/stickers/voteforus.svg",
+        "tags": [
+          "vote",
+          "poll",
+          "feedback",
+          "badge"
+        ],
+        "category": "stickers",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      }
     ],
-    "icons": [
-      { "id": "ICON-000001", "name": "Barista Coffee Cup", "path": "☕", "tags": ["restaurant", "cafe"], "category": "icons" },
-      { "id": "ICON-000002", "name": "Celebration Marriage Rings", "path": "💍", "tags": ["wedding", "events", "personal"], "category": "icons" },
-      { "id": "ICON-000003", "name": "Google Premium Star", "path": "⭐", "tags": ["business", "premium"], "category": "icons" },
-      { "id": "ICON-000004", "name": "Wi-Fi Access Wave", "path": "📶", "tags": ["tech", "cafe", "corporate"], "category": "icons" }
+    "backgrounds": [
+      {
+        "id": "BG-000001",
+        "name": "Obsidian Gold Vein",
+        "path": "/assets/backgrounds/obsidiangoldvein.svg",
+        "tags": [
+          "luxury",
+          "dark",
+          "premium",
+          "gold"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000002",
+        "name": "Royal Amethyst Mesh",
+        "path": "/assets/backgrounds/royalamethystmesh.svg",
+        "tags": [
+          "luxury",
+          "dark",
+          "purple",
+          "premium"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000003",
+        "name": "Champagne Satin",
+        "path": "/assets/backgrounds/champagnesatin.svg",
+        "tags": [
+          "luxury",
+          "light",
+          "gold",
+          "elegant"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000004",
+        "name": "Cosmic Nebula",
+        "path": "/assets/backgrounds/cosmicnebula.svg",
+        "tags": [
+          "premium",
+          "dark",
+          "space",
+          "modern"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000005",
+        "name": "Warm Amber Kitchen",
+        "path": "/assets/backgrounds/warmamberkitchen.svg",
+        "tags": [
+          "restaurant",
+          "warm",
+          "food"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000006",
+        "name": "Fresh Herb Green",
+        "path": "/assets/backgrounds/freshherbgreen.svg",
+        "tags": [
+          "restaurant",
+          "eco",
+          "organic",
+          "fresh"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000007",
+        "name": "Wooden Rustic",
+        "path": "/assets/backgrounds/woodenrustic.svg",
+        "tags": [
+          "restaurant",
+          "rustic",
+          "cafe",
+          "warm"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000008",
+        "name": "Blush Pink Elegance",
+        "path": "/assets/backgrounds/blushpinkelegance.svg",
+        "tags": [
+          "wedding",
+          "pink",
+          "romantic",
+          "elegant"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000009",
+        "name": "Ivory Lace",
+        "path": "/assets/backgrounds/ivorylace.svg",
+        "tags": [
+          "wedding",
+          "ivory",
+          "classic",
+          "traditional"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000010",
+        "name": "Dusty Rose Velvet",
+        "path": "/assets/backgrounds/dustyrosevelvet.svg",
+        "tags": [
+          "wedding",
+          "rose",
+          "vintage",
+          "romantic"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000011",
+        "name": "Clean Clinical White",
+        "path": "/assets/backgrounds/cleanclinicalwhite.svg",
+        "tags": [
+          "medical",
+          "clean",
+          "corporate",
+          "white"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000012",
+        "name": "Healing Blue Gradient",
+        "path": "/assets/backgrounds/healingbluegradient.svg",
+        "tags": [
+          "medical",
+          "health",
+          "blue",
+          "calm"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000013",
+        "name": "Wellness Mint",
+        "path": "/assets/backgrounds/wellnessmint.svg",
+        "tags": [
+          "medical",
+          "wellness",
+          "green",
+          "calm"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000014",
+        "name": "Cyberpunk Grid Neon",
+        "path": "/assets/backgrounds/cyberpunkgridneon.svg",
+        "tags": [
+          "tech",
+          "neon",
+          "cyber",
+          "modern"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000015",
+        "name": "Minimal Slate Dark",
+        "path": "/assets/backgrounds/minimalslatedark.svg",
+        "tags": [
+          "tech",
+          "minimal",
+          "dark",
+          "corporate"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000016",
+        "name": "Circuit Board Blueprint",
+        "path": "/assets/backgrounds/circuitboardblueprint.svg",
+        "tags": [
+          "tech",
+          "engineering",
+          "blueprint",
+          "modern"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000017",
+        "name": "Data Flow Matrix",
+        "path": "/assets/backgrounds/dataflowmatrix.svg",
+        "tags": [
+          "tech",
+          "digital",
+          "modern",
+          "abstract"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000018",
+        "name": "Tropical Sunset",
+        "path": "/assets/backgrounds/tropicalsunset.svg",
+        "tags": [
+          "travel",
+          "tropical",
+          "warm",
+          "beach"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000019",
+        "name": "Ocean Deep Blue",
+        "path": "/assets/backgrounds/oceandeepblue.svg",
+        "tags": [
+          "travel",
+          "ocean",
+          "calm",
+          "nature"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000020",
+        "name": "Mountain Peaks Mist",
+        "path": "/assets/backgrounds/mountainpeaksmist.svg",
+        "tags": [
+          "travel",
+          "nature",
+          "adventure",
+          "landscape"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000021",
+        "name": "Corporate Navy",
+        "path": "/assets/backgrounds/corporatenavy.svg",
+        "tags": [
+          "business",
+          "corporate",
+          "navy",
+          "professional"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000022",
+        "name": "Executive Charcoal",
+        "path": "/assets/backgrounds/executivecharcoal.svg",
+        "tags": [
+          "business",
+          "corporate",
+          "dark",
+          "premium"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000023",
+        "name": "Trust Blue Gradient",
+        "path": "/assets/backgrounds/trustbluegradient.svg",
+        "tags": [
+          "business",
+          "trust",
+          "finance",
+          "corporate"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000024",
+        "name": "Academic Cream",
+        "path": "/assets/backgrounds/academiccream.svg",
+        "tags": [
+          "education",
+          "academic",
+          "light",
+          "classic"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000025",
+        "name": "Learning Sunshine",
+        "path": "/assets/backgrounds/learningsunshine.svg",
+        "tags": [
+          "education",
+          "bright",
+          "warm",
+          "youth"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000026",
+        "name": "Study Focus Blue",
+        "path": "/assets/backgrounds/studyfocusblue.svg",
+        "tags": [
+          "education",
+          "focus",
+          "blue",
+          "concentration"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000027",
+        "name": "Energy Explosion",
+        "path": "/assets/backgrounds/energyexplosion.svg",
+        "tags": [
+          "fitness",
+          "energy",
+          "bright",
+          "sports"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000028",
+        "name": "Dark Gym Intensity",
+        "path": "/assets/backgrounds/darkgymintensity.svg",
+        "tags": [
+          "fitness",
+          "dark",
+          "intense",
+          "modern"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000029",
+        "name": "Property Skyline",
+        "path": "/assets/backgrounds/propertyskyline.svg",
+        "tags": [
+          "real-estate",
+          "modern",
+          "city",
+          "premium"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000030",
+        "name": "Elegant Beige Neutral",
+        "path": "/assets/backgrounds/elegantbeigeneutral.svg",
+        "tags": [
+          "real-estate",
+          "neutral",
+          "elegant",
+          "light"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000031",
+        "name": "Chic Pink Glam",
+        "path": "/assets/backgrounds/chicpinkglam.svg",
+        "tags": [
+          "salon",
+          "beauty",
+          "pink",
+          "glamorous"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000032",
+        "name": "Spa Serenity",
+        "path": "/assets/backgrounds/spaserenity.svg",
+        "tags": [
+          "salon",
+          "spa",
+          "calm",
+          "luxury"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000033",
+        "name": "Coffee Bean Brown",
+        "path": "/assets/backgrounds/coffeebeanbrown.svg",
+        "tags": [
+          "cafe",
+          "coffee",
+          "warm",
+          "cozy"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000034",
+        "name": "Matcha Green Calm",
+        "path": "/assets/backgrounds/matchagreencalm.svg",
+        "tags": [
+          "cafe",
+          "matcha",
+          "green",
+          "calm"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000035",
+        "name": "Grand Lobby Gold",
+        "path": "/assets/backgrounds/grandlobbygold.svg",
+        "tags": [
+          "hotel",
+          "luxury",
+          "gold",
+          "hospitality"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000036",
+        "name": "Resort Paradise",
+        "path": "/assets/backgrounds/resortparadise.svg",
+        "tags": [
+          "hotel",
+          "resort",
+          "tropical",
+          "vacation"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000037",
+        "name": "Festival Vibrant",
+        "path": "/assets/backgrounds/festivalvibrant.svg",
+        "tags": [
+          "festival",
+          "colorful",
+          "vibrant",
+          "party"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000038",
+        "name": "Diwali Festival Lights",
+        "path": "/assets/backgrounds/diwalifestivallights.svg",
+        "tags": [
+          "festival",
+          "diwali",
+          "india",
+          "cultural"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000039",
+        "name": "Indian Heritage Gold",
+        "path": "/assets/backgrounds/indianheritagegold.svg",
+        "tags": [
+          "india",
+          "heritage",
+          "gold",
+          "cultural"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000040",
+        "name": "Crypto Blockchain",
+        "path": "/assets/backgrounds/cryptoblockchain.svg",
+        "tags": [
+          "crypto",
+          "blockchain",
+          "modern",
+          "tech"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000041",
+        "name": "Bitcoin Orange Dark",
+        "path": "/assets/backgrounds/bitcoinorangedark.svg",
+        "tags": [
+          "crypto",
+          "bitcoin",
+          "dark",
+          "finance"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000042",
+        "name": "Gradient Cyber Purple",
+        "path": "/assets/backgrounds/gradientcyberpurple.svg",
+        "tags": [
+          "modern",
+          "tech",
+          "cyber",
+          "abstract"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000043",
+        "name": "Minimal Ocean Breeze",
+        "path": "/assets/backgrounds/minimaloceanbreeze.svg",
+        "tags": [
+          "minimal",
+          "clean",
+          "light",
+          "modern"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000044",
+        "name": "Gold Foil Luxe",
+        "path": "/assets/backgrounds/goldfoilluxe.svg",
+        "tags": [
+          "luxury",
+          "gold",
+          "premium",
+          "exclusive"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000045",
+        "name": "Dark Mode Premium",
+        "path": "/assets/backgrounds/darkmodepremium.svg",
+        "tags": [
+          "dark",
+          "premium",
+          "modern",
+          "ui"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000046",
+        "name": "Pastel Dream",
+        "path": "/assets/backgrounds/pasteldream.svg",
+        "tags": [
+          "pastel",
+          "soft",
+          "light",
+          "modern"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000047",
+        "name": "Aurora Borealis",
+        "path": "/assets/backgrounds/auroraborealis.svg",
+        "tags": [
+          "nature",
+          "aurora",
+          "colorful",
+          "ethereal"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000048",
+        "name": "Glassmorphism Premium",
+        "path": "/assets/backgrounds/glassmorphismpremium.svg",
+        "tags": [
+          "modern",
+          "glass",
+          "ui",
+          "premium"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000049",
+        "name": "Vintage Paper",
+        "path": "/assets/backgrounds/vintagepaper.svg",
+        "tags": [
+          "vintage",
+          "paper",
+          "retro",
+          "classic"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "BG-000050",
+        "name": "Art Deco Geometric",
+        "path": "/assets/backgrounds/artdecogeometric.svg",
+        "tags": [
+          "art-deco",
+          "luxury",
+          "vintage",
+          "geometric"
+        ],
+        "category": "backgrounds",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      }
+    ],
+    "frames": [
+      {
+        "id": "FRAME-000001",
+        "name": "Golden Filigree Royal",
+        "path": "/assets/frames/goldenfiligreeroyal.svg",
+        "tags": [
+          "luxury",
+          "gold",
+          "wedding",
+          "elegant"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000002",
+        "name": "Art Deco Corner Accents",
+        "path": "/assets/frames/artdecocorneraccents.svg",
+        "tags": [
+          "luxury",
+          "art-deco",
+          "gold",
+          "vintage"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000003",
+        "name": "Minimal Gold Border",
+        "path": "/assets/frames/minimalgoldborder.svg",
+        "tags": [
+          "luxury",
+          "minimal",
+          "gold",
+          "clean"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000004",
+        "name": "Lace Heart Frame",
+        "path": "/assets/frames/laceheartframe.svg",
+        "tags": [
+          "wedding",
+          "lace",
+          "romantic",
+          "delicate"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000005",
+        "name": "Rose Gold Leaf",
+        "path": "/assets/frames/rosegoldleaf.svg",
+        "tags": [
+          "wedding",
+          "rose-gold",
+          "floral",
+          "elegant"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000006",
+        "name": "Classic Pearl Border",
+        "path": "/assets/frames/classicpearlborder.svg",
+        "tags": [
+          "wedding",
+          "pearl",
+          "classic",
+          "traditional"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000007",
+        "name": "Neon Glow Border",
+        "path": "/assets/frames/neonglowborder.svg",
+        "tags": [
+          "tech",
+          "neon",
+          "modern",
+          "cyber"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000008",
+        "name": "Clean Corporate Border",
+        "path": "/assets/frames/cleancorporateborder.svg",
+        "tags": [
+          "corporate",
+          "clean",
+          "minimal",
+          "business"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000009",
+        "name": "Geometric Hex Frame",
+        "path": "/assets/frames/geometrichexframe.svg",
+        "tags": [
+          "tech",
+          "geometric",
+          "modern",
+          "abstract"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000010",
+        "name": "Foodie Deco Border",
+        "path": "/assets/frames/foodiedecoborder.svg",
+        "tags": [
+          "restaurant",
+          "food",
+          "warm",
+          "inviting"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000011",
+        "name": "Cafe Cozy Frame",
+        "path": "/assets/frames/cafecozyframe.svg",
+        "tags": [
+          "cafe",
+          "coffee",
+          "warm",
+          "cozy"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000012",
+        "name": "Medical Cross Border",
+        "path": "/assets/frames/medicalcrossborder.svg",
+        "tags": [
+          "medical",
+          "health",
+          "clean",
+          "professional"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000013",
+        "name": "Wellness Leaf Frame",
+        "path": "/assets/frames/wellnessleafframe.svg",
+        "tags": [
+          "medical",
+          "wellness",
+          "green",
+          "organic"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000014",
+        "name": "Travel Passport Frame",
+        "path": "/assets/frames/travelpassportframe.svg",
+        "tags": [
+          "travel",
+          "adventure",
+          "vintage",
+          "explore"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000015",
+        "name": "Beach Paradise Frame",
+        "path": "/assets/frames/beachparadiseframe.svg",
+        "tags": [
+          "travel",
+          "beach",
+          "tropical",
+          "summer"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000016",
+        "name": "Academic Laurel Frame",
+        "path": "/assets/frames/academiclaurelframe.svg",
+        "tags": [
+          "education",
+          "academic",
+          "classic",
+          "achievement"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000017",
+        "name": "Sports Dynamic Frame",
+        "path": "/assets/frames/sportsdynamicframe.svg",
+        "tags": [
+          "fitness",
+          "sports",
+          "dynamic",
+          "energy"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000018",
+        "name": "Property Frame Key",
+        "path": "/assets/frames/propertyframekey.svg",
+        "tags": [
+          "real-estate",
+          "property",
+          "modern",
+          "premium"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000019",
+        "name": "Glamour Mirror Frame",
+        "path": "/assets/frames/glamourmirrorframe.svg",
+        "tags": [
+          "salon",
+          "beauty",
+          "glamorous",
+          "pink"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000020",
+        "name": "Blockchain Hex Border",
+        "path": "/assets/frames/blockchainhexborder.svg",
+        "tags": [
+          "crypto",
+          "blockchain",
+          "modern",
+          "digital"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000021",
+        "name": "Diwali Rangoli Frame",
+        "path": "/assets/frames/diwalirangoliframe.svg",
+        "tags": [
+          "festival",
+          "diwali",
+          "india",
+          "traditional"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000022",
+        "name": "Diamond Sparkle Border",
+        "path": "/assets/frames/diamondsparkleborder.svg",
+        "tags": [
+          "premium",
+          "luxury",
+          "diamond",
+          "elegant"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000023",
+        "name": "Japanese Zen Border",
+        "path": "/assets/frames/japanesezenborder.svg",
+        "tags": [
+          "zen",
+          "japanese",
+          "minimal",
+          "calm"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000024",
+        "name": "Boho Chic Frame",
+        "path": "/assets/frames/bohochicframe.svg",
+        "tags": [
+          "boho",
+          "chic",
+          "colorful",
+          "artistic"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000025",
+        "name": "Vintage Ornate Frame",
+        "path": "/assets/frames/vintageornateframe.svg",
+        "tags": [
+          "vintage",
+          "ornate",
+          "classic",
+          "baroque"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "FRAME-000026",
+        "name": "Modern Gradient Border",
+        "path": "/assets/frames/moderngradientborder.svg",
+        "tags": [
+          "modern",
+          "gradient",
+          "clean",
+          "ui"
+        ],
+        "category": "frames",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      }
+    ],
+    "textures": [
+      {
+        "id": "TEXTURE-000001",
+        "name": "Fine Canvas",
+        "path": "/assets/textures/finecanvas.svg",
+        "tags": [
+          "canvas",
+          "art",
+          "painting",
+          "texture"
+        ],
+        "category": "textures",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "TEXTURE-000002",
+        "name": "Rough Paper",
+        "path": "/assets/textures/roughpaper.svg",
+        "tags": [
+          "paper",
+          "rough",
+          "texture",
+          "natural"
+        ],
+        "category": "textures",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "TEXTURE-000003",
+        "name": "Soft Velvet",
+        "path": "/assets/textures/softvelvet.svg",
+        "tags": [
+          "velvet",
+          "soft",
+          "luxury",
+          "fabric"
+        ],
+        "category": "textures",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "TEXTURE-000004",
+        "name": "Brushed Metal",
+        "path": "/assets/textures/brushedmetal.svg",
+        "tags": [
+          "metal",
+          "brushed",
+          "industrial",
+          "modern"
+        ],
+        "category": "textures",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "TEXTURE-000005",
+        "name": "Sand Grain",
+        "path": "/assets/textures/sandgrain.svg",
+        "tags": [
+          "sand",
+          "beach",
+          "nature",
+          "grainy"
+        ],
+        "category": "textures",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "TEXTURE-000006",
+        "name": "Brick Wall",
+        "path": "/assets/textures/brickwall.svg",
+        "tags": [
+          "brick",
+          "wall",
+          "urban",
+          "industrial"
+        ],
+        "category": "textures",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "TEXTURE-000007",
+        "name": "Carbon Fiber",
+        "path": "/assets/textures/carbonfiber.svg",
+        "tags": [
+          "carbon",
+          "fiber",
+          "tech",
+          "modern"
+        ],
+        "category": "textures",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "TEXTURE-000008",
+        "name": "Linen Fabric",
+        "path": "/assets/textures/linenfabric.svg",
+        "tags": [
+          "linen",
+          "fabric",
+          "natural",
+          "textile"
+        ],
+        "category": "textures",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "TEXTURE-000009",
+        "name": "Water Ripple",
+        "path": "/assets/textures/waterripple.svg",
+        "tags": [
+          "water",
+          "ripple",
+          "calm",
+          "nature"
+        ],
+        "category": "textures",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "TEXTURE-000010",
+        "name": "Stone Granite",
+        "path": "/assets/textures/stonegranite.svg",
+        "tags": [
+          "stone",
+          "granite",
+          "natural",
+          "solid"
+        ],
+        "category": "textures",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "TEXTURE-000011",
+        "name": "Gold Dust Sparkle",
+        "path": "/assets/textures/golddustsparkle.svg",
+        "tags": [
+          "gold",
+          "sparkle",
+          "luxury",
+          "glitter"
+        ],
+        "category": "textures",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "TEXTURE-000012",
+        "name": "Wood Grain Oak",
+        "path": "/assets/textures/woodgrainoak.svg",
+        "tags": [
+          "wood",
+          "oak",
+          "natural",
+          "warm"
+        ],
+        "category": "textures",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "TEXTURE-000013",
+        "name": "Frosted Glass",
+        "path": "/assets/textures/frostedglass.svg",
+        "tags": [
+          "glass",
+          "frosted",
+          "modern",
+          "translucent"
+        ],
+        "category": "textures",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "TEXTURE-000014",
+        "name": "Cloud Soft",
+        "path": "/assets/textures/cloudsoft.svg",
+        "tags": [
+          "cloud",
+          "soft",
+          "dreamy",
+          "light"
+        ],
+        "category": "textures",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "TEXTURE-000015",
+        "name": "Denim Fabric",
+        "path": "/assets/textures/denimfabric.svg",
+        "tags": [
+          "denim",
+          "jeans",
+          "fabric",
+          "casual"
+        ],
+        "category": "textures",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "TEXTURE-000016",
+        "name": "Terrazzo Pattern",
+        "path": "/assets/textures/terrazzopattern.svg",
+        "tags": [
+          "terrazzo",
+          "modern",
+          "colorful",
+          "interior"
+        ],
+        "category": "textures",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      }
+    ],
+    "illustrations": [
+      {
+        "id": "ILLUS-000001",
+        "name": "Restaurant Food Icons",
+        "path": "/assets/illustrations/restaurantfoodicons.svg",
+        "tags": [
+          "restaurant",
+          "food",
+          "icons",
+          "set"
+        ],
+        "category": "illustrations",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "ILLUS-000002",
+        "name": "Wedding Love Hearts",
+        "path": "/assets/illustrations/weddinglovehearts.svg",
+        "tags": [
+          "wedding",
+          "love",
+          "romantic",
+          "icons"
+        ],
+        "category": "illustrations",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "ILLUS-000003",
+        "name": "Medical Health Kit",
+        "path": "/assets/illustrations/medicalhealthkit.svg",
+        "tags": [
+          "medical",
+          "health",
+          "icons",
+          "set"
+        ],
+        "category": "illustrations",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "ILLUS-000004",
+        "name": "Tech Device Set",
+        "path": "/assets/illustrations/techdeviceset.svg",
+        "tags": [
+          "tech",
+          "device",
+          "digital",
+          "icons"
+        ],
+        "category": "illustrations",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "ILLUS-000005",
+        "name": "Travel Adventure Pack",
+        "path": "/assets/illustrations/traveladventurepack.svg",
+        "tags": [
+          "travel",
+          "adventure",
+          "icons",
+          "set"
+        ],
+        "category": "illustrations",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "ILLUS-000006",
+        "name": "Fitness Sport Icons",
+        "path": "/assets/illustrations/fitnesssporticons.svg",
+        "tags": [
+          "fitness",
+          "sports",
+          "workout",
+          "icons"
+        ],
+        "category": "illustrations",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "ILLUS-000007",
+        "name": "Real Estate Building",
+        "path": "/assets/illustrations/realestatebuilding.svg",
+        "tags": [
+          "real-estate",
+          "building",
+          "property",
+          "icons"
+        ],
+        "category": "illustrations",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "ILLUS-000008",
+        "name": "Education Graduation",
+        "path": "/assets/illustrations/educationgraduation.svg",
+        "tags": [
+          "education",
+          "school",
+          "learning",
+          "icons"
+        ],
+        "category": "illustrations",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "ILLUS-000009",
+        "name": "Cafe Coffee Shop",
+        "path": "/assets/illustrations/cafecoffeeshop.svg",
+        "tags": [
+          "cafe",
+          "coffee",
+          "icons",
+          "set"
+        ],
+        "category": "illustrations",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "ILLUS-000010",
+        "name": "Salon Beauty Spa",
+        "path": "/assets/illustrations/salonbeautyspa.svg",
+        "tags": [
+          "salon",
+          "beauty",
+          "spa",
+          "icons"
+        ],
+        "category": "illustrations",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "ILLUS-000011",
+        "name": "Pet Animal Set",
+        "path": "/assets/illustrations/petanimalset.svg",
+        "tags": [
+          "pet",
+          "animals",
+          "cute",
+          "icons"
+        ],
+        "category": "illustrations",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "ILLUS-000012",
+        "name": "Hotel Hospitality",
+        "path": "/assets/illustrations/hotelhospitality.svg",
+        "tags": [
+          "hotel",
+          "hospitality",
+          "icons",
+          "set"
+        ],
+        "category": "illustrations",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "ILLUS-000013",
+        "name": "India Cultural Set",
+        "path": "/assets/illustrations/indiaculturalset.svg",
+        "tags": [
+          "india",
+          "cultural",
+          "traditional",
+          "icons"
+        ],
+        "category": "illustrations",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "ILLUS-000014",
+        "name": "Crypto Bitcoin Set",
+        "path": "/assets/illustrations/cryptobitcoinset.svg",
+        "tags": [
+          "crypto",
+          "bitcoin",
+          "finance",
+          "icons"
+        ],
+        "category": "illustrations",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "ILLUS-000015",
+        "name": "Business Professional",
+        "path": "/assets/illustrations/businessprofessional.svg",
+        "tags": [
+          "business",
+          "corporate",
+          "office",
+          "icons"
+        ],
+        "category": "illustrations",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      }
+    ],
+    "ribbons": [
+      {
+        "id": "RIBBON-000001",
+        "name": "Gold Premium Ribbon",
+        "path": "/assets/ribbons/goldpremiumribbon.svg",
+        "tags": [
+          "premium",
+          "gold",
+          "ribbon",
+          "luxury"
+        ],
+        "category": "ribbons",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "RIBBON-000002",
+        "name": "Red Sale Banner",
+        "path": "/assets/ribbons/redsalebanner.svg",
+        "tags": [
+          "sale",
+          "red",
+          "banner",
+          "promotion"
+        ],
+        "category": "ribbons",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "RIBBON-000003",
+        "name": "Blue Info Bar",
+        "path": "/assets/ribbons/blueinfobar.svg",
+        "tags": [
+          "info",
+          "blue",
+          "banner",
+          "information"
+        ],
+        "category": "ribbons",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "RIBBON-000004",
+        "name": "Green Success Banner",
+        "path": "/assets/ribbons/greensuccessbanner.svg",
+        "tags": [
+          "success",
+          "green",
+          "banner",
+          "achievement"
+        ],
+        "category": "ribbons",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "RIBBON-000005",
+        "name": "Black Exclusive Tag",
+        "path": "/assets/ribbons/blackexclusivetag.svg",
+        "tags": [
+          "exclusive",
+          "black",
+          "tag",
+          "luxury"
+        ],
+        "category": "ribbons",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "RIBBON-000006",
+        "name": "Orange Limited Offer",
+        "path": "/assets/ribbons/orangelimitedoffer.svg",
+        "tags": [
+          "limited",
+          "orange",
+          "offer",
+          "urgency"
+        ],
+        "category": "ribbons",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "RIBBON-000007",
+        "name": "Purple Featured Tag",
+        "path": "/assets/ribbons/purplefeaturedtag.svg",
+        "tags": [
+          "featured",
+          "purple",
+          "highlight",
+          "banner"
+        ],
+        "category": "ribbons",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "RIBBON-000008",
+        "name": "White Minimal Banner",
+        "path": "/assets/ribbons/whiteminimalbanner.svg",
+        "tags": [
+          "minimal",
+          "white",
+          "clean",
+          "banner"
+        ],
+        "category": "ribbons",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      }
+    ],
+    "qr_shapes": [
+      {
+        "id": "QR_SHAPE-000001",
+        "name": "Classic Square Finder",
+        "path": "/assets/qr_shapes/classicsquarefinder.svg",
+        "tags": [
+          "classic",
+          "square",
+          "finder",
+          "qr"
+        ],
+        "category": "qr_shapes",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "QR_SHAPE-000002",
+        "name": "Rounded Circle Finder",
+        "path": "/assets/qr_shapes/roundedcirclefinder.svg",
+        "tags": [
+          "rounded",
+          "circle",
+          "finder",
+          "qr"
+        ],
+        "category": "qr_shapes",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "QR_SHAPE-000003",
+        "name": "Diamond Finder Premium",
+        "path": "/assets/qr_shapes/diamondfinderpremium.svg",
+        "tags": [
+          "diamond",
+          "finder",
+          "qr",
+          "premium"
+        ],
+        "category": "qr_shapes",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "QR_SHAPE-000004",
+        "name": "Hexagon Tech Finder",
+        "path": "/assets/qr_shapes/hexagontechfinder.svg",
+        "tags": [
+          "hexagon",
+          "tech",
+          "finder",
+          "qr"
+        ],
+        "category": "qr_shapes",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "QR_SHAPE-000005",
+        "name": "Heart Finder Romantic",
+        "path": "/assets/qr_shapes/heartfinderromantic.svg",
+        "tags": [
+          "heart",
+          "romantic",
+          "finder",
+          "qr"
+        ],
+        "category": "qr_shapes",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "QR_SHAPE-000006",
+        "name": "Leaf Finder Organic",
+        "path": "/assets/qr_shapes/leaffinderorganic.svg",
+        "tags": [
+          "leaf",
+          "organic",
+          "finder",
+          "qr"
+        ],
+        "category": "qr_shapes",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "QR_SHAPE-000007",
+        "name": "Shield Finder Secure",
+        "path": "/assets/qr_shapes/shieldfindersecure.svg",
+        "tags": [
+          "shield",
+          "secure",
+          "finder",
+          "qr"
+        ],
+        "category": "qr_shapes",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "QR_SHAPE-000008",
+        "name": "Star Finder Playful",
+        "path": "/assets/qr_shapes/starfinderplayful.svg",
+        "tags": [
+          "star",
+          "playful",
+          "finder",
+          "qr"
+        ],
+        "category": "qr_shapes",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "QR_SHAPE-000009",
+        "name": "Minimal Line Finder",
+        "path": "/assets/qr_shapes/minimallinefinder.svg",
+        "tags": [
+          "minimal",
+          "line",
+          "finder",
+          "qr"
+        ],
+        "category": "qr_shapes",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      },
+      {
+        "id": "QR_SHAPE-000010",
+        "name": "Framed Decorative Finder",
+        "path": "/assets/qr_shapes/frameddecorativefinder.svg",
+        "tags": [
+          "framed",
+          "decorative",
+          "finder",
+          "qr"
+        ],
+        "category": "qr_shapes",
+        "type": "svg",
+        "source": "ai-generated",
+        "license": "proprietary",
+        "dateAdded": "2026-06-28"
+      }
     ]
   }
 }
