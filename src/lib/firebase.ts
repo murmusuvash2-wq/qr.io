@@ -3,8 +3,11 @@ import type { TemplateDocument, AnyLayer } from '../data/template-schema';
 import { getPlaceholdersForTool } from '../hooks/useTemplatePlaceholders';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc, updateDoc, increment, collection, getDocs, deleteDoc } from 'firebase/firestore';
-import firebaseConfig from '../../firebase-applet-config.json'; // Make sure the path is correct depending on where the config is generated
 import { generateTemplatesForTool, FLAGSHIP_TOOLS, registerEventLoggerCallback, TemplateTrackingEvent } from './templates-generator';
+let firebaseConfig: any = null;
+try {
+  firebaseConfig = null;
+} catch (e) {}
 
 const isFirebaseConfigured = !!firebaseConfig && !!firebaseConfig.projectId;
 

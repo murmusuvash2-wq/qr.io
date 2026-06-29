@@ -9,7 +9,7 @@ import { TemplateEngine } from '../lib/template-engine';
 import { migrateToLayers } from '../lib/firebase';
 import type { AnyLayer, TextLayer, TemplateDocument, LayerType } from '../data/template-schema';
 import { useTemplatePlaceholders } from '../hooks/useTemplatePlaceholders';
-import type { QRTool } from '../data/tools';
+import type { QRTool } from '../data/tools-database';
 
 interface TemplateEditorProps {
   template: any;

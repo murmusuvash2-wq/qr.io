@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { templateService, TemplateDesign } from './lib/firebase';
-import { QR_TOOLS, QRTool } from './data/tools';
+import { QR_TOOLS, QRTool } from './data/tools-database';
 import { 
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, 
   BarChart, Bar, PieChart, Pie, Cell, Legend

@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { cn } from './lib/utils';
 import { 
   Loader2, 
   AlertCircle,
   CheckCircle2,
   Info,
-  AlertTriangle
+  AlertTriangle,
+  X,
+  Image,
+  FileText
 } from 'lucide-react';
+import QRCodeStyling from 'qr-code-styling';
 
 // --- UI PRIMITIVES ---
 
@@ -405,7 +409,86 @@ export const Footer = ({ brandName = "EzQR", tagline = "Bridge the physical and 
   </footer>
 );
 
-export const Sidebar = ({ items, activeItem, onItemClick, isOpen, onClose, title }: any) => null;
+export const Sidebar = ({ 
+  items, 
+  activeItem, 
+  onItemClick, 
+  isOpen, 
+  onClose, 
+  title 
+}: {
+  items: { id: string; label: string; icon?: React.ReactNode; badge?: string | number }[];
+  activeItem: string;
+  onItemClick: (id: string) => void;
+  isOpen: boolean;
+  onClose: () => void;
+  title?: string;
+}) => {
+  // Mobile overlay
+  if (!isOpen) return null;
+  
+  return (
+    <>
+      {/* Mobile backdrop */}
+      <div 
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      
+      {/* Sidebar panel */}
+      <aside className={cn(
+        "fixed top-0 left-0 h-full w-64 z-50",
+        "bg-[var(--ez-bg-primary)] border-r border-[var(--ez-border-default)]",
+        "flex flex-col",
+        "transform transition-transform duration-300",
+        // Mobile: slide from left
+        "md:relative md:translate-x-0",
+        isOpen ? "translate-x-0" : "-translate-x-full"
+      )}>
+        {/* Header */}
+        {title && (
+          <div className="flex items-center justify-between p-4 border-b border-[var(--ez-border-default)]">
+            <h2 className="font-bold text-[var(--ez-text-primary)]">{title}</h2>
+            <button 
+              onClick={onClose}
+              className="p-2 rounded-lg text-[var(--ez-text-dim)] hover:text-[var(--ez-text-primary)] md:hidden"
+              aria-label="Close sidebar"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+        
+        {/* Navigation items */}
+        <nav className="flex-1 overflow-y-auto p-2 space-y-1">
+          {items.map(item => (
+            <button
+              key={item.id}
+              onClick={() => onItemClick(item.id)}
+              className={cn(
+                "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-all",
+                "min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ez-border-focus)]",
+                activeItem === item.id
+                  ? "bg-[var(--ez-bg-elevated)] text-[var(--ez-text-primary)] border border-[var(--ez-border-focus)]"
+                  : "text-[var(--ez-text-muted)] hover:text-[var(--ez-text-primary)] hover:bg-[var(--ez-bg-highlight)]"
+              )}
+              aria-current={activeItem === item.id ? 'page' : undefined}
+            >
+              {item.icon && <span className="w-5 h-5 shrink-0">{item.icon}</span>}
+              <span className="flex-1 text-left">{item.label}</span>
+              {item.badge && (
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[var(--ez-accent-primary)]/10 text-[var(--ez-accent-primary)]">
+                  {item.badge}
+                </span>
+              )}
+            </button>
+          ))}
+        </nav>
+      </aside>
+    </>
+  );
+};
 
 // --- DOMAIN ---
 export const ToolCard = ({ tool, isActive, onClick }: any) => (
@@ -440,8 +523,183 @@ export const TemplateCard = ({ template, isSelected, onSelect }: any) => (
   </Card>
 );
 
-export const QRPreview = ({ qrString, fgColor, bgColor, label, size, showPrintGuide }: any) => null;
-export const DownloadButtons = ({ onDownloadPNG, onExportSVG, qrString, isPro, onOpenPayModal }: any) => null;
+export const QRPreview = ({ 
+  qrString, 
+  fgColor = '#000000', 
+  bgColor = '#FFFFFF', 
+  label, 
+  size = 200,
+  showPrintGuide = false,
+  dotsType = 'square',
+  cornersType = 'square',
+  logo,
+  errorLevel = 'H'
+}: {
+  qrString: string;
+  fgColor?: string;
+  bgColor?: string;
+  label?: string;
+  size?: number;
+  showPrintGuide?: boolean;
+  dotsType?: 'square' | 'dots' | 'rounded' | 'classy';
+  cornersType?: 'square' | 'extra-rounded' | 'dot';
+  logo?: string;
+  errorLevel?: 'L' | 'M' | 'Q' | 'H';
+}) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const qrInstance = useRef<any>(null);
+
+  useEffect(() => {
+    if (!containerRef.current || !qrString) return;
+    
+    // Clean previous instance
+    containerRef.current.innerHTML = '';
+    
+    const qr = new QRCodeStyling({
+      width: size,
+      height: size,
+      data: qrString,
+      dotsOptions: { color: fgColor, type: dotsType },
+      cornersSquareOptions: { color: fgColor, type: cornersType },
+      backgroundOptions: { color: bgColor },
+      image: logo || undefined,
+      qrOptions: { errorCorrectionLevel: errorLevel },
+    });
+    
+    qr.append(containerRef.current);
+    qrInstance.current = qr;
+    
+    return () => { if (containerRef.current) containerRef.current.innerHTML = ''; };
+  }, [qrString, fgColor, bgColor, size, dotsType, cornersType, logo, errorLevel]);
+
+  return (
+    <div className="flex flex-col items-center gap-3">
+      <div 
+        ref={containerRef}
+        className="rounded-2xl p-4 bg-white shadow-[var(--ez-shadow-md)]"
+        style={{ width: size + 32, height: size + 32 }}
+      />
+      {label && (
+        <span className="text-xs font-bold text-[var(--ez-text-muted)]">{label}</span>
+      )}
+      {showPrintGuide && (
+        <div className="text-[10px] text-[var(--ez-text-dim)] bg-[var(--ez-bg-surface)] px-3 py-2 rounded-lg border border-[var(--ez-border-default)]">
+          Min print size: 1.2" × 1.2" (3×3 cm)
+        </div>
+      )}
+    </div>
+  );
+};
+export const DownloadButtons = ({
+  onDownloadPNG,
+  onExportSVG,
+  onExportPDF,
+  onExportEPS,
+  qrString,
+  isPro,
+  onOpenPayModal,
+  isLoading
+}: {
+  onDownloadPNG?: () => void;
+  onExportSVG?: () => void;
+  onExportPDF?: () => void;
+  onExportEPS?: () => void;
+  qrString?: string;
+  isPro?: boolean;
+  onOpenPayModal?: () => void;
+  isLoading?: boolean;
+}) => {
+  const downloadOptions = [
+    {
+      key: 'png',
+      label: 'PNG',
+      desc: isPro ? 'High-res 300dpi' : 'With watermark',
+      icon: <Image className="w-4 h-4" />,
+      pro: false,
+      action: onDownloadPNG,
+    },
+    {
+      key: 'svg',
+      label: 'SVG',
+      desc: 'Vector — scale to any size',
+      icon: <FileText className="w-4 h-4" />,
+      pro: true,
+      action: onExportSVG,
+    },
+    {
+      key: 'pdf',
+      label: 'PDF',
+      desc: 'Print-ready A4 with crop marks',
+      icon: <FileText className="w-4 h-4" />,
+      pro: true,
+      action: onExportPDF,
+    },
+    {
+      key: 'eps',
+      label: 'EPS',
+      desc: 'Professional print industry standard',
+      icon: <FileText className="w-4 h-4" />,
+      pro: true,
+      action: onExportEPS,
+    },
+  ];
+
+  const handleClick = (opt: typeof downloadOptions[0]) => {
+    if (opt.pro && !isPro) {
+      onOpenPayModal?.();
+      return;
+    }
+    opt.action?.();
+  };
+
+  return (
+    <div className="space-y-2">
+      <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--ez-text-muted)]">
+        Download
+      </h3>
+      <div className="grid grid-cols-2 gap-2">
+        {downloadOptions.map(opt => (
+          <button
+            key={opt.key}
+            onClick={() => handleClick(opt)}
+            disabled={isLoading}
+            className={cn(
+              "flex items-center gap-3 p-3 rounded-xl border text-left transition-all",
+              "min-h-[48px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ez-border-focus)]",
+              opt.pro && !isPro
+                ? "border-[var(--ez-border-default)] bg-[var(--ez-bg-surface)] opacity-60 hover:opacity-100"
+                : "border-[var(--ez-border-strong)] bg-[var(--ez-bg-elevated)] hover:border-[var(--ez-border-focus)]"
+            )}
+          >
+            <div className={cn(
+              "w-8 h-8 rounded-lg flex items-center justify-center",
+              opt.pro && !isPro ? "bg-[var(--ez-bg-highlight)]" : "bg-[var(--ez-accent-primary)]/10"
+            )}>
+              {opt.icon}
+            </div>
+            <div className="flex-1">
+              <div className="text-sm font-bold text-[var(--ez-text-primary)]">{opt.label}</div>
+              <div className="text-[10px] text-[var(--ez-text-dim)]">{opt.desc}</div>
+            </div>
+            {opt.pro && !isPro && (
+              <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-[var(--ez-accent-primary)]/10 text-[var(--ez-accent-primary)]">
+                PRO
+              </span>
+            )}
+          </button>
+        ))}
+      </div>
+      {!isPro && (
+        <button
+          onClick={onOpenPayModal}
+          className="w-full text-center text-[11px] font-bold text-[var(--ez-accent-primary)] hover:underline"
+        >
+          Upgrade to Pro for SVG, PDF, EPS & high-res
+        </button>
+      )}
+    </div>
+  );
+};
 
 export * from './components/ui';
 export * from './components/layout';

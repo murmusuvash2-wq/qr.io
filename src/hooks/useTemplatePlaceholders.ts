@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { TOOL_PLACEHOLDERS } from '../data/template-schema';
 import type { PlaceholderDef } from '../data/template-schema';
-import type { QRTool } from '../data/tools';
+import type { QRTool } from '../data/tools-database';
 
 /**
  * Get placeholder definitions for a tool

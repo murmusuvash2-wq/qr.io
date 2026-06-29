@@ -1,17 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Download, Copy, Check, Eye, EyeOff, HelpCircle, LayoutGrid, CheckCircle, Wifi, User, Briefcase, Globe, MapPin, Coins, CreditCard, MessageSquare, Share2, Send, ExternalLink, Sparkles, Shield, Phone, Mail } from 'lucide-react';
 import QRCodeStyling from 'qr-code-styling';
-import { QRTool } from '../data/tools';
+import { QRTool, TOOLS_DATABASE, getResolvedFieldsForTool, generateQRStringForTool, FAQS_DATABASE, DEFAULT_FAQ, TOOL_CONTENT_DATABASE, RELATED_TOOLS_DATABASE } from '../data/tools-database';
 import { UserStats, templateService, TemplateDesign } from '../lib/firebase';
-
-import { getResolvedFieldsForTool, generateQRStringForTool } from '../data/forms';
 import { THEMES_DATABASE } from '../data/themes';
 import { QR_STYLES_DATABASE } from '../data/qrStyles';
 import { PREVIEW_LAYOUTS_DATABASE } from '../data/previewLayouts';
 import { PRINT_GUIDES_DATABASE } from '../data/printGuides';
-import { FAQS_DATABASE, DEFAULT_FAQ } from '../data/faqs';
-import { TOOL_CONTENT_DATABASE } from '../data/toolContent';
-import { RELATED_TOOLS_DATABASE } from '../data/relatedTools';
 import { CAPABILITIES_DATABASE, DEFAULT_CAPABILITY } from '../data/capabilities';
 import { Field } from '../data/schemas';
 import { Input, Select, Button, Card, Textarea, Skeleton, Badge } from '../design-system';
@@ -19,6 +14,8 @@ import { QREngine } from '../lib/qr-engine';
 import { renderArtQR, ART_SHAPES, ART_STYLES, ArtShape, ArtStyle } from '../lib/art-engine-adapter';
 import { validateQRScan, getQRQualityScore, ScanResult } from '../utils/scan-validator';
 import { QrGradientPicker, GradientConfig } from './ui/QrGradientPicker';
+import UniversalFormEngine from './UniversalFormEngine';
+import { TOOLS_JSON } from '../data/tools-json';
 
 interface QRCodeGeneratorProps {
   tool: QRTool;
@@ -918,207 +915,95 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal, onSelectTe
       );
     };
 
+
+    const toolJson = TOOLS_JSON.find(t => t.id === tool.id) || TOOLS_JSON[0];
     return (
-      <div className="space-y-6">
-        {/* Dynamic Fields List - Rendering EVERYTHING explicitly in tool.inputs */}
-        <div className="space-y-4">
-          {fields.map(input => {
-            const val = formValues[input.id] || '';
-            const isUrlType = input.id === 'url' || input.id.includes('website') || input.id.includes('link');
-            const isPhoneType = input.id.includes('phone') || input.id.includes('mobile') || input.id.includes('whatsapp');
-            const isCoordType = input.id === 'lat' || input.id === 'lng';
-            const isTextType = input.type === 'textarea' || input.id === 'message' || input.id === 'text' || input.id === 'body';
-
-            return (
-              <div key={input.id} className="space-y-1.5">
-                {/* Field Label */}
-                <div className="flex items-center justify-between">
-                  <label className="text-[10px] font-bold text-[#8080A0] uppercase tracking-[1.2px] block">
-                    {input.label} {input.required && <span className="text-[#F472B6]">*</span>}
-                  </label>
-                  
-                  {/* Textarea dynamic counter */}
-                  {isTextType && val.length > 0 && (
-                    <span className="text-[9px] font-mono font-medium text-[#7C6EFA]">
-                      {val.length} chars | {val.split(' ').filter(Boolean).length} words
-                    </span>
-                  )}
-                </div>
-
-                {/* Field Wrapper with Icons & Inputs */}
-                {input.type === 'textarea' ? (
-                  <Textarea
-                    value={val}
-                    onChange={(e) => handleInputChange(input.id, e.target.value)}
-                    placeholder={input.placeholder}
-                  />
-                ) : input.type === 'select' ? (
-                  <div className="relative">
-                    <Select
-                      value={val}
-                      onChange={(e) => handleInputChange(input.id, e.target.value)}
-                      options={input.options?.map(opt => ({ label: opt, value: opt })) || []}
-                      className="bg-[#040408] border-[#28283E] text-[#F2F2FF] focus:border-[#7C6EFA] py-3"
-                    />
-                  </div>
-                ) : (
-                  <div className="relative">
-                    <Input
-                      type={(input.id === 'password' || input.id.includes('pass')) ? (showWifiPass ? 'text' : 'password') : (input.type || 'text')}
-                      value={val}
-                      onChange={(e) => handleInputChange(input.id, e.target.value)}
-                      placeholder={input.placeholder}
-                      className="bg-[#040408] border-[#28283E] text-[#F2F2FF] focus:border-[#7C6EFA] focus:shadow-[0_0_0_3px_rgba(124,110,250,0.1)] py-3"
-                      leftIcon={
-                        isUrlType ? <Globe className="w-4 h-4 text-[#7C6EFA]" />
-                        : (input.id === 'password' || input.id.includes('pass')) ? <span>🔒</span>
-                        : (input.id === 'ssid' || input.id.includes('ssid') || input.id === 'network') ? <Wifi className="w-4 h-4 text-[#7C6EFA]" />
-                        : isPhoneType ? <Phone className="w-4 h-4 text-emerald-400" />
-                        : input.id === 'amount' ? <Coins className="w-4 h-4 text-yellow-500" />
-                        : isCoordType ? <MapPin className="w-4 h-4 text-red-500" />
-                        : <span>🖊️</span>
-                      }
-                      rightElement={
-                        (input.id === 'password' || input.id.includes('pass')) ? (
-                          <button
-                            type="button"
-                            onClick={() => setShowWifiPass(!showWifiPass)}
-                            className="text-[#8080A0] hover:text-white transition-colors"
-                          >
-                            {showWifiPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                          </button>
-                        ) : undefined
-                      }
-                    />
-                  </div>
-                )}
-
-                {/* Fast Action click helper chips underneath inputs */}
-                {isUrlType && (
-                  <div className="flex gap-1.5 flex-wrap pt-0.5">
-                    {["https://", "www.", ".com", ".org", ".in"].map(chip => (
-                      <button
-                        type="button"
-                        key={chip}
-                        onClick={() => {
-                          if (chip.startsWith("http")) prependUrlPrefix(input.id, chip);
-                          else appendUrlSuffix(input.id, chip);
-                        }}
-                        className="text-[9px] font-mono bg-[#12121E] hover:bg-[#28283E] text-slate-300 border border-[#28283E] px-2 py-0.5 rounded transition-all shrink-0 active:scale-95 animate-fade-in"
-                      >
-                        {chip}
-                      </button>
-                    ))}
-                  </div>
-                )}
-
-                {isPhoneType && (
-                  <div className="flex gap-1.5 flex-wrap pt-0.5">
-                    {[
-                      { code: "+91", country: "🇮🇳 IN" },
-                      { code: "+1", country: "🇺🇸 US" },
-                      { code: "+44", country: "🇬🇧 UK" },
-                      { code: "+971", country: "🇦🇪 UAE" }
-                    ].map(chip => (
-                      <button
-                        type="button"
-                        key={chip.code}
-                        onClick={() => {
-                          const cleaned = val.replace(/^\+\d+/, '');
-                          handleInputChange(input.id, chip.code + cleaned);
-                        }}
-                        className="text-[9px] font-medium bg-[#12121E] hover:bg-[#28283E] text-slate-300 border border-[#28283E] px-2 py-0.5 rounded transition-all shrink-0 active:scale-95 font-sans"
-                      >
-                        {chip.country} ({chip.code})
-                      </button>
-                    ))}
-                  </div>
-                )}
-
-                {input.id === 'amount' && (
-                  <div className="flex gap-1.5 flex-wrap pt-0.5">
-                    {["5", "10", "25", "50", "100"].map(preset => (
-                      <button
-                        type="button"
-                        key={preset}
-                        onClick={() => handleInputChange('amount', preset)}
-                        className={`text-[9.5px] font-mono font-bold px-2.5 py-1 rounded-md border transition-all active:scale-95 ${
-                          val === preset
-                            ? 'bg-[#7C6EFA]/15 border-[#7C6EFA] text-white'
-                            : 'bg-black/30 border-[#28283E] text-[#8080A0] hover:text-[#F2F2FF]'
-                        }`}
-                      >
-                        ${preset} USD
-                      </button>
-                    ))}
-                  </div>
-                )}
-
-                {/* GPS Presets handler */}
-                {isCoordType && (
-                  <div className="flex gap-1.5 flex-wrap pt-0.5">
-                    {[
-                      { name: "📍 Eiffel Tower", lat: "48.8584", lng: "2.2945" },
-                      { name: "📍 Taj Mahal", lat: "27.1751", lng: "78.0421" },
-                      { name: "📍 Statue of Liberty", lat: "40.6892", lng: "-74.0445" }
-                    ].map(dest => (
-                      <button
-                        type="button"
-                        key={dest.name}
-                        onClick={() => {
-                          const latKey = fields.find(f => f.id === 'lat' || f.id.includes('latitude'))?.id || 'lat';
-                          const lngKey = fields.find(f => f.id === 'lng' || f.id.includes('longitude'))?.id || 'lng';
-                          setCoordinatesPreset(latKey, lngKey, dest.lat, dest.lng);
-                          const nameKey = fields.find(f => f.id === 'label' || f.id.includes('name'))?.id;
-                          if (nameKey) handleInputChange(nameKey, dest.name.replace('📍 ', ''));
-                        }}
-                        className="text-[9px] font-medium bg-[#12121E] hover:bg-[#28283E] text-slate-300 border border-[#28283E] px-2 py-0.5 rounded transition-all shrink-0 active:scale-95 font-sans"
-                      >
-                        {dest.name}
-                      </button>
-                    ))}
-                  </div>
-                )}
-
-                {/* Templates for Message body */}
-                {isTextType && (
-                  <div className="flex gap-1.5 flex-wrap pt-0.5">
-                    {[
-                      { name: "📝 Quick Greeting", text: "Hello! Hope you are doing great. Connecting digitally via QR!" },
-                      { name: "📅 RSVP Yes", text: "Yes! Please count me in for the amazing upcoming wedding/event." },
-                      { name: "🚨 Support Draft", text: "Query regarding my transaction order. Please escalate and assist." }
-                    ].map(tpl => (
-                      <button
-                        type="button"
-                        key={tpl.name}
-                        onClick={() => insertTextTemplate(input.id, tpl.text)}
-                        className="text-[8.5px] font-medium bg-[#12121E]/80 hover:bg-[#28283E]/75 text-slate-400 border border-[#28283E]/80 px-2.5 py-0.5 rounded transition-all shrink-0 active:scale-95 font-sans"
-                      >
-                        {tpl.name}
-                      </button>
-                    ))}
-                  </div>
-                )}
-
-                {/* Validation error feed alert */}
-                {errors[input.id] && (
-                  <div className="text-[11px] font-medium text-pink-300 mt-1.5 flex items-start gap-1.5 bg-pink-500/10 border border-pink-500/20 px-3 py-2 rounded-lg animate-fade-in">
-                    <span className="shrink-0 text-[12px] pt-0.5">⚠️</span>
-                    <span>{errors[input.id]}</span>
-                  </div>
-                )}
+      <div className="w-full">
+        <UniversalFormEngine 
+          tool={toolJson} 
+          onValuesChange={(vals, qr) => {
+            setFormValues(vals);
+            setQrString(qr);
+          }}
+          renderPreview={(qr) => renderToolSpecificPreview()}
+          renderDownload={() => (
+            <div className="w-full mt-6 grid grid-cols-1 gap-3">
+            <Button
+              variant="gradient"
+              onClick={downloadPNG}
+              fullWidth
+              size="lg"
+              className="text-[13px]"
+              icon={<Download className="w-4 h-4" />}
+            >
+              Download QR Code (PNG)
+            </Button>
+            
+            <div className="grid grid-cols-2 gap-2 mt-2">
+              <Button
+                variant="secondary"
+                size="sm"
+                fullWidth
+                onClick={exportHighResPNG}
+                className="text-[11px] bg-transparent border border-[#28283E] text-[#8080A0] hover:text-[#F2F2FF] hover:border-[#7C6EFA]"
+              >
+                High-Res PNG
+                {!user?.isPro && <span className="text-[8px] uppercase font-bold bg-[rgba(244,114,182,0.1)] border border-[rgba(244,114,182,0.2)] text-[#F472B6] px-1 py-[1px] ml-1 rounded-[3px]">PRO</span>}
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                fullWidth
+                onClick={exportSVG}
+                className="text-[11px] bg-transparent border border-[#28283E] text-[#8080A0] hover:text-[#F2F2FF] hover:border-[#7C6EFA]"
+              >
+                Vector SVG
+                {!user?.isPro && <span className="text-[8px] uppercase font-bold bg-[rgba(244,114,182,0.1)] border border-[rgba(244,114,182,0.2)] text-[#F472B6] px-1 py-[1px] ml-1 rounded-[3px]">PRO</span>}
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                fullWidth
+                onClick={exportPDF}
+                className="text-[11px] bg-transparent border border-[#28283E] text-[#8080A0] hover:text-[#F2F2FF] hover:border-[#7C6EFA]"
+              >
+                Print PDF (A4)
+                {!user?.isPro && <span className="text-[8px] uppercase font-bold bg-[rgba(244,114,182,0.1)] border border-[rgba(244,114,182,0.2)] text-[#F472B6] px-1 py-[1px] ml-1 rounded-[3px]">PRO</span>}
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                fullWidth
+                onClick={exportEPS}
+                className="text-[11px] bg-transparent border border-[#28283E] text-[#8080A0] hover:text-[#F2F2FF] hover:border-[#7C6EFA]"
+              >
+                Pro EPS
+                {!user?.isPro && <span className="text-[8px] uppercase font-bold bg-[rgba(244,114,182,0.1)] border border-[rgba(244,114,182,0.2)] text-[#F472B6] px-1 py-[1px] ml-1 rounded-[3px]">PRO</span>}
+              </Button>
+            </div>
+            
+            <div className="mt-4 pt-4 border-t border-[#1C1C2E]">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] font-bold text-[#8080A0]">Print Resolution</span>
+                <select
+                  value={selectedDPI}
+                  onChange={(e) => setSelectedDPI(Number(e.target.value))}
+                  className="bg-[#0A0A12] border border-[#28283E] text-white text-[10px] rounded px-2 py-1 outline-none"
+                >
+                  <option value="150">150dpi — Draft/Home</option>
+                  <option value="300">300dpi — Professional</option>
+                  <option value="600">600dpi — High Quality</option>
+                  <option value="1200">1200dpi — Premium</option>
+                </select>
               </div>
-            );
-          })}
-        </div>
-
-        {/* Dynamic Tool Specific Interactive Visual Frame */}
-        <div className="pt-2">
-          {renderToolSpecificPreview()}
-        </div>
+            </div>
+          </div>
+          )}
+        />
       </div>
     );
   };
+
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 h-full bg-[#0A0A12]">
@@ -1691,76 +1576,7 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal, onSelectTe
              </div>
           </div>
 
-          <div className="w-full mt-6 grid grid-cols-1 gap-3">
-            <Button
-              variant="gradient"
-              onClick={downloadPNG}
-              fullWidth
-              size="lg"
-              className="text-[13px]"
-              icon={<Download className="w-4 h-4" />}
-            >
-              Download QR Code (PNG)
-            </Button>
-            
-            <div className="grid grid-cols-2 gap-2 mt-2">
-              <Button
-                variant="secondary"
-                size="sm"
-                fullWidth
-                onClick={exportHighResPNG}
-                className="text-[11px] bg-transparent border border-[#28283E] text-[#8080A0] hover:text-[#F2F2FF] hover:border-[#7C6EFA]"
-              >
-                High-Res PNG
-                {!user?.isPro && <span className="text-[8px] uppercase font-bold bg-[rgba(244,114,182,0.1)] border border-[rgba(244,114,182,0.2)] text-[#F472B6] px-1 py-[1px] ml-1 rounded-[3px]">PRO</span>}
-              </Button>
-              <Button
-                variant="secondary"
-                size="sm"
-                fullWidth
-                onClick={exportSVG}
-                className="text-[11px] bg-transparent border border-[#28283E] text-[#8080A0] hover:text-[#F2F2FF] hover:border-[#7C6EFA]"
-              >
-                Vector SVG
-                {!user?.isPro && <span className="text-[8px] uppercase font-bold bg-[rgba(244,114,182,0.1)] border border-[rgba(244,114,182,0.2)] text-[#F472B6] px-1 py-[1px] ml-1 rounded-[3px]">PRO</span>}
-              </Button>
-              <Button
-                variant="secondary"
-                size="sm"
-                fullWidth
-                onClick={exportPDF}
-                className="text-[11px] bg-transparent border border-[#28283E] text-[#8080A0] hover:text-[#F2F2FF] hover:border-[#7C6EFA]"
-              >
-                Print PDF (A4)
-                {!user?.isPro && <span className="text-[8px] uppercase font-bold bg-[rgba(244,114,182,0.1)] border border-[rgba(244,114,182,0.2)] text-[#F472B6] px-1 py-[1px] ml-1 rounded-[3px]">PRO</span>}
-              </Button>
-              <Button
-                variant="secondary"
-                size="sm"
-                fullWidth
-                onClick={exportEPS}
-                className="text-[11px] bg-transparent border border-[#28283E] text-[#8080A0] hover:text-[#F2F2FF] hover:border-[#7C6EFA]"
-              >
-                Pro EPS
-                {!user?.isPro && <span className="text-[8px] uppercase font-bold bg-[rgba(244,114,182,0.1)] border border-[rgba(244,114,182,0.2)] text-[#F472B6] px-1 py-[1px] ml-1 rounded-[3px]">PRO</span>}
-              </Button>
-            </div>
-            
-            <div className="mt-4 pt-4 border-t border-[#1C1C2E]">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[11px] font-bold text-[#8080A0]">Print Resolution</span>
-                <select
-                  value={selectedDPI}
-                  onChange={(e) => setSelectedDPI(Number(e.target.value))}
-                  className="bg-[#0A0A12] border border-[#28283E] text-white text-[10px] rounded px-2 py-1 outline-none"
-                >
-                  <option value="150">150dpi — Draft/Home</option>
-                  <option value="300">300dpi — Professional</option>
-                  <option value="600">600dpi — High Quality</option>
-                  <option value="1200">1200dpi — Premium</option>
-                </select>
-              </div>
-            </div>
+          
 
             {/* SCAN VALIDATION SECTION */}
             <div className="mt-4 p-4 bg-[#0A0A12] border border-[#1C1C2E] rounded-xl">
@@ -1821,6 +1637,5 @@ export default function QRCodeGenerator({ tool, user, onOpenPayModal, onSelectTe
           </div>
         </div>
       </div>
-    </div>
   );
 }

@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs";
 import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
-import aiFactoryRoutes from "./server/routes/ai-factory.js";
+import aiFactoryRoutes from "./server/routes/ai-factory";
 
 dotenv.config();
 
